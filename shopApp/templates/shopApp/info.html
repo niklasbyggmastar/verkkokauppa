@@ -1,0 +1,47 @@
+{% include 'shopApp/header.html' %}
+
+      <div class="row">
+        <span class="ml-3 path"><a href="{% url 'index' %}"><i class="fas fa-home"></i></a> > <a href="{% url 'results' item.category %}">{{ item.category }}</a></span>
+        <div class="infoDiv mx-3">
+          <h5 class="p-2">{{ item.name }}</h5>
+          <div class="row">
+            <div class="col col-md-8">
+              <img class="img img-fluid mx-auto d-block" src="/{{ item.image }}" alt="Image">
+            </div>
+            <div class="col col-md-4">
+              <div class="p-3 mr-3 mt-5 infoSideBar">
+                <li><span><b>Product number:</b> {{ item.id }}</span></li>
+                <li><span><b>Manufacturer:</b> {{ item.make }}</span></li>
+                <li><span><b>Products available:</b> {{ item.quantityAvailable }}</span></li>
+              </div>
+
+              <div class="p-3 mr-3 mt-3 infoSideBar">
+                <h6 class="mb-0">Price (alv 24 % /  0 %)</h6>
+                <span class="priceTag">{{ item.price }}</span>
+                <button onclick="location.href = {% url 'buy' item.id %}" class="btn btn-primary w-100 mt-4"><i class="fas fa-shopping-cart"></i> Add to basket</button>
+                <div class="group">
+                  <div class="item line"></div>
+                  <div class="item text">or</div>
+                  <div class="item line"></div>
+                </div>
+                <button onclick="location.href = {% url 'buy' item.id %}" class="btn btn-secondary w-100 mt-4"><i class="far fa-heart"></i> Add to my list</button>
+
+              <!--  <form action="{% url 'buy' item.id %}" method="post">
+                  {% csrf_token %}
+                  <input type="submit" value="Add to basket" class="btn btn-primary w-100">
+                </form>-->
+              </div>
+            </div>
+          </div>
+          <hr>
+          <div class="m-4">
+              <li><span>{{ item.desc }}</span></li>
+          </div>
+
+        </div>
+      </div>
+
+
+    </div><!--container-->
+  </body>
+</html>

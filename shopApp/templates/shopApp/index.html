@@ -1,0 +1,36 @@
+{% include 'shopApp/header.html' %}
+      <div class="row display-flex">
+        <div class="col-12 productDiv">
+          {% for message in messages %}
+            <div class="alert {{ message.tags }}" role="alert">
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+        {% if new_items_list %}
+          {% for item in new_items_list %}
+            <div class="col-3 productDiv" onclick="location.href = {% url 'info' item.id %}">
+              <div class="mr-0">
+                <img class="img img-fluid mx-auto d-block index" src="{{ item.image }}" alt="Item">
+                <h5>{{ item.name }}</h5>
+                <span>{{ item.price }}€ || {{ item.quantityAvailable }} left</span>
+              </div>
+            </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+
+    </div><!--container-->
+
+    <script>
+      $(".alert.alert-success").fadeTo(3000, 500).slideUp(500, function(){
+        $(".alert.alert-success").slideUp(500);
+      });
+
+      $(".alert.alert-danger").fadeTo(3000, 500).slideUp(500, function(){
+        $(".alert.alert-danger").slideUp(500);
+      });
+    </script>
+
+  </body>
+</html>

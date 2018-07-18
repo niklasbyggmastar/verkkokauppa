@@ -1,0 +1,109 @@
+{% include 'shopApp/header.html' %}
+
+    <div class="row">
+      <div class="infoDiv mx-3 w-100">
+        <h5 class="p-2"><i class="fas fa-unlock mx-2"></i> Login</h5>
+        <div class="m-4">
+          {% for message in messages %}
+            <div class="alert {{ message.tags }}" role="alert">
+              {{ message }}
+            </div>
+          {% endfor %}
+
+          <h6 class="text-center mb-3">Login by entering your email.</h6>
+
+          <form class="form-group" action="{% url 'check_email' %}" method="post">
+            {% csrf_token %}
+            <input id="emailInput" class="form-control mx-auto d-block w-50 mb-2" type="email" name="email" placeholder="Your email">
+            <input id="passwordInput" class="" type="password" name="password" placeholder="Your password" style="display:none;">
+            <input id="submitBtn" class="form-control mx-auto d-block w-50 btn btn-primary my-3" type="submit" value="Submit">
+          </form>
+
+          <div class="group w-50 mt-4 mb-5">
+            <div class="item line"></div>
+            <div class="item text">or</div>
+            <div class="item line"></div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div style="background-color:rgb(250,250,250); border-radius:3px" class="p-4">
+                <h5>Login through a social media</h5>
+                <div class="row">
+                  <div class="col-4">
+                    <button class="btn btn-light">
+                      <img src="/shopApp/static/img/fb.png" class="w-25 mx-auto d-block">
+                      Facebook
+                    </button>
+                  </div>
+                  <div class="col-4">
+                    <button class="btn btn-light">
+                      <img src="/shopApp/static/img/google.png" class="w-25 mx-auto d-block">
+                      Google
+                    </button>
+                  </div>
+                  <div class="col-4">
+                    <button class="btn btn-light">
+                      <img src="/shopApp/static/img/win10.png" class="w-25 mx-auto d-block">
+                      Microsoft
+                    </button>
+                  </div>
+                </div>
+                <p class="font-14 mt-2">When logging in we will save the used email address and create a customer account in Verkkokauppa.com if there's no existing account.</p>
+              </div>
+            </div>
+
+            <div class="col">
+              <div style="background-color:rgb(217,234,255); border-radius:3px" class="p-4">
+                <h5>New customer</h5>
+                <h6>The best self-service in Finland!</h6>
+                <span class="font-14">As the account manager</span>
+                <li class="list-disc font-14 mx-4 mt-2">You can see your orders, bills and checks</li>
+                <li class="list-disc font-14 mx-4">You can see your browser specific login history</li>
+                <li class="list-disc font-14 mx-4">You can easily manage your shipping and billing addresses</li>
+                <li class="list-disc font-14 mx-4">You can choose if you want personalized marketing messages</li>
+                <button class="btn btn-primary w-100 mt-3" onclick="location.href='{% url 'signup' %}'">New customer</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+    </div><!--container-->
+
+    <script>
+      $(function(){
+
+        var txt = parseURL(window.location.href).search;
+        console.log(txt.substring(0,7));
+        if (txt.substring(0,7)=="?email=") {
+          $("#passwordInput").addClass("form-control mx-auto d-block w-50");
+          $("#emailInput").val(txt.substring(7,txt.length));
+          $("form").attr("action", "{% url 'login_action' %}");
+          $("#submitBtn").val("Login");
+        }
+
+
+        function parseURL(url){
+          var a = document.createElement('a');
+          a.href = url;
+          return a;
+        }
+      });
+
+
+      $(".alert.alert-success").fadeTo(3000, 500).slideUp(500, function(){
+        $(".alert.alert-success").slideUp(500);
+      });
+
+      $(".alert.alert-danger").fadeTo(3000, 500).slideUp(500, function(){
+        $(".alert.alert-danger").slideUp(500);
+      });
+
+    </script>
+
+  </body>
+</html>

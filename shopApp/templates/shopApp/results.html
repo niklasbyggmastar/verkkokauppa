@@ -1,0 +1,61 @@
+{% include 'shopApp/header.html' %}
+
+      <span class="ml-3 path">
+        <a href="{% url 'index' %}"><i class="fas fa-home"></i></a> > <a href="{% url 'results' category.name %}">{{ category.name }}</a>
+      </span>
+
+    <div class="resultsDiv">
+      <div class="row">
+        <!--carousel-->
+        <div id="demo" class="carousel slide mx-3" data-ride="carousel">
+          <!-- Indicators -->
+          <ul class="carousel-indicators">
+            <li data-target="#demo" data-slide-to="0" class="active"></li>
+            <li data-target="#demo" data-slide-to="1"></li>
+          </ul>
+
+          <!-- The slideshow -->
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img src="/{{ category.ad_1 }}" alt="Los Angeles">
+            </div>
+            <div class="carousel-item">
+              <img src="/{{ category.ad_2 }}" alt="Chicago">
+            </div>
+          </div>
+
+          <!-- Left and right controls -->
+          <a class="carousel-control-prev" href="#demo" data-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+          </a>
+          <a class="carousel-control-next" href="#demo" data-slide="next">
+            <span class="carousel-control-next-icon"></span>
+          </a>
+
+        </div><!--carousel-->
+      </div><!--row-->
+
+
+        <div class="row m-4">
+          <h5>{{ category.name }}</h5>
+        </div>
+        <hr>
+
+        <div class="row display-flex">
+          {% if items %}
+            {% for item in items %}
+            <div class="col-3 productDiv" onclick="location.href = {% url 'info' item.id %}">
+              <div class="mr-0">
+                <img class="img img-fluid mx-auto d-block index" src="/{{ item.image }}" alt="Item">
+                <h5>{{ item.name }}</h5>
+                <span>{{ item.price }} || {{ item.quantityAvailable }} left</span>
+              </div>
+            </div>
+            {% endfor %}
+          {% endif %}
+        </div>
+
+      </div>
+    </div><!--container-->
+  </body>
+</html>

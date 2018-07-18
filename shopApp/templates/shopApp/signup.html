@@ -1,0 +1,37 @@
+{% include 'shopApp/header.html' %}
+
+    <div class="row">
+      <div class="infoDiv mx-3 w-100">
+        <h5 class="p-2"><i class="far fa-user mx-2"></i> Sign up</h5>
+        <div class="m-4">
+          <div class="mx-auto d-block" style="width:33%">
+            <a href="{% url 'login' %}" style="color:rgb(80,80,255"><h6 style="font-size:14px;" class="mb-3">< Back to login</h6></a>
+            <form class="form-group" action="index.html" method="post">
+              <label>Email address</label><input name="email1" type="email" class="form-control">
+              <label>Confirm email address</label><input name="email2" type="email" class="form-control">
+              <label>Password</label><input type="password" class="form-control">
+              <label>First name</label><input type="text" class="form-control">
+              <label>Last name</label><input type="text" class="form-control">
+              <label>Phone number</label><input type="tel" class="form-control">
+              <label>Language</label><select class="form-control">
+                <option value="fin">Finnish</option>
+                <option value="eng">English</option>
+              </select>
+              <div class="my-3"><input type="checkbox" name=""> I have read and accepted the privacy policy of Verkkokauppa.com</div>
+              <input type="submit" value="Submit" class="btn btn-primary w-100">
+            </form>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
+    </div><!--container-->
+  </body>
+</html>
