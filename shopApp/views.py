@@ -29,10 +29,18 @@ def buy(request, item_id):
     context = {'item_id': item_id, 'categories': categories}
     return render(request, 'shopApp/buy.html', context)
 
-def login_view(request):
+def account(request):
     categories = Category.objects.all()
     context = {'categories': categories}
-    return render(request, 'shopApp/login.html', context)
+    return render(request, 'shopApp/account.html', context)
+
+def login_view(request):
+    if not request.user.is_authenticated:
+        categories = Category.objects.all()
+        context = {'categories': categories}
+        return render(request, 'shopApp/login.html', context)
+    else:
+        return redirect("/")
 
 def signup(request):
     categories = Category.objects.all()

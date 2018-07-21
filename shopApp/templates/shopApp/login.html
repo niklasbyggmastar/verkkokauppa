@@ -10,13 +10,13 @@
             </div>
           {% endfor %}
 
-          <h6 class="text-center mb-3">Login by entering your email.</h6>
+          <h6 id="loginTitle" class="text-center mb-3">Login by entering your email.</h6>
 
           <form class="form-group" action="{% url 'check_email' %}" method="post">
             {% csrf_token %}
             <input id="emailInput" class="form-control mx-auto d-block w-50 mb-2" type="email" name="email" placeholder="Your email">
             <input id="passwordInput" class="" type="password" name="password" placeholder="Your password" style="display:none;">
-            <input id="submitBtn" class="form-control mx-auto d-block w-50 btn btn-primary my-3" type="submit" value="Submit">
+            <input id="submitBtn" class="form-control mx-auto d-block w-50 btn btn-primary my-3" type="submit" value="Continue">
           </form>
 
           <div class="group w-50 mt-4 mb-5">
@@ -78,12 +78,12 @@
       $(function(){
 
         var txt = parseURL(window.location.href).search;
-        console.log(txt.substring(0,7));
         if (txt.substring(0,7)=="?email=") {
           $("#passwordInput").addClass("form-control mx-auto d-block w-50");
           $("#emailInput").val(txt.substring(7,txt.length));
           $("form").attr("action", "{% url 'login_action' %}");
           $("#submitBtn").val("Login");
+          $("#loginTitle").text("Enter your password");
         }
 
 

@@ -1,0 +1,86 @@
+{% include 'shopApp/header.html' %}
+
+    {% if user.is_authenticated %}
+      <div class="row">
+        <div class="infoDiv mx-3 d-inline w-100">
+          <h5 class="p-2 pl-3 w-100"><i class="far fa-user-circle"></i> Account management <a href="{% url 'logout_action' %}" class="float-right" style="color:white;font-size:15px"><i class="fas fa-sign-out-alt align-middle"></i> Logout</a></h5>
+          <div class="row">
+            <div class="col">
+              <ul class="nav nav-tabs justify-content-center">
+                <li class="nav-item">
+                  <a class="nav-link active" href="#info" data-toggle="tab">Personal information</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#settings" data-toggle="tab">Settings</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#orders" data-toggle="tab">Orders</a>
+                </li>
+              </ul>
+
+              <div class="tab-content">
+                <!-- Personal information -->
+                <div class="tab-pane container active" id="info">
+                  <div class="infoDiv mx-2 d-inline w-100">
+                    <div class="row" style="border:0.5px solid black;">
+                      <h5 style="background-color:rgb(248,248,248);border-left:0.5px solid black;border-bottom:0.5px solid black;border-top:0.5px solid black" class="p-3 w-100 m-0"><i class="far fa-user"></i> {{ user.first_name }} {{ user.last_name }}<a href="#edit" class="float-right font-14">Edit</a></h5>
+                      <div class="col">
+                        <li class="my-2">Account manager: <span class="float-right font-weight-bold">{{ user.first_name }} {{ user.last_name }}</span></li>
+                        <li class="my-2">Customer ID: <span class="float-right font-weight-bold">{{ user.id }}</span></li>
+                        <li class="my-2">Email: <span class="float-right font-weight-bold">{{ user.email }}</span></li>
+                      </div>
+                      <div class="col">
+                        <li class="my-2">Phone number: <span class="float-right font-weight-bold">555555555</span></li>
+                        <li class="my-2">Language: <span class="float-right font-weight-bold">Finnish</span></li>
+                        <li class="my-2">Refunds left: <span class="float-right font-weight-bold">0,00€</span></li>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Settings -->
+                <div class="tab-pane container fade" id="settings">
+                  <div class="infoDiv mx-2 d-inline w-100">
+                    <div class="row" style="border:0.5px solid black;">
+                      <div class="col">
+                        <div class="m-5">
+                          <h5>Change your account password</h5>
+                          <h6>Tips for a secure password:</h6>
+                          <ul>
+                            <li class="list-disc font-14">Long enough: at least 10 characters</li>
+                            <li class="list-disc font-14">Complex enough: lower and upper case letters, numbers and at least one special character</li>
+                            <li class="list-disc font-14">Avoid repeating the same letters and characters in a row more than twice</li>
+                            <li class="list-disc font-14">Avoid using same passwords in different services, try to make them unique</li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div class="col">
+                        <div class="m-5">
+                          <form class="" action="index.html" method="post">
+                            <span>Your current password</span>
+                            <input class="form-control w-100 mb-2" type="password" name="old_password">
+                            <span>New password</span>
+                            <input class="form-control w-100 mb-2" type="password" name="password1">
+                            <span>Confirm password</span>
+                            <input class="form-control w-100 mb-2" type="password" name="password2">
+                            <input class="form-control w-100 btn btn-primary my-3" type="button" value="Change password">
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Orders -->
+                <div class="tab-pane container fade" id="orders">ORDERS</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <h1 class="text-center">Please login!</h1>
+    {% endif %}
+
+    </div><!--container-->
+  </body>
+</html>
