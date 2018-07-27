@@ -1,5 +1,4 @@
 {% include 'shopApp/header.html' %}
-
     {% if user.is_authenticated %}
       <div class="row">
         <div class="infoDiv mx-3 d-inline w-100">
@@ -30,9 +29,9 @@
                         <li class="my-2">Email: <span class="float-right font-weight-bold">{{ user.email }}</span></li>
                       </div>
                       <div class="col">
-                        <li class="my-2">Phone number: <span class="float-right font-weight-bold">555555555</span></li>
-                        <li class="my-2">Language: <span class="float-right font-weight-bold">Finnish</span></li>
-                        <li class="my-2">Refunds left: <span class="float-right font-weight-bold">0,00€</span></li>
+                        <li class="my-2">Phone number: <span class="float-right font-weight-bold">{{ user.profile.phone_num }}</span></li>
+                        <li class="my-2">Language: <span class="float-right font-weight-bold">{{ user.profile.get_language_display }}</span></li>
+                        <li class="my-2">Refunds left: <span class="float-right font-weight-bold">{{ user.profile.refunds_left }}€</span></li>
                       </div>
                     </div>
                   </div>
@@ -71,7 +70,19 @@
                   </div>
                 </div>
                 <!-- Orders -->
-                <div class="tab-pane container fade" id="orders">ORDERS</div>
+                <div class="tab-pane container fade" id="orders">
+                  <ul class="my-5">
+                    {% if orders_list %}
+                      <ul>
+                        {% for order in orders_list %}
+                          <li><a href="{% url 'info' order.id %}">{{ order.name }}</a></li>
+                        {% endfor %}
+                      </ul>
+                    {% else %}
+                      <li>No open orders.</li>
+                    {% endif %}
+                  </ul>
+                </div>
               </div>
             </div>
           </div>

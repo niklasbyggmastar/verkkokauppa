@@ -1,10 +1,36 @@
 from django.db import models
 from django.core.validators import MinValueValidator
 from django.utils import timezone
-from django.contrib.auth.models import BaseUserManager
-from django.contrib.auth.models import AbstractBaseUser
-from django.contrib.auth.models import PermissionsMixin
-from django.utils.translation import ugettext_lazy as _
+from phonenumber_field.modelfields import PhoneNumberField
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.contrib.postgres.fields import ArrayField
+
+
+class Profile(models.Model):
+    LANGUAGES = (
+        ('FI', 'Finnish'),
+        ('EN', 'English'),
+    )
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    phone_num = PhoneNumberField()
+    language = models.CharField(max_length=2, choices=LANGUAGES)
+    refunds_left =  models.DecimalField(decimal_places=2, max_digits=9, default=0)
+    orders = ArrayField(models.IntegerField(default=0, unique=True) ,size=50, blank=True, default=[])   #list of product IDs
+
+    def __str__(self):
+        return self.user.username
+
+    @receiver(post_save, sender=User)
+    def create_user_profile(sender, instance, created, **kwargs):
+        if created:
+            Profile.objects.create(user=instance)
+
+    @receiver(post_save, sender=User)
+    def save_user_profile(sender, instance, **kwargs):
+        instance.profile.save()
+
 
 class Category(models.Model):
     name = models.CharField(max_length=200)

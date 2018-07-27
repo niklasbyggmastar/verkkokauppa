@@ -31,7 +31,12 @@ def buy(request, item_id):
 
 def account(request):
     categories = Category.objects.all()
-    context = {'categories': categories}
+    orders_list = []
+    for item_id in request.user.profile.orders:
+        for item in Item.objects.all():
+            if item_id == item.id:
+                orders_list.insert(0, item)
+    context = {'categories': categories, 'orders_list': orders_list}
     return render(request, 'shopApp/account.html', context)
 
 def login_view(request):

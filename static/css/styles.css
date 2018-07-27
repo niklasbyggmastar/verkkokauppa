@@ -30,7 +30,7 @@ a:hover{
   margin-right: -20px;
 }
 
-.col-3.productDiv > .mr-0{
+.col-md-3.productDiv > .mr-0{
   background-color: white;
   padding: 20px;
   height: 100%;
@@ -39,7 +39,7 @@ a:hover{
   box-sizing: border-box;
 }
 
-.col-3.productDiv > .mr-0:hover{
+.col-md-3.productDiv > .mr-0:hover{
   cursor: pointer;
   border: 0.5px solid rgb(200,200,200);
 }
@@ -64,6 +64,7 @@ a:hover{
   color:white;
 }
 
+/*???*/
 li{
   list-style-type: none;
 }
@@ -71,6 +72,7 @@ li{
 .list-disc{
   list-style-type:disc;
 }
+/*???*/
 
 .font-14{
   font-size: 14px;
@@ -90,9 +92,7 @@ b{
   color: grey;
 }
 
-.img.img-fluid.mx-auto.d-block{
-  height:30em;
-}
+
 
 /*sidebar*/
 .navMenu.float-left{
@@ -102,7 +102,7 @@ b{
   background-color:white;
 }
 
-.navbar.navbar-expand-md.navbar-light.justify-content-between{
+.navbar.navbar-expand-md.navbar-light.justify-content-start{
   background-color:rgb(10,10,10);
   height:3em;
 }
@@ -125,11 +125,17 @@ b{
   color: black;
 }
 
+.fas.fa-bars{
+  color:white;
+}
+
 .resultsDiv{
   background-color:white;
   margin-left:18%;
   margin-right:1.25em;
 }
+
+
 
 /**/
 .group {
@@ -159,5 +165,11 @@ b{
 @media screen and (min-width:1000px){
   .img.img-fluid.mx-auto.d-block.index{
     height: 190px;
+  }
+  .img.img-fluid.mx-auto.d-block{
+    height:30em;
+  }
+  .navbar-brand{
+    margin-left:14em;
   }
 }

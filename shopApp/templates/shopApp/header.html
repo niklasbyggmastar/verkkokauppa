@@ -10,20 +10,26 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
-<!--    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.js"></script>
-    <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}">-->
+    <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
   </head>
   <body>
-
-
       <!--TOP BAR-->
-      <nav class="navbar navbar-expand-md navbar-light justify-content-between">
-        <a class="navbar-brand" href="{% url 'index' %}" style="margin-left:14em">
-          <img src="{% static 'img/logo.png' %}" class="float-right" alt="Verkkokauppa" width="210" height="35">
+      <nav class="navbar navbar-expand-md navbar-light justify-content-start">
+        <button type="button" class="navbar-toggler mr-2" data-toggle="collapse" data-target="#sideBarNav" aria-controls="sideBarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <i class="fas fa-bars"></i>
+        </button>
+        <a class="navbar-brand" href="{% url 'index' %}">
+          <picture>
+            <source media="(min-width:1000px)" srcset="{% static 'img/logo.png' %}">
+            <source media="(min-width:200px)" srcset="{% static 'img/favicon.png' %}">
+            <img src="{% static 'img/logo.png' %}" alt="Verkkokauppa" height="35">
+          </picture>
         </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar"> <span class="navbar-toggler-icon"></span></button>
+
+        <!--<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar"> <span class="navbar-toggler-icon"></span></button>-->
         <div class="collapse navbar-collapse pull-right" id="collapsibleNavbar">
           <form style="width:65%">
             <div class="input-group">
@@ -44,23 +50,20 @@
       </nav>
 
 
-      <div class="container-fluid">
+
       <!--SIDE BAR-->
-        <div class="navMenu float-left">
+<div class="container-fluid" style="position:relative;">
+        <div class="navMenu float-left collapse navbar-collapse w-75" id="sideBarNav">
           <nav class="nav flex-column">
             {% if categories %}
               {% for category in categories %}
               <a class="dropdown-item" href="/results/{{ category.name }}">
-                <img width=25 height=25 src="/{{ category.icon }}" alt="">
+                <img width=25 height=25 src="/{{ category.icon }}" alt="icon">
                 <span class="align-middle">{{ category.name }}</span>
               </a>
               {% endfor %}
             {% else %}
               <h1>no categories</h1>
             {% endif %}
-            <!--<a class="nav-link" href="#">Discounts</a>
-            <a class="nav-link" href="#">About us</a>
-            <a class="nav-link" href="#">Contact</a>-->
           </nav>
         </div>
-        <br>
