@@ -52,8 +52,8 @@
 
 
       <!--SIDE BAR-->
-<div class="container-fluid" style="position:relative;">
-        <div class="navMenu float-left collapse navbar-collapse w-75" id="sideBarNav">
+      <div class="container-fluid">
+        <div class="navMenu float-left" id="sideBarNav">  <!-- collapse navbar-collapse w-75-->
           <nav class="nav flex-column">
             {% if categories %}
               {% for category in categories %}
@@ -67,3 +67,20 @@
             {% endif %}
           </nav>
         </div>
+
+        <script>
+          $(function(){
+            checkWidth();
+            $(window).on('resize', function(){
+              checkWidth();
+            });
+          });
+          
+          function checkWidth(){
+            if($(window).width() < 1000){
+              $("#sideBarNav").addClass("collapse navbar-collapse w-75");
+            }else{
+              $("#sideBarNav").removeClass("collapse navbar-collapse w-75");
+            }
+          }
+        </script>

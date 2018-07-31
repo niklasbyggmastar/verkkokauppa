@@ -78,6 +78,10 @@ li{
   font-size: 14px;
 }
 
+.font-16{
+  font-size: 16px;
+}
+
 .btn.btn-light{
   border:1px solid grey;
 }
@@ -95,7 +99,7 @@ b{
 
 
 /*sidebar*/
-.navMenu.float-left{
+#sideBarNav{
   width:17%;
   border-left: 0.1px solid rgb(200,200,200);
   border-right: 0.1px solid rgb(200,200,200);
@@ -160,16 +164,26 @@ b{
     top: -.5em;
 }
 /**/
-
+.img.img-fluid.mx-auto.d-block.index{
+  height: 190px;
+}
 
 @media screen and (min-width:1000px){
-  .img.img-fluid.mx-auto.d-block.index{
-    height: 190px;
-  }
+
   .img.img-fluid.mx-auto.d-block{
     height:30em;
   }
   .navbar-brand{
     margin-left:14em;
+  }
+}
+
+@media screen and (max-width:1000px){
+  .container-fluid{
+    position: relative;
+  }
+  #sideBarNav{
+    position:absolute;
+    z-index:1;
   }
 }

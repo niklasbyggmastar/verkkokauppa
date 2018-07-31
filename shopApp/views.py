@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Item
-from .models import Category
+from .models import Item, Category, Review
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
@@ -8,7 +7,8 @@ from django.contrib.auth import login, authenticate, logout
 def index(request):
     categories = Category.objects.all()
     new_items_list = Item.objects.order_by('-date_added')[:25]
-    context = {'new_items_list': new_items_list, 'categories': categories}
+    reviews = Review.objects.order_by('-date_added')[:25]
+    context = {'new_items_list': new_items_list, 'categories': categories, 'reviews': reviews}
     return render(request, 'shopApp/index.html', context)
 
 def info(request, item_id):

@@ -1,5 +1,5 @@
 from django.db import models
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils import timezone
 from phonenumber_field.modelfields import PhoneNumberField
 from django.contrib.auth.models import User
@@ -56,9 +56,13 @@ class Item(models.Model):
 
 class Review(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default="")
     title = models.CharField(max_length=200, default="")
     text = models.CharField(max_length=500)
-    stars = models.PositiveIntegerField(validators=[MinValueValidator(0)], default=0)
+    stars = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(5)])
+
+    def __str__(self):
+        return self.title
 
 #------------------------------------------------------------------------------------
 
