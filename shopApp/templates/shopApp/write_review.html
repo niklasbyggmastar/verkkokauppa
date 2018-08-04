@@ -1,0 +1,145 @@
+{% include 'shopApp/header.html' %}
+
+<div class="row">
+  <div class="infoDiv m-3 w-100">
+    <h5 class="p-3 title"><i class="far fa-star"></i> Write a review</h5>
+    <div class="px-4 pb-4 pt-1">
+      <h6 class="text-center">{{ item.name }}</h6>
+      <div class="row my-5" id="rowDiv">
+        <div class="col col-md-8 col-xs-12">
+          <a href="{% url 'info' item.id %}"><img style="width:40%;height:auto" class="img img-fluid mx-auto d-block" src="/{{ item.image }}" alt="{{ item.name }}"></a>
+        </div>
+        <div class="col col-md-4 col-xs-12">
+          <div class="p-3 mt-3 infoSideBar">
+            <h6 class="mb-0">Price (alv 24 % /  0 %)</h6>
+            <span class="priceTag">{{ item.price }}</span>
+            <button onclick="location.href = {% url 'buy' item.id %}" class="btn btn-primary w-100 mt-4"><i class="fas fa-shopping-cart"></i> Add to basket</button>
+            <div class="group">
+              <div class="item line"></div>
+              <div class="item text">or</div>
+              <div class="item line"></div>
+            </div>
+            <button onclick="location.href = {% url 'buy' item.id %}" class="btn btn-secondary w-100 mt-4"><i class="far fa-heart"></i> Add to my list</button>
+
+          <!--  <form action="{% url 'buy' item.id %}" method="post">
+              {% csrf_token %}
+              <input type="submit" value="Add to basket" class="btn btn-primary w-100">
+            </form>-->
+          </div>
+
+        </div>
+      </div>
+      <h6 style="background-color:rgb(210,230,255)" class="py-3 px-5 font-14 my-4">Fields with a star ( <span style="color:red">*</span> ) are mandatory</h6>
+      <h6 class="font-14" style="color:grey"><span style="color:red">*</span> Overall rating of the product</h6>
+
+
+
+
+
+
+
+      <form class="form-group" action="{% url 'post_review' item.id %}" method="post">
+        {% csrf_token %}
+        <div class="my-rating"></div>
+        <input id="starsInput" type="hidden" name="stars">
+        <div class="form-check m-2">
+          <input id="check" type="checkbox" name="recommend" class="form-check-input" value="False">
+          <span class="mx-1" style="color:rgb(19,165,41); font-weight:bold"><i class="fas fa-thumbs-up mx-1"></i>{{ recommended }} I recommend this product</span>
+        </div>
+        <div class="form-group my-5">
+          <label for="title"><span style="color:red">*</span>Title of the review</label>
+          <input type="text" name="title" class="form-control mb-3">
+          <label for="review_text"><span style="color:red">*</span>Review</label>
+          <textarea name="review_text" rows="5" class="form-control mb-3"></textarea>
+          {% if not request.user.is_authenticated %}
+            <div class="row">
+              <div class="col col-md-6">
+                <label for="email"><span style="color:red">*</span>Your email</label>
+                <input type="email" name="email" class="form-control form-control-sm mb-3">
+                <label for="age"><span style="color:red">*</span>Your age</label>
+                <select class="form-control form-control-sm mb-3" name="age">
+                  <option value="max17">17 or younger</option>
+                  <option value="18-24">18-24</option>
+                  <option value="25-34">25-34</option>
+                  <option value="35-44">35-44</option>
+                  <option value="45-54">45-54</option>
+                  <option value="55-64">55-64</option>
+                  <option value="min65">65 or older</option>
+                </select>
+              </div>
+              <div class="col col-md-6">
+                <label for="nickname"><span style="color:red">*</span>Nickname</label>
+                <input type="text" name="nickname" class="form-control form-control-sm mb-3">
+                <label for="gender">Gender <span style="color:grey">(optional)</span></label>
+                <select class="form-control form-control-sm mb-3" name="gender">
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+              </div>
+            </div>
+
+
+          {% endif %}
+          <div class="float-right">
+            <input type="button" class="btn btn-light" value="Cancel">
+            <input type="submit" class="btn btn-primary" value="Submit review">
+          </div>
+        </div>
+      </form>
+
+    </div>
+
+  </div>
+</div>
+
+      <script>
+        $(function(){
+          //Check browser width and act accordingly
+          checkWidthInfo();
+          $(window).on('resize', function(){
+            checkWidthInfo();
+          });
+          //Checkbox values change true/false
+          checkBoxValues();
+          //Star rating
+          $(".my-rating").starRating({
+            starShape: 'rounded',
+            strokeWidth: 10,
+            starSize: 40,
+            useFullStars: true,
+            emptyColor: 'lightgray',
+            hoverColor: 'orange',
+            activeColor: 'orange',
+            ratedColor: 'orange',
+            disableAfterRate: false,
+            callback: function(currentRating, $el){
+               $("#starsInput").val(currentRating);
+            }
+          });
+        });
+
+        function checkBoxValues(){
+          $("#check").on('change', function(){
+            if($(this).is(':checked')){
+              $(this).attr('value', 'True');
+            }else{
+              $(this).attr('value', 'False');
+            }
+          });
+        }
+
+        function checkWidthInfo(){
+          if($(window).width() < 1000){
+            $("#rowDiv").removeClass("row my-5");
+            $("#rowDiv").addClass("my-3");
+            $(".img.img-fluid.mx-auto.d-block").width("100%");
+          }else{
+            $("#rowDiv").addClass("row my-5");
+            $(".img.img-fluid.mx-auto.d-block").width("40%");
+          }
+        }
+      </script>
+
+    </div><!--container-->
+  </body>
+</html>

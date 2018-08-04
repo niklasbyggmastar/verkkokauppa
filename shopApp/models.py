@@ -56,13 +56,15 @@ class Item(models.Model):
 
 class Review(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default="")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default="", null=True)
     title = models.CharField(max_length=200, default="")
     text = models.CharField(max_length=500)
-    stars = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(5)])
+    stars = models.IntegerField(default=0, validators=[MinValueValidator(1), MaxValueValidator(5)])
+    recommend = models.BooleanField(default=False)
+    date_added = models.DateTimeField('date added')
 
     def __str__(self):
-        return self.title
+        return self.item.name
 
 #------------------------------------------------------------------------------------
 

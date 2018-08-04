@@ -7,14 +7,21 @@
             </div>
           {% endfor %}
         </div>
+
         {% if new_items_list %}
           {% for item in new_items_list %}
             <div class="col-md-3 productDiv" onclick="location.href = {% url 'info' item.id %}">
               <div class="mr-0">
                 <img class="img img-fluid mx-auto d-block index" src="{{ item.image }}" alt="Item">
                 <h5>{{ item.name }}</h5>
-                
-                <p>{{ reviews.stars }}</p>
+                <!-- HYI -->
+
+                {% for review in reviews %}
+                  {% if review.item.id == item.id %}
+                    <p>{{ review.stars }}</p>
+                  {% endif %}
+                {% endfor %}
+                <!---/HYI-->
                 <p class="priceTag font-16 my-0">{{ item.price }}</p> <!--€ || {{ item.quantityAvailable }} left-->
                 <p class="my-0">{{ item.desc | slice:"0:70" }}...</p>
               </div>

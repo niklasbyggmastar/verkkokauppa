@@ -2,11 +2,11 @@ body{
   background-color: rgb(235,235,235);
 }
 
-a{
+.blackLink{
   color: black;
 }
 
-a:hover{
+.blackLink:hover{
   text-decoration: none;
   color: black;
 }
@@ -53,15 +53,19 @@ a:hover{
   background-color: rgb(210,230,255);
 }
 
-.infoDiv.mx-3{
+.infoDiv.m-3{
   background-color: white;
   border: 0.1px solid rgb(200,200,200);
 }
 
 
-.infoDiv.mx-3 > .p-2{
+.infoDiv.m-3 > .title{
   background-color:rgb(70,70,70);
   color:white;
+}
+
+.fas.fa-star{
+  color: orange;
 }
 
 /*???*/
@@ -96,7 +100,10 @@ b{
   color: grey;
 }
 
-
+input[type=checkbox] {
+  transform: scale(1.8);
+  margin-top: .5em;
+}
 
 /*sidebar*/
 #sideBarNav{
@@ -118,6 +125,10 @@ b{
 
 .ml-3.path > a{
   color:red;
+}
+
+.ml-3.path >a:hover{
+  text-decoration: underline;
 }
 
 .ml-3.path{

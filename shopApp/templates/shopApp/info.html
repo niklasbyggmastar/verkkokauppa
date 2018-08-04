@@ -1,12 +1,43 @@
 {% include 'shopApp/header.html' %}
 
       <div class="row">
-        <span class="ml-3 path"><a href="{% url 'index' %}"><i class="fas fa-home"></i></a> > <a href="{% url 'results' item.category %}">{{ item.category }}</a></span>
-        <div class="infoDiv mx-3">
-          <h5 class="p-2">{{ item.name }}</h5>
-          <div class="row" id="rowDiv">
+        <span class="ml-3 path mt-2"><a href="{% url 'index' %}"><i class="fas fa-home"></i></a> > <a href="{% url 'results' item.category %}">{{ item.category }}</a> > <a href="{% url 'info' item.id %}">Product {{ item.id }}</a> </span>
+        <div class="infoDiv m-3">
+          <h5 class="p-3 title">{{ item.name }}</h5>
+          <!-- Ratig stars -->
+          {% if reviews %}
+            <div class="font-14 mx-3 mb-3">
+              {% for i in loop_times %}
+                <i class="fas fa-star"></i>
+              {% endfor %}
+              {% for i in remaining %}
+                <i class="far fa-star"></i>
+              {% endfor %}
+              <span class="mx-2">{{ reviews.count }} reviews</span>
+              {% if recommended >= 50 %}
+                <span class="mx-2" style="color:rgb(19,165,41); font-weight:bold"><i class="fas fa-thumbs-up mx-1"></i>{{ recommended }} % recommend</span>
+              {% else %}
+                <span class="mx-2" style="color:red; font-weight:bold"><i class="fas fa-thumbs-down mx-1"></i>{{ recommended }} % recommend</span>
+              {% endif %}
+              <span class="mx-3"><a href="#">Read reviews</a></span>
+              <span><a href="{% url 'write' item.id %}">Write a review</a></span>
+            </div>
+          {% else %}
+            <div class="font-14 mx-3 mb-3">
+              <i class="far fa-star"></i>
+              <i class="far fa-star"></i>
+              <i class="far fa-star"></i>
+              <i class="far fa-star"></i>
+              <i class="far fa-star"></i>
+              <span class="mx-2">No reviews</span>
+              <span><a href="{% url 'write' item.id %}">Write the first review!</a></span>
+            </div>
+          {% endif %}
+
+
+          <div class="row p-4" id="rowDiv">
             <div class="col col-md-8 col-xs-12">
-              <img class="img img-fluid mx-auto d-block" src="/{{ item.image }}" alt="Image">
+              <img class="img img-fluid mx-auto d-block" src="/{{ item.image }}" alt="{{ item.name }}">
             </div>
             <div class="col col-md-4 col-xs-12">
               <div class="p-3 mr-3 mt-5 infoSideBar">
@@ -56,10 +87,12 @@
 
     function checkWidthInfo(){
       if($(window).width() < 1000){
-        $("#rowDiv").removeClass("row");
+        $("#rowDiv").removeClass("row p-4");
       }else{
-        $("#rowDiv").addClass("row");
+        $("#rowDiv").addClass("row p-4");
       }
     }
+
+
   </script>
 </html>

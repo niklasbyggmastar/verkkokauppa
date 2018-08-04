@@ -1,8 +1,8 @@
 {% include 'shopApp/header.html' %}
     {% if user.is_authenticated %}
       <div class="row">
-        <div class="infoDiv mx-3 d-inline w-100">
-          <h5 class="p-2 pl-3 w-100"><i class="far fa-user-circle"></i> Account management <a href="{% url 'logout_action' %}" class="float-right" style="color:white;font-size:15px"><i class="fas fa-sign-out-alt align-middle"></i> Logout</a></h5>
+        <div class="infoDiv m-3 d-inline w-100">
+          <h5 class="p-2 pl-3 w-100 title"><i class="far fa-user-circle"></i> Account management <a href="{% url 'logout_action' %}" class="float-right" style="color:white;font-size:15px"><i class="fas fa-sign-out-alt align-middle"></i> Logout</a></h5>
           <div class="row">
             <div class="col">
               <ul class="nav nav-tabs justify-content-center">
