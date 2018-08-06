@@ -19,7 +19,7 @@
               {% else %}
                 <span class="mx-2" style="color:red; font-weight:bold"><i class="fas fa-thumbs-down mx-1"></i>{{ recommended }} % recommend</span>
               {% endif %}
-              <span class="mx-3"><a href="#">Read reviews</a></span>
+              <span class="mx-3"><a href="#reviews">Read reviews</a></span>
               <span><a href="{% url 'write' item.id %}">Write a review</a></span>
             </div>
           {% else %}
@@ -69,6 +69,21 @@
           <hr>
           <div class="m-4">
               <li><span>{{ item.desc }}</span></li>
+              {% if reviews %}
+                <hr>
+                <section id="reviews">
+                  <div class="w-100 p-3" style="border:1px solid grey;">
+                    {{ reviews.count }} reviews
+                    <hr>
+                    {% for review in reviews %}
+                      <p>{{ review.stars }}</p>
+                      <p>{{ review.title }}</p>
+                      <p>{{ review.text }}</p>
+                      <hr>
+                    {% endfor %}
+                  </div>
+                </section>
+              {% endif %}
           </div>
 
         </div>

@@ -32,14 +32,14 @@
         </a>
 
         <!--<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar"> <span class="navbar-toggler-icon"></span></button>-->
-        <div class="collapse navbar-collapse pull-right" id="collapsibleNavbar">
-          <form style="width:65%">
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+          <form style="width:60%">
             <div class="input-group">
               <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
               <button class="btn btn-primary my-2 my-sm-0" type="submit">Search</button>
             </div>
           </form>
-          <ul class="navbar-nav ml-auto mr-3">
+          <ul class="navbar-nav ml-0 mr-3">
             {% if user.is_authenticated %}
               <li class="nav-item"><a class="nav-link" style="color:white;" href="{% url 'account' %}"><i class="far fa-user-circle"></i> Hello, {{ user.first_name }}!</a></li>
             {% else %}

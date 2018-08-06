@@ -85,7 +85,9 @@ def post_review(request, item_id):
             age = request.POST['age']
             nickname = request.POST['nickname']
             gender = request.POST['gender']
-        review = Review.objects.create(item=item, user=request.user, title=title, text=review_text, stars=stars, recommend=recommend, date_added=timezone.now())
+            review = Review.objects.create(item=item, email=email, age=age, nickname=nickname, gender=gender, title=title, text=review_text, stars=stars, recommend=recommend, date_added=timezone.now())
+        else:
+            review = Review.objects.create(item=item, user=request.user, title=title, text=review_text, stars=stars, recommend=recommend, date_added=timezone.now())
         review.save()
         return redirect("/"+str(item_id)+"?review=added")
 

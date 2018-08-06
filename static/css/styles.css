@@ -150,9 +150,13 @@ input[type=checkbox] {
   margin-right:1.25em;
 }
 
+.img.img-fluid.mx-auto.d-block.index{
+  height: 190px;
+}
 
 
-/**/
+
+/*Horizontal line*/
 .group {
     display: table;
     width: 85%;
@@ -174,21 +178,31 @@ input[type=checkbox] {
     position: relative;
     top: -.5em;
 }
-/**/
-.img.img-fluid.mx-auto.d-block.index{
-  height: 190px;
+/*-------------*/
+
+
+/*Big screen*/
+@media screen and (min-width:1600px){
+  .container-fluid{
+    width:1500px;
+    margin-left: 12em;
+  }
+  picture{
+    margin-left:23em;
+  }
 }
 
-@media screen and (min-width:1000px){
-
+/*Medium screen*/
+@media screen and (min-width:1000px) and (max-width:1600px) {
   .img.img-fluid.mx-auto.d-block{
     height:30em;
   }
-  .navbar-brand{
-    margin-left:14em;
+  picture{
+    margin-left:30em; /*ei toimi????*/
   }
 }
 
+/*Small screen*/
 @media screen and (max-width:1000px){
   .container-fluid{
     position: relative;

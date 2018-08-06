@@ -56,7 +56,14 @@ class Item(models.Model):
 
 class Review(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default="", null=True)
+    # --- if logged in: ---
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None, null=True)
+    # --- if not logged in: ---
+    email = models.CharField(max_length=200)
+    age = models.CharField(max_length=50)
+    nickname = models.CharField(max_length=200)
+    gender = models.CharField(max_length=50)
+    #------------------------
     title = models.CharField(max_length=200, default="")
     text = models.CharField(max_length=500)
     stars = models.IntegerField(default=0, validators=[MinValueValidator(1), MaxValueValidator(5)])

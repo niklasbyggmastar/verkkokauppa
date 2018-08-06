@@ -81,7 +81,7 @@
 
           {% endif %}
           <div class="float-right">
-            <input type="button" class="btn btn-light" value="Cancel">
+            <input type="button" class="btn btn-light" value="Cancel" onclick="location.href='{% url 'info' item.id %}'">
             <input type="submit" class="btn btn-primary" value="Submit review">
           </div>
         </div>
