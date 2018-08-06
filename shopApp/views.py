@@ -77,7 +77,7 @@ def post_review(request, item_id):
     if request.method == 'POST':
         item = Item.objects.get(pk=item_id)
         stars = request.POST['stars']
-        recommend = request.POST['recommend']
+        recommend = request.POST.get('recommend', False)
         title = request.POST['title']
         review_text = request.POST['review_text']
         if not request.user.is_authenticated:

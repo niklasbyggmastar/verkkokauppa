@@ -19,13 +19,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'n_+=z$v&kn^i)izmr-&bu3ie6x)63lj7nm=82#6a^)mqf-n(6v'
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ["localhost", "192.168.0.100", "192.168.8.109"]
+ALLOWED_HOSTS = []
 
 #AUTH_USER_MODEL = 'shopApp.User'
 
@@ -78,14 +77,11 @@ WSGI_APPLICATION = 'verkkokauppa.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'verkkokauppa.com',
-        'USER': 'postgres',
-        'PASSWORD': 'Julla080997!',
-        'HOST': '127.0.0.1',
-        'PORT': '5432'
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
 
 
 # Password validation
@@ -126,3 +122,8 @@ USE_TZ = True
 
 STATIC_URL = '/shopApp/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+try:
+    from .local_settings import *
+except ImportError:
+    pass
