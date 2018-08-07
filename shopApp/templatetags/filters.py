@@ -1,8 +1,7 @@
 from django import template
-from django.db.models import Sum
 
 register = template.Library()
 
-@register.filter(name='sumOfList')  #is_safe?
-def sumOfList(list):
-    return len(list)
+@register.filter(name='range')  #is_safe?
+def filter_range(start,end):
+    return range(start,end)

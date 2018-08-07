@@ -41,39 +41,41 @@
       <form class="form-group" action="{% url 'post_review' item.id %}" method="post">
         {% csrf_token %}
         <div class="my-rating"></div>
-        <input id="starsInput" type="hidden" name="stars">
+        <input id="starsInput" type="hidden" name="stars" required>
         <div class="form-check m-2">
           <input id="check" type="checkbox" name="recommend" class="form-check-input">
           <span class="mx-1" style="color:rgb(19,165,41); font-weight:bold"><i class="fas fa-thumbs-up mx-1"></i>{{ recommended }} I recommend this product</span>
         </div>
         <div class="form-group my-5">
           <label for="title"><span style="color:red">*</span>Title of the review</label>
-          <input type="text" name="title" class="form-control mb-3">
+          <input type="text" name="title" class="form-control mb-3" required>
           <label for="review_text"><span style="color:red">*</span>Review</label>
-          <textarea name="review_text" rows="5" class="form-control mb-3"></textarea>
+          <textarea name="review_text" rows="5" class="form-control mb-3" required></textarea>
           {% if not request.user.is_authenticated %}
             <div class="row">
               <div class="col col-md-6">
                 <label for="email"><span style="color:red">*</span>Your email</label>
-                <input type="email" name="email" class="form-control form-control-sm mb-3">
+                <input type="email" name="email" class="form-control form-control-sm mb-3" required>
                 <label for="age"><span style="color:red">*</span>Your age</label>
-                <select class="form-control form-control-sm mb-3" name="age">
-                  <option value="max17">17 or younger</option>
+                <select class="form-control form-control-sm mb-3" name="age" required>
+                  <option value=""></option>
+                  <option value="17 or younger">17 or younger</option>
                   <option value="18-24">18-24</option>
                   <option value="25-34">25-34</option>
                   <option value="35-44">35-44</option>
                   <option value="45-54">45-54</option>
                   <option value="55-64">55-64</option>
-                  <option value="min65">65 or older</option>
+                  <option value="65 or older">65 or older</option>
                 </select>
               </div>
               <div class="col col-md-6">
                 <label for="nickname"><span style="color:red">*</span>Nickname</label>
-                <input type="text" name="nickname" class="form-control form-control-sm mb-3">
+                <input type="text" name="nickname" class="form-control form-control-sm mb-3" required>
                 <label for="gender">Gender <span style="color:grey">(optional)</span></label>
                 <select class="form-control form-control-sm mb-3" name="gender">
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
+                  <option value=""></option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
                 </select>
               </div>
             </div>
@@ -82,7 +84,7 @@
           {% endif %}
           <div class="float-right">
             <input type="button" class="btn btn-light" value="Cancel" onclick="location.href='{% url 'info' item.id %}'">
-            <input type="submit" class="btn btn-primary" value="Submit review">
+            <input type="button" class="btn btn-primary disabled" value="Submit review">
           </div>
         </div>
       </form>
@@ -114,8 +116,24 @@
             disableAfterRate: false,
             callback: function(currentRating, $el){
                $("#starsInput").val(currentRating);
+               //cannot submit review until stars rated
+               $(".btn.btn-primary.disabled").removeClass("disabled").attr("type", "submit");
             }
           });
+
+      /*    $(".form-group").validate({
+            rules:{
+              stars: {required:true},
+              recommend: {required:true},
+              title: {required:true},
+              review_text: {required:true},
+            },
+            messages:{
+              stars: {required:"Enter the stars!"},
+              comment: {required:"Enter your comment!"},
+            }
+          });*/
+
         });
 
         function checkBoxValues(){

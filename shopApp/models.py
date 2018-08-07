@@ -44,7 +44,8 @@ class Category(models.Model):
 class Item(models.Model):
     make = models.CharField(max_length=200, default="")
     name = models.CharField(max_length=200)
-    desc = models.CharField(max_length=5000)
+    desc = models.CharField(max_length=500)
+    properties = ArrayField(models.CharField(default="", max_length=500),size=20, blank=True, default=[])   #list of product properties
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     image = models.ImageField(upload_to="shopApp/static/img", default="")
     price = models.DecimalField(decimal_places=2, max_digits=9)
@@ -57,12 +58,12 @@ class Item(models.Model):
 class Review(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     # --- if logged in: ---
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None, blank=True, null=True)
     # --- if not logged in: ---
-    email = models.CharField(max_length=200)
-    age = models.CharField(max_length=50)
-    nickname = models.CharField(max_length=200)
-    gender = models.CharField(max_length=50)
+    email = models.CharField(max_length=200, blank=True, null=True)
+    age = models.CharField(max_length=50, blank=True, null=True)
+    nickname = models.CharField(max_length=200, blank=True, null=True)
+    gender = models.CharField(max_length=50, blank=True, null=True)
     #------------------------
     title = models.CharField(max_length=200, default="")
     text = models.CharField(max_length=500)

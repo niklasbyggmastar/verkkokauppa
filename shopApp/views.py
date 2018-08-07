@@ -17,11 +17,11 @@ def index(request):
 def info(request, item_id):
     categories = Category.objects.order_by('name')
     item = Item.objects.get(pk=item_id)
-    reviews = Review.objects.filter(item=item)
+    reviews = Review.objects.filter(item=item).order_by('-date_added')
     remaining = 5
     if reviews:
         recommended = round((len(reviews.filter(recommend=True)) / len(reviews)) * 100)
-        average_stars = round(list(reviews.aggregate(Avg('stars')).values())[0]) # 1 decimal place
+        average_stars = round(list(reviews.aggregate(Avg('stars')).values())[0]) # 0 decimal place
         loop_times = range(0, round(average_stars))
         remaining = range(average_stars, 5)
         context = {'item': item, 'categories': categories, 'average_stars': average_stars, 'reviews': reviews, 'recommended': recommended, 'loop_times': loop_times, 'remaining': remaining}
@@ -89,7 +89,8 @@ def post_review(request, item_id):
         else:
             review = Review.objects.create(item=item, user=request.user, title=title, text=review_text, stars=stars, recommend=recommend, date_added=timezone.now())
         review.save()
-        return redirect("/"+str(item_id)+"?review=added")
+        messages.success(request, 'Review posted successfully!', extra_tags="alert-success")
+        return redirect("/"+str(item_id))
 
 
 def check_email(request):
