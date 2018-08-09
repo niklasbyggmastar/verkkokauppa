@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.postgres.fields import ArrayField
+from .managers import ItemManager, ReviewManager
 
 
 class Profile(models.Model):
@@ -51,9 +52,14 @@ class Item(models.Model):
     price = models.DecimalField(decimal_places=2, max_digits=9)
     quantityAvailable = models.IntegerField(default=0)
     date_added = models.DateTimeField('date added')
+    objects = ItemManager()
 
     def __str__(self):
         return self.name
+
+    @property
+    def date(self):
+        return self.date_added.date
 
 class Review(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
@@ -74,6 +80,9 @@ class Review(models.Model):
     def __str__(self):
         return self.item.name
 
+    @property
+    def date(self):
+        return self.date_added.date
 #------------------------------------------------------------------------------------
 
 #class MyUserManager(BaseUserManager):

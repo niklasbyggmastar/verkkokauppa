@@ -81,7 +81,15 @@
                 {% endfor %}
               {% endif %}
               {% if reviews %}
-                <section id="reviews">
+
+                {% verbatim %}
+                  <section id="reviews" ng-app="reviewApp" ng-controller="reviewCtrl">
+                    <li ng-repeat="ngreview in ngreviews | filter:{item:'/api/v1/item/9/'} | limitTo: displayNum">
+                      {{ ngreview }}
+                    </li>
+                    <button ng-click="showMore(3)">more</button>
+                  {% endverbatim %}
+                  
                   <div class="w-100 p-3 mt-5" style="border:.5px solid grey;">
                     <span class="reviewCount">{{ reviews.count }}</span> <span class="font-16">Reviews</span>
                   </div>

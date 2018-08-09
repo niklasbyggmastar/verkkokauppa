@@ -15,8 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from shopApp.api import v1_api
 
 urlpatterns = [
     path('', include('shopApp.urls')),
+    path('api/', include(v1_api.urls)),
     path('admin/', admin.site.urls),
 ]
