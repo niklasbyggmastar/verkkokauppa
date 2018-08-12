@@ -65,6 +65,7 @@ class Review(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     # --- if logged in: ---
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=None, blank=True, null=True)
+    user_fullname = models.CharField(max_length=200, blank=True, null=True, default="") #for angularjs
     # --- if not logged in: ---
     email = models.CharField(max_length=200, blank=True, null=True)
     age = models.CharField(max_length=50, blank=True, null=True)
@@ -72,7 +73,7 @@ class Review(models.Model):
     gender = models.CharField(max_length=50, blank=True, null=True)
     #------------------------
     title = models.CharField(max_length=200, default="")
-    text = models.CharField(max_length=500)
+    text = models.CharField(max_length=2000)
     stars = models.IntegerField(default=0, validators=[MinValueValidator(1), MaxValueValidator(5)])
     recommend = models.BooleanField(default=False)
     date_added = models.DateTimeField('date added')

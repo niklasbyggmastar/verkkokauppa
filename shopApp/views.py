@@ -10,14 +10,14 @@ from django.utils import timezone
 def index(request):
     categories = Category.objects.order_by('name')
     new_items_list = Item.objects.order_by('-date_added')[:25]
-    reviews = Review.objects.order_by('-date_added')[:25]
+    reviews = Review.objects.order_by('-date_added')[:25]                                       #AngularJS tilalle
     context = {'new_items_list': new_items_list, 'categories': categories, 'reviews': reviews}
     return render(request, 'shopApp/index.html', context)
 
 def info(request, item_id):
     categories = Category.objects.order_by('name')
     item = Item.objects.get(pk=item_id)
-    reviews = Review.objects.filter(item=item).order_by('-date_added')
+    reviews = Review.objects.filter(item=item).order_by('-date_added')                   #AngularJS tilalle
     remaining = 5
     if reviews:
         recommended = round((len(reviews.filter(recommend=True)) / len(reviews)) * 100)
@@ -87,10 +87,11 @@ def post_review(request, item_id):
             gender = request.POST['gender']
             review = Review.objects.create(item=item, email=email, age=age, nickname=nickname, gender=gender, title=title, text=review_text, stars=stars, recommend=recommend, date_added=timezone.now())
         else:
-            review = Review.objects.create(item=item, user=request.user, title=title, text=review_text, stars=stars, recommend=recommend, date_added=timezone.now())
+            user_fullname = request.user.first_name + " " + request.user.last_name
+            review = Review.objects.create(item=item, user=request.user, user_fullname=user_fullname, title=title, text=review_text, stars=stars, recommend=recommend, date_added=timezone.now())
         review.save()
         messages.success(request, 'Review posted successfully!', extra_tags="alert-success")
-        return redirect("/"+str(item_id))
+        return redirect("/%3F"+str(item_id))
 
 
 def check_email(request):

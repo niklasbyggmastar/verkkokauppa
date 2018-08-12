@@ -16,11 +16,11 @@
                 <h5>{{ item.name }}</h5>
                 <!-- HYI -->
 
-                {% for review in reviews %}
+                <!--{% for review in reviews %}
                   {% if review.item.id == item.id %}
                     <p>{{ review.stars }}</p>
                   {% endif %}
-                {% endfor %}
+                {% endfor %}-->
                 <!---/HYI-->
                 <p class="priceTag font-16 my-0">{{ item.price }}</p> <!--€ || {{ item.quantityAvailable }} left-->
                 <p class="my-0">{{ item.desc | slice:"0:70" }}...</p>
