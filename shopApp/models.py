@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.postgres.fields import ArrayField
-from .managers import ItemManager, ReviewManager
+from .managers import ItemManager, ReviewManager, CategoryManager
 
 
 class Profile(models.Model):
@@ -38,6 +38,7 @@ class Category(models.Model):
     icon = models.ImageField(upload_to="shopApp/static/img", default="")
     ad_1 = models.ImageField(upload_to="shopApp/static/img", default="")
     ad_2 = models.ImageField(upload_to="shopApp/static/img", default="")
+    objects = CategoryManager()
 
     def __str__(self):
         return self.name
@@ -47,7 +48,8 @@ class Item(models.Model):
     name = models.CharField(max_length=200)
     desc = models.CharField(max_length=500)
     properties = ArrayField(models.CharField(default="", max_length=500),size=20, blank=True, default=[])   #list of product properties
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, db_column="category_name")
+    #category_name = models.CharField(max_length=200, default="")
     image = models.ImageField(upload_to="shopApp/static/img", default="")
     price = models.DecimalField(decimal_places=2, max_digits=9)
     quantityAvailable = models.IntegerField(default=0)

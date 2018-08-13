@@ -17,16 +17,7 @@ def index(request):
 def info(request, item_id):
     categories = Category.objects.order_by('name')
     item = Item.objects.get(pk=item_id)
-    reviews = Review.objects.filter(item=item).order_by('-date_added')                   #AngularJS tilalle
-    remaining = 5
-    if reviews:
-        recommended = round((len(reviews.filter(recommend=True)) / len(reviews)) * 100)
-        average_stars = round(list(reviews.aggregate(Avg('stars')).values())[0]) # 0 decimal place
-        loop_times = range(0, round(average_stars))
-        remaining = range(average_stars, 5)
-        context = {'item': item, 'categories': categories, 'average_stars': average_stars, 'reviews': reviews, 'recommended': recommended, 'loop_times': loop_times, 'remaining': remaining}
-    else:
-        context = {'item': item, 'categories': categories, 'reviews': reviews}
+    context = {'item': item, 'categories': categories}
     return render(request, 'shopApp/info.html', context)
 
 def results(request, category_name):

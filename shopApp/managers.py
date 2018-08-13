@@ -1,6 +1,10 @@
 from django.db.models.manager import Manager
 import datetime
 
+class CategoryManager(Manager):
+    def get_by_natural_key(self, category_name):
+        return self.get(category_name=category_name)
+
 class ItemManager(Manager):
     def by_date(self, date):
         return self.get_queryset().filter(

@@ -14,10 +14,6 @@ class ReviewResource(ModelResource):
         queryset = Review.objects.all()
         resource_name = 'review'
 
-    def dehydrate(self,bundle):
-        bundle.data['new_date_format'] = '10.8.2018'
-        return bundle
-
 v1_api = Api(api_name='v1')
 v1_api.register(ItemResource())
 v1_api.register(ReviewResource())

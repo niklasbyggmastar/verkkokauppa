@@ -1,90 +1,80 @@
 {% include 'shopApp/header.html' %}
 {% load filters %}
-      <div class="row">
-        <span class="ml-3 path mt-2"><a href="{% url 'index' %}"><i class="fas fa-home"></i></a> > <a href="{% url 'results' item.category %}">{{ item.category }}</a> > <a href="{% url 'info' item.id %}">Product {{ item.id }}</a> </span>
+      <div class="row" ng-app="app" ng-controller="ctrl">
+        {% verbatim %}
+        <span class="ml-3 path mt-2"><a href="/"><i class="fas fa-home"></i></a> > <a href="/results/{{ ngitem.category_name }}">{{ ngitem.category_name }}</a> > <a href="/%3F{{ ngitem.id }}">Product {{ ngitem.id }}</a> </span>
         <div class="infoDiv m-3">
-          {% for message in messages %}
-            <div class="alert {{ message.tags }}" role="alert">
-              {{ message }}
-            </div>
-          {% endfor %}
-          <h5 class="p-3 title">{{ item.name }}</h5>
-          <!-- Ratig stars -->
-          {% if reviews %}
-          <div ng-app="reviewApp" ng-controller="reviewCtrl">
-            <div class="font-14 mx-3 mb-3">
-              {% for i in loop_times %}
+
+          <div ng-repeat="message in messages" class="alert {{ message.tags }}" role="alert">
+            {{ message }}
+          </div>
+
+          <h5 class="p-3 title">{{ ngitem.name }}</h5>
+
+            <!-- Rating stars -->
+            <div ng-if="ngreviews.length > 0" class="font-14 mx-3 mb-3">
+              <span ng-repeat="x in [].constructor(ngaverage_stars) track by $index">
                 <i class="fas fa-star"></i>
-              {% endfor %}
-              {% for i in remaining %}
+              </span>
+              <span ng-repeat="x in [].constructor(5-ngaverage_stars) track by $index">
                 <i class="fa fa-star"></i>
-              {% endfor %}
-              <span class="mx-2">{{ reviews.count }} reviews</span>
-              {% if recommended >= 50 %}
-                <span class="mx-2" style="color:rgb(19,165,41); font-weight:bold"><i class="fas fa-thumbs-up mx-1"></i>{{ recommended }} % recommend</span>
-              {% else %}
-                <span class="mx-2" style="color:red; font-weight:bold"><i class="fas fa-thumbs-down mx-1"></i>{{ recommended }} % recommend</span>
-              {% endif %}
+              </span>
+              <span class="mx-2">{{ ngreviews.length }} reviews</span>
+              <span ng-if="ngrecommended >= 50" class="mx-2" style="color:rgb(19,165,41); font-weight:bold"><i class="fas fa-thumbs-up mx-1"></i>{{ ngrecommended }} % recommend</span>
+              <span ng-if="ngrecommended < 50" class="mx-2" style="color:red; font-weight:bold"><i class="fas fa-thumbs-down mx-1"></i>{{ ngrecommended }} % recommend</span>
               <span class="mx-3"><a href="#reviews">Read reviews</a></span>
-              <span><a href="{% url 'write' item.id %}">Write a review</a></span>
+              <span><a href="/write/{{ ngitem.id }}">Write a review</a></span>
             </div>
-          {% else %}
-            <div class="font-14 mx-3 mb-3">
+
+            <div ng-if="ngreviews.length == 0" class="font-14 mx-3 mb-3">
               <i class="fa fa-star"></i>
               <i class="fa fa-star"></i>
               <i class="fa fa-star"></i>
               <i class="fa fa-star"></i>
               <i class="fa fa-star"></i>
               <span class="mx-2">No reviews</span>
-              <span><a href="{% url 'write' item.id %}">Write the first review!</a></span>
+              <span><a href="/write/{{ ngitem.id }}">Write the first review!</a></span>
             </div>
-          {% endif %}
+
 
 
           <div class="row p-4" id="rowDiv">
-            <div class="col col-md-8 col-xs-12">
-              <img class="img img-fluid mx-auto d-block" src="/{{ item.image }}" alt="{{ item.name }}">
+            <div class="col col-lg-8 col-xs-12">
+              <img class="img img-fluid mx-auto d-block" ng-src="/{{ ngitem.image }}" alt="{{ ngitem.name }}">
             </div>
-            <div class="col col-md-4 col-xs-12">
+            <div class="col col-lg-4 col-xs-12">
               <div class="p-3 mr-3 mt-5 infoSideBar">
-                <li><span><b>Product number:</b> {{ item.id }}</span></li>
-                <li><span><b>Manufacturer:</b> {{ item.make }}</span></li>
-                <li><span><b>Products available:</b> {{ item.quantityAvailable }}</span></li>
+                <li><span><b>Product number:</b> {{ ngitem.id }}</span></li>
+                <li><span><b>Manufacturer:</b> {{ ngitem.make }}</span></li>
+                <li><span><b>Products available:</b> {{ ngitem.quantityAvailable }}</span></li>
               </div>
 
+              <!--AngularJS-->
               <div class="p-3 mr-3 mt-3 infoSideBar">
                 <h6 class="mb-0">Price (alv 24 % /  0 %)</h6>
-                <span class="priceTag">{{ item.price }}</span>
-                <button onclick="location.href = {% url 'buy' item.id %}" class="btn btn-primary w-100 mt-4"><i class="fas fa-shopping-cart"></i> Add to basket</button>
+                <span class="priceTag">{{ ngitem.price }}</span>
+                <button ng-click="buy()" class="btn btn-primary w-100 mt-4"><i class="fas fa-shopping-cart"></i> Add to basket</button>
                 <div class="group">
                   <div class="item line"></div>
                   <div class="item text">or</div>
                   <div class="item line"></div>
                 </div>
-                <button onclick="location.href = {% url 'buy' item.id %}" class="btn btn-secondary w-100 mt-4"><i class="far fa-heart"></i> Add to my list</button>
-
-              <!--  <form action="{% url 'buy' item.id %}" method="post">
-                  {% csrf_token %}
-                  <input type="submit" value="Add to basket" class="btn btn-primary w-100">
-                </form>-->
+                <button class="btn btn-secondary w-100 mt-4"><i class="far fa-heart"></i> Add to my list</button>
               </div>
+              <!--/AngularJS-->
             </div>
           </div>
 
           <hr>
           <div class="m-4">
-              <p>{{ item.desc }}</p>
-              {% if item.properties %}
-              <h6 style="font-weight:bold">Properties:</h6>
-                {% for property in item.properties %}
-                  <li class="list-disc ml-4 font-14">{{ property }}</li>
-                {% endfor %}
-              {% endif %}
+              <p>{{ ngitem.desc }}</p>
+              <div ng-if="ngitem.properties.length > 0">
+                <h6 style="font-weight:bold">Properties:</h6>
+                <li class="list-disc ml-4 font-14" ng-repeat="i in ngproperties">{{ i }}</li>
+              </div>
 
 
-
-                  {% verbatim %}
-                    <section ng-if="ngreviews" id="reviews">
+                    <section ng-if="ngreviews.length > 0" id="reviews">
                       <div class="w-100 p-3 mt-5" style="border:.5px solid grey;">
                         <span class="reviewCount">{{ ngreviews.length }}</span> <span class="font-16">Reviews</span>
                       </div>
@@ -92,13 +82,13 @@
                         <div class="row">
                           <div class="col-md-6 text-center">
                             <div class="font-26 mx-3">
-                              {% for i in loop_times %}
+                              <span ng-repeat="x in [].constructor(ngaverage_stars) track by $index">
                                 <i class="fas fa-star"></i>
-                              {% endfor %}
-                              {% for i in remaining %}
+                              </span>
+                              <span ng-repeat="x in [].constructor(5-ngaverage_stars) track by $index">
                                 <i class="fa fa-star"></i>
-                              {% endfor %}
-                              <span class="mx-3">{{ average_stars }}</span>
+                              </span>
+                              <span class="mx-3">{{ ngaverage_stars }}</span>
                             </div>
                           </div>
                         </div>
@@ -128,10 +118,6 @@
                     </section>
                   {% endverbatim %}
                 </div>
-
-
-          </div>
-
         </div>
       </div>
 
