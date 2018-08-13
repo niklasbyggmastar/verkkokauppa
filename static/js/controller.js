@@ -23,8 +23,8 @@ app.controller("ctrl", function ($scope, $http, $location, $filter) {
 
   $http.get(itemUrl).then(function(response) {
     $scope.ngitem = response.data;
-    $scope.ngproperties = stringToArray($scope.ngitem.properties);
     $scope.propertiesCount = $scope.ngitem.properties.split(',').length;
+    $scope.ngproperties =  stringToArray($scope.ngitem.properties); //$scope.ngitem.properties.split(',')[$scope.propertiesCount-1];
   });
 
   $scope.showMore = function(num){
@@ -39,19 +39,13 @@ app.controller("ctrl", function ($scope, $http, $location, $filter) {
   };
 
   var stringToArray = function(data){
-    var itemCount = data.split(',').length;
-    console.log(itemCount);
+    var itemCount = data.split('|').length;
     var list = [];
     for (var i = 0; i < itemCount; i++) {
-      list.push(data.split(',')[i]);
+      list.push(data.split('|')[i].replace("\['","").replace("\']",""));
     }
-    return list.length;
+    return list;
   };
-
-  /*var split = function(string, nb) {
-    var array = string.split(',');
-    return array[nb];
-  };*/
 
   var getStarValues = function(data){
     var list = [];

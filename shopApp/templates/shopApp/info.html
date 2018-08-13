@@ -68,56 +68,54 @@
           <hr>
           <div class="m-4">
               <p>{{ ngitem.desc }}</p>
-              <div ng-if="ngitem.properties.length > 0">
+              <div ng-if="ngproperties.length > 1">
                 <h6 style="font-weight:bold">Properties:</h6>
                 <li class="list-disc ml-4 font-14" ng-repeat="i in ngproperties">{{ i }}</li>
               </div>
-
-
-                    <section ng-if="ngreviews.length > 0" id="reviews">
-                      <div class="w-100 p-3 mt-5" style="border:.5px solid grey;">
-                        <span class="reviewCount">{{ ngreviews.length }}</span> <span class="font-16">Reviews</span>
-                      </div>
-                      <div class="w-100 p-3" style="border-right:.5px solid grey;border-left:.5px solid grey;border-bottom:.5px solid grey;">
-                        <div class="row">
-                          <div class="col-md-6 text-center">
-                            <div class="font-26 mx-3">
-                              <span ng-repeat="x in [].constructor(ngaverage_stars) track by $index">
-                                <i class="fas fa-star"></i>
-                              </span>
-                              <span ng-repeat="x in [].constructor(5-ngaverage_stars) track by $index">
-                                <i class="fa fa-star"></i>
-                              </span>
-                              <span class="mx-3">{{ ngaverage_stars }}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="w-100 p-3">
-                        <li ng-repeat="ngreview in ngreviews | limitTo: displayNum | orderBy: '-date_added'"> <!-- wrong order -->
-                          <span ng-repeat="i in [] | range:ngreview.stars">
-                            <i class="fas fa-star"></i>
-                          </span>
-                          <span ng-repeat="i in [] | range:5-ngreview.stars">
-                            <i class="fa fa-star"></i>
-                          </span>
-                          <span style="font-weight:bold" class="mx-2">{{ ngreview.title }}</span>
-                          <p ng-if="ngreview.nickname" style="color:gray;">
-                            <i class="far fa-user align-center mr-2"></i>
-                            <span class="mr-4" style="font-weight:bold">{{ ngreview.nickname }}</span> {{ ngreview.gender }} {{ ngreview.age }} <span class="float-right">{{ ngreview.date_added.substr(0,ngreview.date_added.lastIndexOf(year) + 4) }}</span>
-                          </p>
-                          <p ng-if="!ngreview.nickname" style="color:gray;">
-                            <i class="far fa-user align-center mr-2"></i>
-                            <span class="mr-4" style="font-weight:bold">{{ ngreview.user_fullname }}</span><span class="float-right">{{ ngreview.date_added.substr(0,ngreview.date_added.lastIndexOf(year) + 4) }}</span>
-                          </p>
-                          <p>{{ ngreview.text }}</p>
-                          <hr>
-                        </li>
-                        <button class="btn btn-light mx-auto d-block w-75" ng-click="showMore(3)" ng-show="showMoreBtn">See more</button>
-                      </div>
-                    </section>
-                  {% endverbatim %}
+              <section ng-if="ngreviews.length > 0" id="reviews">
+                <div class="w-100 p-3 mt-5" style="border:.5px solid grey;">
+                  <span class="reviewCount">{{ ngreviews.length }}</span> <span class="font-16">Reviews</span>
                 </div>
+                <div class="w-100 p-3" style="border-right:.5px solid grey;border-left:.5px solid grey;border-bottom:.5px solid grey;">
+                  <div class="row">
+                    <div class="col-md-6 text-center">
+                      <div class="font-26 mx-3">
+                        <span ng-repeat="x in [].constructor(ngaverage_stars) track by $index">
+                          <i class="fas fa-star"></i>
+                        </span>
+                        <span ng-repeat="x in [].constructor(5-ngaverage_stars) track by $index">
+                          <i class="fa fa-star"></i>
+                        </span>
+                        <span class="mx-3">{{ ngaverage_stars }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="w-100 p-3">
+                  <li ng-repeat="ngreview in ngreviews | limitTo: displayNum | orderBy: '-date_added'"> <!-- wrong order -->
+                    <span ng-repeat="i in [] | range:ngreview.stars">
+                      <i class="fas fa-star"></i>
+                    </span>
+                    <span ng-repeat="i in [] | range:5-ngreview.stars">
+                      <i class="fa fa-star"></i>
+                    </span>
+                    <span style="font-weight:bold" class="mx-2">{{ ngreview.title }}</span>
+                    <p ng-if="ngreview.nickname" style="color:gray;">
+                      <i class="far fa-user align-center mr-2"></i>
+                      <span class="mr-4" style="font-weight:bold">{{ ngreview.nickname }}</span> {{ ngreview.gender }} {{ ngreview.age }} <span class="float-right">{{ ngreview.date_added.substr(0,ngreview.date_added.lastIndexOf(year) + 4) }}</span>
+                    </p>
+                    <p ng-if="!ngreview.nickname" style="color:gray;">
+                      <i class="far fa-user align-center mr-2"></i>
+                      <span class="mr-4" style="font-weight:bold">{{ ngreview.user_fullname }}</span><span class="float-right">{{ ngreview.date_added.substr(0,ngreview.date_added.lastIndexOf(year) + 4) }}</span>
+                    </p>
+                    <p>{{ ngreview.text }}</p>
+                    <hr>
+                  </li>
+                  <button class="btn btn-light mx-auto d-block w-75" ng-click="showMore(3)" ng-show="showMoreBtn">See more</button>
+                </div>
+              </section>
+            {% endverbatim %}
+          </div>
         </div>
       </div>
 
