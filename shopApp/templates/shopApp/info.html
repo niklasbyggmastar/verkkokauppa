@@ -2,7 +2,7 @@
 {% load filters %}
       <div class="row" ng-app="app" ng-controller="ctrl">
         {% verbatim %}
-        <span class="ml-3 path mt-2"><a href="/"><i class="fas fa-home"></i></a> > <a href="/results/{{ ngitem.category_name }}">{{ ngitem.category_name }}</a> > <a href="/%3F{{ ngitem.id }}">Product {{ ngitem.id }}</a> </span>
+        <span class="ml-3 path mt-2"><a href="/"><i class="fas fa-home"></i></a> > <a href="/results/{{ category_name }}">{{ category_name }}</a> > <a href="/%3F{{ ngitem.id }}">Product {{ ngitem.id }}</a> </span>
         <div class="infoDiv m-3">
 
           <div ng-repeat="message in messages" class="alert {{ message.tags }}" role="alert">
@@ -11,32 +11,30 @@
 
           <h5 class="p-3 title">{{ ngitem.name }}</h5>
 
-            <!-- Rating stars -->
-            <div ng-if="ngreviews.length > 0" class="font-14 mx-3 mb-3">
-              <span ng-repeat="x in [].constructor(ngaverage_stars) track by $index">
-                <i class="fas fa-star"></i>
-              </span>
-              <span ng-repeat="x in [].constructor(5-ngaverage_stars) track by $index">
-                <i class="fa fa-star"></i>
-              </span>
-              <span class="mx-2">{{ ngreviews.length }} reviews</span>
-              <span ng-if="ngrecommended >= 50" class="mx-2" style="color:rgb(19,165,41); font-weight:bold"><i class="fas fa-thumbs-up mx-1"></i>{{ ngrecommended }} % recommend</span>
-              <span ng-if="ngrecommended < 50" class="mx-2" style="color:red; font-weight:bold"><i class="fas fa-thumbs-down mx-1"></i>{{ ngrecommended }} % recommend</span>
-              <span class="mx-3"><a href="#reviews">Read reviews</a></span>
-              <span><a href="/write/{{ ngitem.id }}">Write a review</a></span>
-            </div>
+          <!-- Rating stars -->
+          <div ng-if="ngreviews.length > 0" class="font-14 mx-3 mb-3">
+            <span ng-repeat="x in [].constructor(ngaverage_stars) track by $index">
+              <i class="fas fa-star"></i>
+            </span>
+            <span ng-repeat="x in [].constructor(5-ngaverage_stars) track by $index">
+              <i class="fa fa-star"></i>
+            </span>
+            <span class="mx-2">{{ ngreviews.length }} reviews</span>
+            <span ng-if="ngrecommended >= 50" class="mx-2" style="color:rgb(19,165,41); font-weight:bold"><i class="fas fa-thumbs-up mx-1"></i>{{ ngrecommended }} % recommend</span>
+            <span ng-if="ngrecommended < 50" class="mx-2" style="color:red; font-weight:bold"><i class="fas fa-thumbs-down mx-1"></i>{{ ngrecommended }} % recommend</span>
+            <span class="mx-3"><a href="#reviews">Read reviews</a></span>
+            <span><a href="/write/{{ ngitem.id }}">Write a review</a></span>
+          </div>
 
-            <div ng-if="ngreviews.length == 0" class="font-14 mx-3 mb-3">
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i>
-              <span class="mx-2">No reviews</span>
-              <span><a href="/write/{{ ngitem.id }}">Write the first review!</a></span>
-            </div>
-
-
+          <div ng-if="ngreviews.length == 0" class="font-14 mx-3 mb-3">
+            <i class="fa fa-star"></i>
+            <i class="fa fa-star"></i>
+            <i class="fa fa-star"></i>
+            <i class="fa fa-star"></i>
+            <i class="fa fa-star"></i>
+            <span class="mx-2">No reviews</span>
+            <span><a href="/write/{{ ngitem.id }}">Write the first review!</a></span>
+          </div>
 
           <div class="row p-4" id="rowDiv">
             <div class="col col-lg-8 col-xs-12">
@@ -49,10 +47,15 @@
                 <li><span><b>Products available:</b> {{ ngitem.quantityAvailable }}</span></li>
               </div>
 
-              <!--AngularJS-->
               <div class="p-3 mr-3 mt-3 infoSideBar">
                 <h6 class="mb-0">Price (alv 24 % /  0 %)</h6>
                 <span class="priceTag">{{ ngitem.price }}</span>
+
+
+
+
+
+                <!-- THESE TWO MOFO BUTTONS LEFT HERE! AND CATEGORY NAME! -->
                 <button ng-click="buy()" class="btn btn-primary w-100 mt-4"><i class="fas fa-shopping-cart"></i> Add to basket</button>
                 <div class="group">
                   <div class="item line"></div>
@@ -61,7 +64,7 @@
                 </div>
                 <button class="btn btn-secondary w-100 mt-4"><i class="far fa-heart"></i> Add to my list</button>
               </div>
-              <!--/AngularJS-->
+
             </div>
           </div>
 

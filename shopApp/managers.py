@@ -2,8 +2,12 @@ from django.db.models.manager import Manager
 import datetime
 
 class CategoryManager(Manager):
-    def get_by_natural_key(self, category_name):
-        return self.get(category_name=category_name)
+    def by_name(self, name):
+        return self.get_queryset().filter(name=name)
+
+class ProfileManager(Manager):
+    def by_user(self, user):
+        return self.get_queryset().filter(username=user.username)
 
 class ItemManager(Manager):
     def by_date(self, date):
