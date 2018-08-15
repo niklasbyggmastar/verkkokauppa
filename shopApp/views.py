@@ -1,68 +1,88 @@
 from django.shortcuts import render, redirect
-from .models import Item, Category, Review
+from .models import Item, Category, Review, Profile
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from django.db.models import Avg
 from django.utils import timezone
+import json
 
 
 def index(request):
     categories = Category.objects.order_by('name')
+    profile = Profile.objects.get(user=request.user)
     new_items_list = Item.objects.order_by('-date_added')[:25]
     reviews = Review.objects.order_by('-date_added')[:25]                                       #AngularJS tilalle
-    context = {'new_items_list': new_items_list, 'categories': categories, 'reviews': reviews}
+    context = {'new_items_list': new_items_list, 'categories': categories, 'reviews': reviews, 'profile': profile}
     return render(request, 'shopApp/index.html', context)
 
 def info(request, item_id):
     categories = Category.objects.order_by('name')
-    item = Item.objects.get(pk=item_id)
-    context = {'item': item, 'categories': categories}
+    profile = Profile.objects.get(user=request.user)
+    context = {'categories': categories, 'profile': profile}
     return render(request, 'shopApp/info.html', context)
 
 def results(request, category_name):
     categories = Category.objects.order_by('name')
+    profile = Profile.objects.get(user=request.user)
     items = Item.objects.filter(category__name=category_name)
     category = Category.objects.get(name=category_name)
-    context = {'items': items, 'categories': categories, 'category': category}
+    context = {'items': items, 'categories': categories, 'category': category, 'profile': profile}
     return render(request, 'shopApp/results.html', context)
 
 def buy(request, item_id):
     categories = Category.objects.order_by('name')
-    context = {'item_id': item_id, 'categories': categories}
+    profile = Profile.objects.get(user=request.user)
+    context = {'item_id': item_id, 'categories': categories, 'profile': profile}
     return render(request, 'shopApp/buy.html', context)
 
 def write(request, item_id):
     categories = Category.objects.order_by('name')
+    profile = Profile.objects.get(user=request.user)
     item = Item.objects.get(pk=item_id)
-    context = {'categories': categories, 'item': item}
+    context = {'categories': categories, 'item': item, 'profile': profile}
     return render(request, 'shopApp/write_review.html', context)
 
 def account(request):
     categories = Category.objects.order_by('name')
+    profile = Profile.objects.get(user=request.user)
     orders_list = []
-    for item_id in request.user.profile.orders:
+    for item_id in profile.orders:
         for item in Item.objects.all():
             if item_id == item.id:
                 orders_list.insert(0, item)
-    context = {'categories': categories, 'orders_list': orders_list}
+    context = {'categories': categories, 'orders_list': orders_list, 'profile': profile}
     return render(request, 'shopApp/account.html', context)
 
 def login_view(request):
     if not request.user.is_authenticated:
         categories = Category.objects.order_by('name')
-        context = {'categories': categories}
+        profile = Profile.objects.get(user=request.user)
+        context = {'categories': categories, 'profile': profile}
         return render(request, 'shopApp/login.html', context)
     else:
         return redirect("/")
 
 def signup(request):
     categories = Category.objects.order_by('name')
-    context = {'categories': categories}
+    profile = Profile.objects.get(user=request.user)
+    context = {'categories': categories, 'profile': profile}
     return render(request, 'shopApp/signup.html', context)
 
 
 #---------------- ACTIONS ---------------
+
+def add(request):
+    if request.method == 'POST':
+        print("REQUEST BODY ------> " + str(request.body.decode('utf-8')))
+        id = request.body.decode('utf-8')
+        profile = Profile.objects.get(user=request.user)
+        print("request post:" + str(id))
+        print("Profile: " + profile.user.username)
+        profile.shopping_cart.append(id)
+        profile.save()
+        return redirect("/?ywas")
+
 
 def post_review(request, item_id):
     if request.method == 'POST':

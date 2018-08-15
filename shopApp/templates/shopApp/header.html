@@ -12,12 +12,13 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
     <link rel="stylesheet" href="{% static 'css/star-rating-svg.css' %}">
     <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
     <script src="{% static 'js/controller.js' %}"></script>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
   </head>
-  <body>
+  <body ng-app="app">
       <!--TOP BAR-->
       <nav class="navbar navbar-expand-md navbar-light justify-content-start">
         <button type="button" class="navbar-toggler mr-2" data-toggle="collapse" data-target="#sideBarNav" aria-controls="sideBarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,20 +34,38 @@
 
         <!--<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar"> <span class="navbar-toggler-icon"></span></button>-->
         <div class="collapse navbar-collapse" id="collapsibleNavbar">
-          <form style="width:60%">
+          <form style="width:55%">
             <div class="input-group">
-              <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-              <button class="btn btn-primary my-2 my-sm-0" type="submit">Search</button>
+              <input id="searchInput" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" style="border-radius:3px;">
+              <button id="searchBtn" class="btn btn-primary my-2 my-sm-0" type="submit" style="display:none">Search</button>
             </div>
           </form>
           <ul class="navbar-nav ml-0 mr-3">
             {% if user.is_authenticated %}
-              <li class="nav-item"><a class="nav-link" style="color:white;" href="{% url 'account' %}"><i class="far fa-user-circle"></i> Hello, {{ user.first_name }}!</a></li>
+              <li class="nav-item"><a class="nav-link" style="color:white;" href="{% url 'account' %}"><i class="font-20 far fa-user-circle"></i> Hello, {{ user.first_name }}!</a></li>
             {% else %}
-              <li class="nav-item"><a class="nav-link" style="color:white;" href="{% url 'login_view' %}"><i class="fas fa-unlock"></i> Login</a></li>
+              <li class="nav-item"><a class="nav-link" style="color:white;" href="{% url 'login_view' %}"><i class="font-20 fas fa-unlock"></i> Login</a></li>
             {% endif %}
-            <li class="nav-item"><a class="nav-link" style="color:white;" href="#"><i class="far fa-heart"></i> My lists</a></li>
-            <li class="nav-item"><a class="nav-link" style="color:white;" href="#"><i class="fas fa-shopping-cart"></i> Checkout</a></li>
+            <li class="nav-item">
+              <a class="nav-link" style="color:white;" href="#">
+                <i class="font-20 far fa-heart"></i> My lists
+              </a>
+            </li>
+            <li ng-controller="ctrl" class="nav-item"> <!-- NGCONTROLLER! -->
+              <a class="nav-link" style="color:white;" href="#checkout">
+                <!-- EI NÄY HETI -->
+              <!--  {% verbatim %}
+                  {{ itemsInCart }}<i class="fas fa-shopping-cart"></i> Checkout
+                {% endverbatim %} -->
+
+                <i class="font-20 fas fa-shopping-cart">
+                  {% if profile.shopping_cart|length > 0 %}
+                    <span class="itemsInCart" style="position: relative; font-size: 14px;border-radius:50%; padding-left: 4px; padding-right: 4px; background-color:red; bottom:12px; right:8px; margin-right:-10px">{{ profile.shopping_cart|length }}</span>
+                  {% endif %}
+                </i> Checkout
+
+              </a>
+            </li>
           </ul>
         </div>
       </nav>
@@ -76,6 +95,14 @@
             $(window).on('resize', function(){
               checkWidth();
             });
+            $("input").keyup(function(){
+              if($("#searchInput").val().length > 0){
+                $("#searchBtn").show();
+              }else{
+                $("#searchBtn").hide();
+              }
+            });
+
           });
 
           function checkWidth(){

@@ -1,6 +1,6 @@
 {% include 'shopApp/header.html' %}
 {% load filters %}
-      <div class="row" ng-app="app" ng-controller="ctrl">
+      <div class="row" ng-controller="ctrl">
         {% verbatim %}
         <span class="ml-3 path mt-2"><a href="/"><i class="fas fa-home"></i></a> > <a href="/results/{{ category_name }}">{{ category_name }}</a> > <a href="/%3F{{ ngitem.id }}">Product {{ ngitem.id }}</a> </span>
         <div class="infoDiv m-3">
@@ -55,8 +55,8 @@
 
 
 
-                <!-- THESE TWO MOFO BUTTONS LEFT HERE! AND CATEGORY NAME! -->
-                <button ng-click="buy()" class="btn btn-primary w-100 mt-4"><i class="fas fa-shopping-cart"></i> Add to basket</button>
+                <!-- THESE TWO MOFO BUTTONS LEFT HERE! -->
+                <button ng-click="addToCart()" class="btn btn-primary w-100 mt-4"><i class="fas fa-shopping-cart"></i> Add to cart</button>
                 <div class="group">
                   <div class="item line"></div>
                   <div class="item text">or</div>
