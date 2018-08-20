@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {% load static %}
+
+    <meta charset="utf-8">
+    <title>Verkkokauppa</title>
+    <meta name="viewport" content="width=device-width, height=device-height initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="{% static 'js/jquery.star-rating-svg.min.js' %}"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/star-rating-svg.css' %}">
+    <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
+    <script src="{% static 'js/controller.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  </head>
+  <body>
+      <!--TOP BAR-->
+      <nav class="navbar navbar-expand-md navbar-light justify-content-start">
+        <button type="button" class="navbar-toggler mr-2" data-toggle="collapse" data-target="#sideBarNav" aria-controls="sideBarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <i class="fas fa-bars"></i>
+        </button>
+        <a class="navbar-brand" href="{% url 'index' %}">
+          <picture>
+            <source media="(min-width:1000px)" srcset="{% static 'img/logo.png' %}" style="margin-left:-6em">
+            <source media="(min-width:200px)" srcset="{% static 'img/favicon.png' %}">
+            <img src="{% static 'img/logo.png' %}" alt="Verkkokauppa" height="35">
+          </picture>
+        </a>
+
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+          <ul class="navbar-nav ml-auto" style="margin-right:20em;">
+            <li class="nav-item mr-4">
+              <a style="color:white" class="nav-link" href="#">
+                <i class="fas fa-phone font-24"></i>
+                <span class="align-top font-14">Customer service</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a style="color:white" class="nav-link" href="{% url 'index' %}">
+                <i class="fas fa-store font-24"></i>
+                <span class="align-top font-14">Back to the shop</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+
+
+      <!--SIDE BAR-->
+      <div class="container-fluid">
+
+      <div class="row">
+        <div class="col col-lg-9">
+          <div class="checkoutDiv mt-3">
+
+
+            <!-- Top bar of the order steps -->
+            <div class="px-5 pt-4 ml-4">
+              <div class="row">
+                <div class="col-lg-2">
+                  <div class="checkoutIcon active"><img class="img img-fluid" src="{% static 'img/cart_w.png' %}" alt="Cart"></div>
+                  <label class="font-13">Shopping cart</label>
+                </div>
+                <div class="col-lg-2">
+                  <div class="checkoutIcon"><img class="img img-fluid" src="{% static 'img/contacts_b.png' %}" alt="Contacts"></div>
+                  <label class="font-13">Contacts</label>
+                </div>
+                <div class="col-lg-2">
+                  <div class="checkoutIcon"><img class="img img-fluid" src="{% static 'img/delivery_b.png' %}" alt="Delivery"></div>
+                  <label class="font-13">Delivery</label>
+                </div>
+                <div class="col-lg-2">
+                  <div class="checkoutIcon"><img class="img img-fluid" src="{% static 'img/payment_b.png' %}" alt="Payment"></div>
+                  <label class="font-13">Payment</label>
+                </div>
+                <div class="col-lg-2">
+                  <div class="checkoutIcon"><img class="img img-fluid" src="{% static 'img/preview_b.png' %}" alt="Summary"></div>
+                  <label class="font-13">Summary</label>
+                </div>
+              </div>
+            </div>
+
+
+            <hr>
+
+            <h5 class="ml-4 mb-5"><i class="font-26 fas fa-shopping-cart"></i> Shopping cart</h5>
+
+            {% for item in cart %}
+              <li class="d-inline">
+                <div class="row">
+                  <div class="col-lg-2"> <!--!!!!!!!!!!!-->
+                    <a href="{% url 'info' item.id %}"><img class="img img-fluid mx-3" src="/{{ item.image }}" alt="{{ item.name }}"></a>
+                  </div>
+                  <div class="col-lg-10">
+                    <a href="{% url 'info' item.id %}" style="color:black"><span style="font-weight:bold">{{ item.name }}</span></a>
+                    <span class="float-right mr-3" style="font-weight:bold">{{ item.price }} €</span>
+                  </div>
+                </div>
+                <hr>
+              </li>
+            {% empty %}
+              No items in shopping cart
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="col col-lg-3">
+          <div class="p-4 mt-3 infoSideBar w-75">
+            <h6>Order summary</h6>
+            <li class="font-13" style="margin-bottom:-5px;">{{ cart|length }} items in total<span class="float-right">{{ total_price }} €</span></li>
+            <hr>
+            <li class="font-13" style="font-weight:bold;margin-top:-5px;">Total price<span class="float-right" style="color:red;">{{ total_price }} €</span></li>
+          </div>
+          <div class="p-4 mt-3 infoSideBar w-75">
+            <h6>Client information</h6>
+            <li class="font-13 mb-2" style="font-weight:bold">{{ request.user.get_full_name }}<span class="float-right font-12" style="color:grey;">{{ request.user.id }}</span></li>
+            <li class="mb-2"><i class="fas fa-phone"></i> <span class="font-13"> {{ profile.phone_num }}</span></li>
+            <li><i class="far fa-envelope"></i> <span class="font-13"> {{ request.user.email }}</span></li>
+          </div>
+        </div>
+
+
+      </div>
+
+    </div><!--container-->
+  </body>
+</html>

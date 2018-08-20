@@ -30,31 +30,22 @@ app.controller("ctrl", function ($scope, $http, $location, $filter) {
   });
 
   // --- Buying and lists related ---
-
-  var profileUrl = "http://localhost:8000/api/v1/profile/2/?format=json";
-  $http.get(profileUrl).then(function(response){
-    var user_id = (response.data.user.split('/')[4]);
-    // Assuming profile ID and user ID are the same!
-  //  $scope.user_id = response.data.user;
-  //  $scope.profile = $filter('filter')(response.data.objects, user.split('/')[4]: user_id);
-
-  });
-  $scope.itemsInCart = 0;
   $http.defaults.xsrfCookieName = 'csrftoken';
   $http.defaults.xsrfHeaderName = 'X-CSRFToken';
   $http.defaults.headers.post['XSRF-AUTH'] = csrf_token;
   var csrf_token = Cookies.get('csrftoken');
   // Add item to shopping cart
   $scope.addToCart = function(){
-    //$scope.cart.push(itemid);
-    //console.log($scope.cart.length);
+    // Call django view
     $http({
       method: 'POST',
-      url: '/add/',
+      url: '/addToCart/',
       data: itemid
-      }).then(function(){
-        console.log("addeded " + itemid);
-        $scope.itemsInCart += 1;
+    }).then(function(response){
+        // Parse JsonResponse from Django view and update cart length in template
+        var num = angular.element(document.querySelector('.numOfItems'));
+        num.html(response.data.cart.length);
+        num.css('display', 'inline');
       }, function errorCallBack(response){
         console.log(response.data);
       });

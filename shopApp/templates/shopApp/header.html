@@ -51,16 +51,13 @@
                 <i class="font-20 far fa-heart"></i> My lists
               </a>
             </li>
-            <li ng-controller="ctrl" class="nav-item"> <!-- NGCONTROLLER! -->
-              <a class="nav-link" style="color:white;" href="#checkout">
-                <!-- EI NÄY HETI -->
-              <!--  {% verbatim %}
-                  {{ itemsInCart }}<i class="fas fa-shopping-cart"></i> Checkout
-                {% endverbatim %} -->
-
+            <li class="nav-item">
+              <a class="nav-link" style="color:white;" href="{% url 'checkout' %}">
                 <i class="font-20 fas fa-shopping-cart">
                   {% if profile.shopping_cart|length > 0 %}
-                    <span class="itemsInCart" style="position: relative; font-size: 14px;border-radius:50%; padding-left: 4px; padding-right: 4px; background-color:red; bottom:12px; right:8px; margin-right:-10px">{{ profile.shopping_cart|length }}</span>
+                    <span class="numOfItems">{{ profile.shopping_cart|length }}</span>
+                  {% else %}
+                    <span class="numOfItems" style="display:none;">{{ profile.shopping_cart|length }}</span>
                   {% endif %}
                 </i> Checkout
 
@@ -74,20 +71,20 @@
 
       <!--SIDE BAR-->
       <div class="container-fluid">
-        <div class="navMenu float-left" id="sideBarNav">  <!-- collapse navbar-collapse w-75-->
-          <nav class="nav flex-column">
-            {% if categories %}
+        {% if categories %}
+          <div class="navMenu float-left" id="sideBarNav">  <!-- collapse navbar-collapse w-75-->
+            <nav class="nav flex-column">
               {% for category in categories %}
-              <a class="dropdown-item py-1" href="/results/{{ category.name }}">
-                <img width=25 height=25 src="/{{ category.icon }}" alt="icon">
-                <span class="align-middle">{{ category.name }}</span>
-              </a>
+                <a class="dropdown-item py-1" href="/results/{{ category.name }}">
+                  <img width=25 height=25 src="/{{ category.icon }}" alt="icon">
+                  <span class="align-middle">{{ category.name }}</span>
+                </a>
               {% endfor %}
-            {% else %}
-              <h1>no categories</h1>
-            {% endif %}
-          </nav>
-        </div>
+            </nav>
+          </div>
+          {% endif %}
+
+
 
         <script>
           $(function(){

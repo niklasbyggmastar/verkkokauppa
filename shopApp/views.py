@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from django.db.models import Avg
 from django.utils import timezone
-import json
+from django.http import JsonResponse
 
 
 def index(request):
@@ -30,11 +30,18 @@ def results(request, category_name):
     context = {'items': items, 'categories': categories, 'category': category, 'profile': profile}
     return render(request, 'shopApp/results.html', context)
 
-def buy(request, item_id):
-    categories = Category.objects.order_by('name')
+def checkout(request):
     profile = Profile.objects.get(user=request.user)
-    context = {'item_id': item_id, 'categories': categories, 'profile': profile}
-    return render(request, 'shopApp/buy.html', context)
+    cart = []
+    total_price = 0
+    for item_id in profile.shopping_cart:
+        for item in Item.objects.all():
+            if item_id == item.id:
+                cart.insert(0, item)
+    for item in cart:
+        total_price += item.price
+    context = {'profile': profile, 'cart': cart, 'total_price': total_price}
+    return render(request, 'shopApp/checkout.html', context)
 
 def write(request, item_id):
     categories = Category.objects.order_by('name')
@@ -72,16 +79,13 @@ def signup(request):
 
 #---------------- ACTIONS ---------------
 
-def add(request):
+def addToCart(request):
     if request.method == 'POST':
-        print("REQUEST BODY ------> " + str(request.body.decode('utf-8')))
         id = request.body.decode('utf-8')
         profile = Profile.objects.get(user=request.user)
-        print("request post:" + str(id))
-        print("Profile: " + profile.user.username)
         profile.shopping_cart.append(id)
         profile.save()
-        return redirect("/?ywas")
+        return JsonResponse({'cart': profile.shopping_cart})
 
 
 def post_review(request, item_id):
