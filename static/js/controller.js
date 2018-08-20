@@ -1,5 +1,29 @@
 var app = angular.module('app', []);
 
+
+
+
+
+
+
+
+
+
+
+
+
+// ----------------------------- TODO: LOADING SCREEN ON INFO PAGE! -------------------------------
+
+
+
+
+
+
+
+
+
+
+
 // Controller
 app.controller("ctrl", function ($scope, $http, $location, $filter) {
 

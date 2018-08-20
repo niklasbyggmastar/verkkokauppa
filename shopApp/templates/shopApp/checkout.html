@@ -33,7 +33,7 @@
         </a>
 
         <div class="collapse navbar-collapse" id="collapsibleNavbar">
-          <ul class="navbar-nav ml-auto" style="margin-right:20em;">
+          <ul class="navbar-nav ml-auto" id="checkoutNav">
             <li class="nav-item mr-4">
               <a style="color:white" class="nav-link" href="#">
                 <i class="fas fa-phone font-24"></i>
@@ -56,31 +56,31 @@
       <div class="container-fluid">
 
       <div class="row">
-        <div class="col col-lg-9">
+        <div class="col col-lg-9 col-md-10">
           <div class="checkoutDiv mt-3">
 
 
             <!-- Top bar of the order steps -->
-            <div class="px-5 pt-4 ml-4">
+            <div class="pt-4 mx-4">
               <div class="row">
-                <div class="col-lg-2">
-                  <div class="checkoutIcon active"><img class="img img-fluid" src="{% static 'img/cart_w.png' %}" alt="Cart"></div>
+                <div class="col text-center">
+                  <div id="cart" class="checkoutIcon active"><img class="img img-fluid" src="{% static 'img/cart_w.png' %}" alt="Cart"></div>
                   <label class="font-13">Shopping cart</label>
                 </div>
-                <div class="col-lg-2">
-                  <div class="checkoutIcon"><img class="img img-fluid" src="{% static 'img/contacts_b.png' %}" alt="Contacts"></div>
+                <div class="col text-center">
+                  <div id="contacts" class="checkoutIcon"><img class="img img-fluid" src="{% static 'img/contacts_b.png' %}" alt="Contacts"></div>
                   <label class="font-13">Contacts</label>
                 </div>
-                <div class="col-lg-2">
-                  <div class="checkoutIcon"><img class="img img-fluid" src="{% static 'img/delivery_b.png' %}" alt="Delivery"></div>
+                <div class="col text-center">
+                  <div id="delivery" class="checkoutIcon"><img class="img img-fluid" src="{% static 'img/delivery_b.png' %}" alt="Delivery"></div>
                   <label class="font-13">Delivery</label>
                 </div>
-                <div class="col-lg-2">
-                  <div class="checkoutIcon"><img class="img img-fluid" src="{% static 'img/payment_b.png' %}" alt="Payment"></div>
+                <div class="col text-center">
+                  <div id="payment" class="checkoutIcon"><img class="img img-fluid" src="{% static 'img/payment_b.png' %}" alt="Payment"></div>
                   <label class="font-13">Payment</label>
                 </div>
-                <div class="col-lg-2">
-                  <div class="checkoutIcon"><img class="img img-fluid" src="{% static 'img/preview_b.png' %}" alt="Summary"></div>
+                <div class="col text-center">
+                  <div id="summary" class="checkoutIcon"><img class="img img-fluid" src="{% static 'img/summary_b.png' %}" alt="Summary"></div>
                   <label class="font-13">Summary</label>
                 </div>
               </div>
@@ -89,28 +89,52 @@
 
             <hr>
 
-            <h5 class="ml-4 mb-5"><i class="font-26 fas fa-shopping-cart"></i> Shopping cart</h5>
 
-            {% for item in cart %}
-              <li class="d-inline">
-                <div class="row">
-                  <div class="col-lg-2"> <!--!!!!!!!!!!!-->
-                    <a href="{% url 'info' item.id %}"><img class="img img-fluid mx-3" src="/{{ item.image }}" alt="{{ item.name }}"></a>
+            <div id="cartDiv">
+              <h5 class="ml-4 mb-5"><i class="font-26 fas fa-shopping-cart"></i> Shopping cart</h5>
+              {% for item in cart %}
+                <li class="d-inline">
+                  <div class="row">
+                    <div class="col-lg-2 col-md-2"> <!--!!!!!!!!!!!-->
+                      <a href="{% url 'info' item.id %}"><img class="img img-fluid mx-3" src="/{{ item.image }}" alt="{{ item.name }}"></a>
+                    </div>
+                    <div class="col-lg-10 col-md-10">
+                      <a href="{% url 'info' item.id %}" style="color:black"><span style="font-weight:bold">{{ item.name }}</span></a>
+                      <span class="float-right mr-3" style="font-weight:bold">{{ item.price }} €</span>
+                      <p style="color:gray">Item number {{ item.id }}</p>
+                    </div>
                   </div>
-                  <div class="col-lg-10">
-                    <a href="{% url 'info' item.id %}" style="color:black"><span style="font-weight:bold">{{ item.name }}</span></a>
-                    <span class="float-right mr-3" style="font-weight:bold">{{ item.price }} €</span>
-                  </div>
-                </div>
-                <hr>
-              </li>
-            {% empty %}
-              No items in shopping cart
-            {% endfor %}
+                  <hr class="cartItemSeparator">
+                </li>
+              {% empty %}
+                No items in shopping cart
+              {% endfor %}
+            </div>
+
+            <div id="contactsDiv" style="display:none">
+              <form class="form-group" action="index.html" method="post">
+                Name: <input type="text" class="form-control">
+                Email: <input type="email" class="form-control">
+                <input type="submit" value="Continue" class="btn btn-primary">
+              </form>
+            </div>
+
+            <div id="deliveryDiv" style="display:none">
+              delivery
+            </div>
+
+            <div id="paymentDiv" style="display:none">
+              payment
+            </div>
+
+            <div id="summaryDiv" style="display:none">
+              summary
+            </div>
+
           </div>
         </div>
 
-        <div class="col col-lg-3">
+        <div class="col col-lg-3 col-md-2">
           <div class="p-4 mt-3 infoSideBar w-75">
             <h6>Order summary</h6>
             <li class="font-13" style="margin-bottom:-5px;">{{ cart|length }} items in total<span class="float-right">{{ total_price }} €</span></li>
@@ -129,5 +153,29 @@
       </div>
 
     </div><!--container-->
+    <script>
+      $(function(){
+        var list = ["cart", "contacts", "delivery", "payment", "summary"];
+        // When any icon is clicked
+        $(".checkoutIcon").click(function(){
+          // Check which icon is currently active
+          var currentActive = $(".pt-4.mx-4").find(".checkoutIcon.active");
+          for (var i = 0; i < list.length; i++) {
+            if (currentActive.attr("id")===list[i]) {
+              // Change the previous active button img to corresponding black icon
+              currentActive.children().attr("src", "/shopApp/static/img/" + list[i] + "_b.png");
+              // Remove the 'active' class from the previous button
+              currentActive.removeClass("active");
+              // Add 'active' class to the button just clicked
+              $(this).addClass("active");
+              // And change the button img to corresponding white icon
+              $(this).children().attr("src", "/shopApp/static/img/" + $(this).attr('id') + "_w.png");
+              $("#"+currentActive.attr("id")+"Div").hide();
+              $("#"+$(this).attr("id")+"Div").show();
+            }
+          }
+        });
+      });
+    </script>
   </body>
 </html>
