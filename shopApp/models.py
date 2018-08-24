@@ -17,6 +17,9 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone_num = PhoneNumberField()
     language = models.CharField(max_length=2, choices=LANGUAGES)
+    street_address = models.CharField(max_length=200, blank=True, null=True)
+    zip_code = models.CharField(max_length=10, blank=True, null=True)
+    city = models.CharField(max_length=200, blank=True, null=True)
     refunds_left =  models.DecimalField(decimal_places=2, max_digits=9, default=0)
     shopping_cart = ArrayField(models.IntegerField(default=0, unique=True) ,size=50, blank=True, default=[])   #list of product IDs
     my_lists = ArrayField(models.IntegerField(default=0, unique=True) ,size=200, blank=True, default=[])   #list of product IDs

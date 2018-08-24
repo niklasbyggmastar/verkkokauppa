@@ -18,16 +18,17 @@
     <script src="{% static 'js/controller.js' %}"></script>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
   </head>
-  <body>
+  <body ng-app="app">
       <!--TOP BAR-->
       <nav class="navbar navbar-expand-md navbar-light justify-content-start">
         <button type="button" class="navbar-toggler mr-2" data-toggle="collapse" data-target="#sideBarNav" aria-controls="sideBarNav" aria-expanded="false" aria-label="Toggle navigation">
           <i class="fas fa-bars"></i>
         </button>
         <a class="navbar-brand" href="{% url 'index' %}">
-          <picture>
-            <source media="(min-width:1000px)" srcset="{% static 'img/logo.png' %}" style="margin-left:-6em">
-            <source media="(min-width:200px)" srcset="{% static 'img/favicon.png' %}">
+          <picture class="checkoutLogo">
+            <source media="(max-width:1920) and (min-width:1000px)" srcset="{% static 'img/logo.png' %}">
+            <source media="(max-width:1000px) and (min-width:600px)" srcset="{% static 'img/logo.png' %}">
+            <source media="(max-width:600px) and (min-width:200px)" srcset="{% static 'img/favicon.png' %}">
             <img src="{% static 'img/logo.png' %}" alt="Verkkokauppa" height="35">
           </picture>
         </a>
@@ -56,31 +57,31 @@
       <div class="container-fluid">
 
       <div class="row">
-        <div class="col col-lg-9 col-md-10">
-          <div class="checkoutDiv mt-3">
+        <div class="col col-lg-9 col-md-10 col-xs-8">
+          <div class="checkoutDiv mt-lg-3 mt-sm-0">
 
 
             <!-- Top bar of the order steps -->
             <div class="pt-4 mx-4">
               <div class="row">
                 <div class="col text-center">
-                  <div id="cart" class="checkoutIcon active"><img class="img img-fluid" src="{% static 'img/cart_w.png' %}" alt="Cart"></div>
+                  <a href="#cart"><div id="cart" class="checkoutIcon active"><img class="img img-fluid" src="{% static 'img/cart_w.png' %}" alt="Cart"></div></a>
                   <label class="font-13">Shopping cart</label>
                 </div>
                 <div class="col text-center">
-                  <div id="contacts" class="checkoutIcon"><img class="img img-fluid" src="{% static 'img/contacts_b.png' %}" alt="Contacts"></div>
+                  <a href="#contacts"><div id="contacts" class="checkoutIcon"><img class="img img-fluid" src="{% static 'img/contacts_b.png' %}" alt="Contacts"></div></a>
                   <label class="font-13">Contacts</label>
                 </div>
                 <div class="col text-center">
-                  <div id="delivery" class="checkoutIcon"><img class="img img-fluid" src="{% static 'img/delivery_b.png' %}" alt="Delivery"></div>
+                  <a href="#delivery"><div id="delivery" class="checkoutIcon"><img class="img img-fluid" src="{% static 'img/delivery_b.png' %}" alt="Delivery"></div></a>
                   <label class="font-13">Delivery</label>
                 </div>
                 <div class="col text-center">
-                  <div id="payment" class="checkoutIcon"><img class="img img-fluid" src="{% static 'img/payment_b.png' %}" alt="Payment"></div>
+                  <a href="#payment"><div id="payment" class="checkoutIcon"><img class="img img-fluid" src="{% static 'img/payment_b.png' %}" alt="Payment"></div></a>
                   <label class="font-13">Payment</label>
                 </div>
                 <div class="col text-center">
-                  <div id="summary" class="checkoutIcon"><img class="img img-fluid" src="{% static 'img/summary_b.png' %}" alt="Summary"></div>
+                  <a href="#summary"><div id="summary" class="checkoutIcon"><img class="img img-fluid" src="{% static 'img/summary_b.png' %}" alt="Summary"></div></a>
                   <label class="font-13">Summary</label>
                 </div>
               </div>
@@ -90,6 +91,8 @@
             <hr>
 
 
+
+            <!-- CART SECTION -->
             <div id="cartDiv">
               <h5 class="ml-4 mb-5"><i class="font-26 fas fa-shopping-cart"></i> Shopping cart</h5>
               {% for item in cart %}
@@ -107,34 +110,109 @@
                   <hr class="cartItemSeparator">
                 </li>
               {% empty %}
-                No items in shopping cart
+                <h6 class="p-4 text-center">No items in shopping cart.</h6>
               {% endfor %}
             </div>
 
-            <div id="contactsDiv" style="display:none">
-              <form class="form-group" action="index.html" method="post">
-                Name: <input type="text" class="form-control">
-                Email: <input type="email" class="form-control">
-                <input type="submit" value="Continue" class="btn btn-primary">
-              </form>
+
+
+            <!-- CONTACTS SECTION -->
+            <div id="contactsDiv" style="display:none" ng-controller="checkoutCtrl">
+
+              <div class="alert d-none" role="alert"></div>
+
+              {% if profile.street_address|length > 0 %} <!-- Check only the address (?) -->
+                <h5 class="ml-4 mb-4"><i class="font-26 far fa-id-card"></i> Delivery address</h5>
+                <div class="p-3 m-3 w-25" style="border:1px solid #2171cc; border-radius:3px;">
+                  <li style="font-weight:bold">{{ request.user.get_full_name }}</li>
+                  <li>{{ profile.street_address }}</li>
+                  <li>{{ profile.zip_code }} {{ profile.city }}</li>
+                  <li><i class="fas fa-phone"></i> {{ profile.phone_num }}</li>
+                  <li><i class="far fa-envelope"></i> {{ request.user.email }}</li>
+                </div>
+
+
+              {% else %}
+              <h5 class="ml-4 mb-4"><i class="font-26 far fa-id-card"></i> Adding an address</h5>
+              <div class="mx-auto d-block p-3 mb-5" style="border: 1px solid #c4c4c4; width:47%; border-radius:3px;">
+                <h6 style="background-color:#f0f8fc; border:1px solid #cee9f5" class="py-3 px-5 font-14 my-4">Fields with a star ( <span style="color:red">*</span> ) are mandatory</h6>
+                  <div class="my-1">
+                    <span style="color:red">*</span> <span class="font-14">Name</span><input type="text" class="form-control form-control-sm" placeholder="Full name" value="{{ user.get_full_name }}" required readonly>
+                  </div>
+                  <div class="my-1">
+                    {% verbatim %}
+                      <span style="color:red">*</span> <span class="font-14">Street address</span><input id="street_address" ng-model="street_address" ng-blur="getVal()" type="text" class="form-control form-control-sm" required>
+                    {% endverbatim %}
+                  </div>
+                  <div class="my-1">
+                    <div class="row">
+                      <div class="col-4">
+                        {% verbatim %}
+                          <span style="color:red">*</span> <span class="font-14">Zip code</span><input ng-model="zip_code" ng-blur="getVal()" type="text" class="form-control form-control-sm" required>
+                        {% endverbatim %}
+                      </div>
+                      <div class="col-8">
+                        {% verbatim %}
+                          <span style="color:red">*</span> <span class="font-14">City</span><input ng-model="city" ng-blur="getVal()" type="text" class="form-control form-control-sm" required>
+                        {% endverbatim %}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="my-1">
+                    <span style="color:red">*</span> <span class="font-14">Phone number</span><input type="tel" class="form-control form-control-sm" value="{{ profile.phone_num }}" required>
+                  </div>
+                  <div class="my-1">
+                    <span class="font-14">Email</span><input type="email" class="form-control form-control-sm" value="{{ user.email }}">
+                  </div>
+                  <!-- ASYNC SAVE ADDRESS INFO TO PROFILE -->
+                  {% verbatim %}
+                    <button id="addressBtn" ng-click="addAddress()" type="button" class="btn btn-primary w-100 mt-3">Add address and continue</button>
+                  {% endverbatim %}
+                </div>
+              {% endif %}
+
             </div>
 
+
+            <!-- DELIVERY SECTION -->
             <div id="deliveryDiv" style="display:none">
-              delivery
+              <h5 class="ml-4 mb-4"><i class="fas fa-truck font-26"></i> Delivery</h5>
+              <div class="form-group">
+                <select class="form-control w-100" name="">
+                  <option value="">Collect from Helsinki</option>
+                  <option value="">Collect from Helsinki</option>
+                  <option value="">Collect from Helsinki</option>
+                  <option value="">Collect from Helsinki</option>
+                  <option value="">Collect from Helsinki</option>
+                </select>
+              </div>
             </div>
 
+
+            <!-- PAYMENT SECTION -->
             <div id="paymentDiv" style="display:none">
               payment
+
             </div>
 
+
+            <!-- SUMMARY SECTION -->
             <div id="summaryDiv" style="display:none">
               summary
             </div>
 
+
+            <!-- Next and previous buttons -->
+            <hr>
+            <a href=""><button id="prevBtn" onclick="prev()" class="btn btn-light m-2">Previous</button></a>
+            <a href=""><button id="nextBtn" onclick="next()" class="btn btn-primary float-right m-2">Next</button></a>
+
+
+
           </div>
         </div>
 
-        <div class="col col-lg-3 col-md-2">
+        <div class="col col-lg-3 col-md-2 col-xs-4">
           <div class="p-4 mt-3 infoSideBar w-75">
             <h6>Order summary</h6>
             <li class="font-13" style="margin-bottom:-5px;">{{ cart|length }} items in total<span class="float-right">{{ total_price }} €</span></li>
@@ -154,28 +232,79 @@
 
     </div><!--container-->
     <script>
+
+      // List of the step names
+      var list = ["cart", "contacts", "delivery", "payment", "summary"];
+
       $(function(){
-        var list = ["cart", "contacts", "delivery", "payment", "summary"];
+        // If the url has no step specified, redirect to the first step
+        if (!window.location.hash) {
+          window.location.hash = "#cart";
+        }
+        updateStep();
         // When any icon is clicked
         $(".checkoutIcon").click(function(){
-          // Check which icon is currently active
-          var currentActive = $(".pt-4.mx-4").find(".checkoutIcon.active");
-          for (var i = 0; i < list.length; i++) {
-            if (currentActive.attr("id")===list[i]) {
-              // Change the previous active button img to corresponding black icon
-              currentActive.children().attr("src", "/shopApp/static/img/" + list[i] + "_b.png");
-              // Remove the 'active' class from the previous button
-              currentActive.removeClass("active");
-              // Add 'active' class to the button just clicked
-              $(this).addClass("active");
-              // And change the button img to corresponding white icon
-              $(this).children().attr("src", "/shopApp/static/img/" + $(this).attr('id') + "_w.png");
-              $("#"+currentActive.attr("id")+"Div").hide();
-              $("#"+$(this).attr("id")+"Div").show();
-            }
-          }
+          // Change the url hash to the wanted step and update the view
+          window.location.hash = $(this).attr("id");
+          updateStep();
         });
       });
+
+
+      function next(){
+        var step = window.location.hash.substring(1,window.location.hash.length);
+        var currentIndex = list.indexOf(step);
+        if (currentIndex !== list.length-1) {
+          window.location.hash = list[currentIndex+1];
+        }
+        updateStep();
+      }
+
+
+      function prev(){
+        var step = window.location.hash.substring(1,window.location.hash.length);
+        var currentIndex = list.indexOf(step);
+        if (currentIndex !== 0) {
+          window.location.hash = list[currentIndex-1];
+        }
+        updateStep();
+      }
+
+
+      function updateStep(){
+        // Current step from the url
+        var step = window.location.hash.substring(1,window.location.hash.length);
+        // Show the current step
+        $("#"+step+"Div").show();
+        $("#"+step).addClass("active").children().attr("src", "/shopApp/static/img/" + step + "_w.png");
+
+        // Index of the current step
+        var index = list.indexOf(step);
+
+        // Hide all other steps
+        for (var i = 0; i < list.length; i++) {
+          if (i !== index){
+            $("#"+list[i]+"Div").hide();
+            $("#"+list[i]).removeClass("active").children().attr("src", "/shopApp/static/img/" + list[i] + "_b.png");
+          }
+        }
+
+        // If the last step
+        if (index === list.length-1) {
+          $("#nextBtn").text("Submit");
+        }else{
+          $("#nextBtn").text("Next");
+        }
+
+        // If the first step
+        if (index === 0) {
+          $("#prevBtn").css('display', 'hidden');
+        }else{
+          $("#prevBtn").text("Previous");
+        }
+      } // updateStep
+
+
     </script>
   </body>
 </html>

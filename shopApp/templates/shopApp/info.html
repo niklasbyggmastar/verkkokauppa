@@ -2,124 +2,135 @@
 {% load filters %}
       <div class="row" ng-controller="ctrl">
         {% verbatim %}
-        <span class="ml-3 path mt-2"><a href="/"><i class="fas fa-home"></i></a> > <a href="/results/{{ category_name }}">{{ category_name }}</a> > <a href="/%3F{{ ngitem.id }}">Product {{ ngitem.id }}</a> </span>
-        <div class="infoDiv m-3">
 
-          <div ng-repeat="message in messages" class="alert {{ message.tags }}" role="alert">
-            {{ message }}
-          </div>
+        <div ng-show="loading">
+          <div id="loading"></div>
+        </div>
 
-          <h5 class="p-3 title">{{ ngitem.name }}</h5>
+        <div ng-hide="loading">
+          <span class="ml-3 path mt-2"><a href="/"><i class="fas fa-home"></i></a> > <a href="/results/{{ category_name }}">{{ category_name }}</a> > <a href="/%3F{{ ngitem.id }}">Product {{ ngitem.id }}</a> </span>
+          <div class="infoDiv m-3">
 
-          <!-- Rating stars -->
-          <div ng-if="ngreviews.length > 0" class="font-14 mx-3 mb-3">
-            <span ng-repeat="x in [].constructor(ngaverage_stars) track by $index">
-              <i class="fas fa-star"></i>
-            </span>
-            <span ng-repeat="x in [].constructor(5-ngaverage_stars) track by $index">
+            <div ng-repeat="message in messages" class="alert {{ message.tags }}" role="alert">
+              {{ message }}
+            </div>
+
+            <h5 class="p-3 title">{{ ngitem.name }}</h5>
+
+            <!-- Rating stars -->
+            <div ng-if="ngreviews.length > 0" class="font-14 mx-3 mb-3">
+              <span ng-repeat="x in [].constructor(ngaverage_stars) track by $index">
+                <i class="fas fa-star"></i>
+              </span>
+              <span ng-repeat="x in [].constructor(5-ngaverage_stars) track by $index">
+                <i class="fa fa-star"></i>
+              </span>
+              <span class="mx-2">{{ ngreviews.length }} reviews</span>
+              <span ng-if="ngrecommended >= 50" class="mx-2" style="color:rgb(19,165,41); font-weight:bold"><i class="fas fa-thumbs-up mx-1"></i>{{ ngrecommended }} % recommend</span>
+              <span ng-if="ngrecommended < 50" class="mx-2" style="color:red; font-weight:bold"><i class="fas fa-thumbs-down mx-1"></i>{{ ngrecommended }} % recommend</span>
+              <span class="mx-3"><a href="#reviews">Read reviews</a></span>
+              <span><a href="/write/{{ ngitem.id }}">Write a review</a></span>
+            </div>
+
+            <div ng-if="ngreviews.length == 0" class="font-14 mx-3 mb-3">
               <i class="fa fa-star"></i>
-            </span>
-            <span class="mx-2">{{ ngreviews.length }} reviews</span>
-            <span ng-if="ngrecommended >= 50" class="mx-2" style="color:rgb(19,165,41); font-weight:bold"><i class="fas fa-thumbs-up mx-1"></i>{{ ngrecommended }} % recommend</span>
-            <span ng-if="ngrecommended < 50" class="mx-2" style="color:red; font-weight:bold"><i class="fas fa-thumbs-down mx-1"></i>{{ ngrecommended }} % recommend</span>
-            <span class="mx-3"><a href="#reviews">Read reviews</a></span>
-            <span><a href="/write/{{ ngitem.id }}">Write a review</a></span>
-          </div>
-
-          <div ng-if="ngreviews.length == 0" class="font-14 mx-3 mb-3">
-            <i class="fa fa-star"></i>
-            <i class="fa fa-star"></i>
-            <i class="fa fa-star"></i>
-            <i class="fa fa-star"></i>
-            <i class="fa fa-star"></i>
-            <span class="mx-2">No reviews</span>
-            <span><a href="/write/{{ ngitem.id }}">Write the first review!</a></span>
-          </div>
-
-          <div class="row p-4" id="rowDiv">
-            <div class="col col-lg-8 col-xs-12">
-              <img class="img img-fluid mx-auto d-block info" ng-src="/{{ ngitem.image }}" alt="{{ ngitem.name }}">
+              <i class="fa fa-star"></i>
+              <i class="fa fa-star"></i>
+              <i class="fa fa-star"></i>
+              <i class="fa fa-star"></i>
+              <span class="mx-2">No reviews</span>
+              <span><a href="/write/{{ ngitem.id }}">Write the first review!</a></span>
             </div>
-            <div class="col col-lg-4 col-xs-12">
-              <div class="p-3 mr-3 mt-5 infoSideBar">
-                <li><span><b>Product number:</b> {{ ngitem.id }}</span></li>
-                <li><span><b>Manufacturer:</b> {{ ngitem.make }}</span></li>
-                <li><span><b>Products available:</b> {{ ngitem.quantityAvailable }}</span></li>
+
+            <div class="row p-4" id="rowDiv">
+              <div class="col col-lg-8 col-xs-12">
+                <img class="img img-fluid mx-auto d-block info" ng-src="/{{ ngitem.image }}" alt="{{ ngitem.name }}">
               </div>
-
-              <div class="p-3 mr-3 mt-3 infoSideBar">
-                <h6 class="mb-0">Price (alv 24 % /  0 %)</h6>
-                <span class="priceTag">{{ ngitem.price }}</span>
-
-
-
-
-
-                <!-- THESE TWO MOFO BUTTONS LEFT HERE! -->
-                <button ng-click="addToCart()" class="btn btn-primary w-100 mt-4"><i class="fas fa-shopping-cart"></i> Add to cart</button>
-                <div class="group">
-                  <div class="item line"></div>
-                  <div class="item text">or</div>
-                  <div class="item line"></div>
+              <div class="col col-lg-4 col-xs-12">
+                <div class="p-3 mr-3 mt-5 infoSideBar">
+                  <li><span><b>Product number:</b> {{ ngitem.id }}</span></li>
+                  <li><span><b>Manufacturer:</b> {{ ngitem.make }}</span></li>
+                  <li><span><b>Products available:</b> {{ ngitem.quantityAvailable }}</span></li>
                 </div>
-                <button class="btn btn-secondary w-100 mt-4"><i class="far fa-heart"></i> Add to my list</button>
-              </div>
 
+                <div class="p-3 mr-3 mt-3 infoSideBar">
+                  <h6 class="mb-0">Price (alv 24 % /  0 %)</h6>
+                  <span class="priceTag">{{ ngitem.price }}</span>
+
+
+
+
+
+
+                  <button ng-click="addToCart()" class="btn btn-primary w-100 mt-4"><i class="fas fa-shopping-cart"></i> Add to cart</button>
+                  <div class="group">
+                    <div class="item line"></div>
+                    <div class="item text">or</div>
+                    <div class="item line"></div>
+                  </div>
+                  <!-- TUDUU! -->
+                  <button class="btn btn-secondary w-100 mt-4"><i class="far fa-heart"></i> Add to my list</button>
+                </div>
+
+              </div>
             </div>
-          </div>
 
-          <hr>
-          <div class="m-4">
-              <p>{{ ngitem.desc }}</p>
-              <div ng-if="ngproperties.length > 1">
-                <h6 style="font-weight:bold">Properties:</h6>
-                <li class="list-disc ml-4 font-14" ng-repeat="i in ngproperties">{{ i }}</li>
-              </div>
-              <section ng-if="ngreviews.length > 0" id="reviews">
-                <div class="w-100 p-3 mt-5" style="border:.5px solid grey;">
-                  <span class="reviewCount">{{ ngreviews.length }}</span> <span class="font-16">Reviews</span>
+            <hr>
+            <div class="m-4">
+                <p>{{ ngitem.desc }}</p>
+                <div ng-if="ngproperties.length > 1">
+                  <h6 style="font-weight:bold">Properties:</h6>
+                  <li class="list-disc ml-4 font-14" ng-repeat="i in ngproperties">{{ i }}</li>
                 </div>
-                <div class="w-100 p-3" style="border-right:.5px solid grey;border-left:.5px solid grey;border-bottom:.5px solid grey;">
-                  <div class="row">
-                    <div class="col-md-6 text-center">
-                      <div class="font-26 mx-3">
-                        <span ng-repeat="x in [].constructor(ngaverage_stars) track by $index">
-                          <i class="fas fa-star"></i>
-                        </span>
-                        <span ng-repeat="x in [].constructor(5-ngaverage_stars) track by $index">
-                          <i class="fa fa-star"></i>
-                        </span>
-                        <span class="mx-3">{{ ngaverage_stars }}</span>
+                <section ng-if="ngreviews.length > 0" id="reviews">
+                  <div class="w-100 p-3 mt-5" style="border:.5px solid grey;">
+                    <span class="reviewCount">{{ ngreviews.length }}</span> <span class="font-16">Reviews</span>
+                  </div>
+                  <div class="w-100 p-3" style="border-right:.5px solid grey;border-left:.5px solid grey;border-bottom:.5px solid grey;">
+                    <div class="row">
+                      <div class="col-md-6 text-center">
+                        <div class="font-26 mx-3">
+                          <span ng-repeat="x in [].constructor(ngaverage_stars) track by $index">
+                            <i class="fas fa-star"></i>
+                          </span>
+                          <span ng-repeat="x in [].constructor(5-ngaverage_stars) track by $index">
+                            <i class="fa fa-star"></i>
+                          </span>
+                          <span class="mx-3">{{ ngaverage_stars }}</span>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div class="w-100 p-3">
-                  <li ng-repeat="ngreview in ngreviews | limitTo: displayNum | orderBy: '-date_added'"> <!-- wrong order -->
-                    <span ng-repeat="i in [] | range:ngreview.stars">
-                      <i class="fas fa-star"></i>
-                    </span>
-                    <span ng-repeat="i in [] | range:5-ngreview.stars">
-                      <i class="fa fa-star"></i>
-                    </span>
-                    <span style="font-weight:bold" class="mx-2">{{ ngreview.title }}</span>
-                    <p ng-if="ngreview.nickname" style="color:gray;">
-                      <i class="far fa-user align-center mr-2"></i>
-                      <span class="mr-4" style="font-weight:bold">{{ ngreview.nickname }}</span> {{ ngreview.gender }} {{ ngreview.age }} <span class="float-right">{{ ngreview.date_added.substr(0,ngreview.date_added.lastIndexOf(year) + 4) }}</span>
-                    </p>
-                    <p ng-if="!ngreview.nickname" style="color:gray;">
-                      <i class="far fa-user align-center mr-2"></i>
-                      <span class="mr-4" style="font-weight:bold">{{ ngreview.user_fullname }}</span><span class="float-right">{{ ngreview.date_added.substr(0,ngreview.date_added.lastIndexOf(year) + 4) }}</span>
-                    </p>
-                    <p>{{ ngreview.text }}</p>
-                    <hr>
-                  </li>
-                  <button class="btn btn-light mx-auto d-block w-75" ng-click="showMore(3)" ng-show="showMoreBtn">See more</button>
-                </div>
-              </section>
-            {% endverbatim %}
+                  <div class="w-100 p-3">
+                    <li ng-repeat="ngreview in ngreviews | limitTo: displayNum | orderBy: '-date_added'"> <!-- wrong order -->
+                      <span ng-repeat="i in [] | range:ngreview.stars">
+                        <i class="fas fa-star"></i>
+                      </span>
+                      <span ng-repeat="i in [] | range:5-ngreview.stars">
+                        <i class="fa fa-star"></i>
+                      </span>
+                      <span style="font-weight:bold" class="mx-2">{{ ngreview.title }}</span>
+                      <p ng-if="ngreview.nickname" style="color:gray;">
+                        <i class="far fa-user align-center mr-2"></i>
+                        <span class="mr-4" style="font-weight:bold">{{ ngreview.nickname }}</span> {{ ngreview.gender }} {{ ngreview.age }} <span class="float-right">{{ ngreview.date_added.substr(0,ngreview.date_added.lastIndexOf(year) + 4) }}</span>
+                      </p>
+                      <p ng-if="!ngreview.nickname" style="color:gray;">
+                        <i class="far fa-user align-center mr-2"></i>
+                        <span class="mr-4" style="font-weight:bold">{{ ngreview.user_fullname }}</span><span class="float-right">{{ ngreview.date_added.substr(0,ngreview.date_added.lastIndexOf(year) + 4) }}</span>
+                      </p>
+                      <p>{{ ngreview.text }}</p>
+                      <hr>
+                    </li>
+                    <button class="btn btn-light mx-auto d-block w-75" ng-click="showMore(3)" ng-show="showMoreBtn">See more</button>
+                  </div>
+                </section>
+              {% endverbatim %}
+            </div>
           </div>
         </div>
+
+
+
       </div>
 
 

@@ -55,8 +55,10 @@
               <a class="nav-link" style="color:white;" href="{% url 'checkout' %}">
                 <i class="font-20 fas fa-shopping-cart">
                   {% if profile.shopping_cart|length > 0 %}
+                    <!-- If there are items in the cart -->
                     <span class="numOfItems">{{ profile.shopping_cart|length }}</span>
                   {% else %}
+                    <!-- If empty cart -->
                     <span class="numOfItems" style="display:none;">{{ profile.shopping_cart|length }}</span>
                   {% endif %}
                 </i> Checkout

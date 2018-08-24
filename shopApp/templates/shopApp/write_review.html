@@ -13,6 +13,7 @@
           <div class="p-3 mt-3 infoSideBar">
             <h6 class="mb-0">Price (alv 24 % /  0 %)</h6>
             <span class="priceTag">{{ item.price }}</span>
+            <!-- ANGULARJS!!!11-->
             <button onclick="location.href = {% url 'buy' item.id %}" class="btn btn-primary w-100 mt-4"><i class="fas fa-shopping-cart"></i> Add to basket</button>
             <div class="group">
               <div class="item line"></div>
@@ -20,16 +21,11 @@
               <div class="item line"></div>
             </div>
             <button onclick="location.href = {% url 'buy' item.id %}" class="btn btn-secondary w-100 mt-4"><i class="far fa-heart"></i> Add to my list</button>
-
-          <!--  <form action="{% url 'buy' item.id %}" method="post">
-              {% csrf_token %}
-              <input type="submit" value="Add to basket" class="btn btn-primary w-100">
-            </form>-->
           </div>
 
         </div>
       </div>
-      <h6 style="background-color:rgb(210,230,255)" class="py-3 px-5 font-14 my-4">Fields with a star ( <span style="color:red">*</span> ) are mandatory</h6>
+      <h6 style="background-color:#f0f8fc; border:1px solid #cee9f5" class="py-3 px-5 font-14 my-4">Fields with a star ( <span style="color:red">*</span> ) are mandatory</h6>
       <h6 class="font-14" style="color:grey"><span style="color:red">*</span> Overall rating of the product</h6>
 
 

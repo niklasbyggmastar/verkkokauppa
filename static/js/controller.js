@@ -1,34 +1,11 @@
 var app = angular.module('app', []);
 
-
-
-
-
-
-
-
-
-
-
-
-
-// ----------------------------- TODO: LOADING SCREEN ON INFO PAGE! -------------------------------
-
-
-
-
-
-
-
-
-
-
-
 // Controller
 app.controller("ctrl", function ($scope, $http, $location, $filter) {
 
   // Other
   $scope.year = new Date().getFullYear();
+  $scope.loading = true;
 
   // --- Item related (+category) ---
   var itemid = $location.$$absUrl.split('%3F')[1].split('/')[0];
@@ -51,6 +28,8 @@ app.controller("ctrl", function ($scope, $http, $location, $filter) {
       $scope.category_name = $filter('filter')($scope.ngcategories, {id: $scope.category_id})[0].name;
     });
 
+  }).finally(function(){
+    $scope.loading = false;
   });
 
   // --- Buying and lists related ---
@@ -128,6 +107,50 @@ app.controller("ctrl", function ($scope, $http, $location, $filter) {
   };
 
 });// Controller
+
+
+
+//---------------------------------------------------------
+
+
+
+app.controller("checkoutCtrl", function ($scope, $http) {
+  // Set csrf token for post method
+  var csrf_token = Cookies.get('csrftoken');
+  $http.defaults.headers.post['XSRF-AUTH'] = csrf_token;
+  $http.defaults.xsrfCookieName = 'csrftoken';
+  $http.defaults.xsrfHeaderName = 'X-CSRFToken';
+
+  // Add a new delivery address
+  $scope.addAddress = function(){
+    // Get values of input fields
+    $scope.getVal = function(){
+      $scope.street_address = $scope.street_address;
+      $scope.zip_code = $scope.zip_code;
+      $scope.city = $scope.city;
+    }
+    // Call django view
+    $http({
+      method: 'POST',
+      url: '/addAddress/',
+      data: {
+        street_address: $scope.street_address,
+        zip_code: $scope.zip_code,
+        city: $scope.city
+      }
+    }).then(function(response){
+      // Parse JsonResponse from Django view and update cart length in template
+      var message = angular.element(document.querySelector('.alert'));
+      message.html("Address added successfully!").removeClass("d-none").addClass("alert-success");
+      $(".alert.alert-success").fadeTo(3000, 500).slideUp(500, function(){
+        $(".alert.alert-success").slideUp(500);
+      });
+      }, function errorCallBack(response){
+        console.log(response.data);
+      });
+  };
+}); // Checkout controller
+
 
 
 app.filter('range', function() {

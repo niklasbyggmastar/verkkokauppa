@@ -12,6 +12,7 @@ urlpatterns = [
     path('account/', views.account, name='account'),
     #---- Actions ----
     path('addToCart/', views.addToCart, name='addToCart'),
+    path('addAddress/', views.addAddress, name='addAddress'),
     path('post_review/<int:item_id>/', views.post_review, name='post_review'),
     path('login_action/', views.login_action, name='login_action'),
     path('logout_action/', views.logout_action, name='logout_action'),

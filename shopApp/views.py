@@ -6,6 +6,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.db.models import Avg
 from django.utils import timezone
 from django.http import JsonResponse
+import json
 
 
 def index(request):
@@ -88,6 +89,26 @@ def addToCart(request):
         return JsonResponse({'cart': profile.shopping_cart})
 
 
+
+def addAddress(request):
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        street_address = data['street_address']
+        zip_code = data['zip_code']
+        city = data['city']
+        profile = Profile.objects.get(user=request.user)
+        profile.street_address = street_address
+        profile.zip_code = zip_code
+        profile.city = city
+        profile.save()
+        return JsonResponse({
+            'street_address': profile.street_address,
+            'zip_code': profile.zip_code,
+            'city': profile.city
+        })
+
+
+
 def post_review(request, item_id):
     if request.method == 'POST':
         item = Item.objects.get(pk=item_id)
@@ -109,6 +130,7 @@ def post_review(request, item_id):
         return redirect("/%3F"+str(item_id))
 
 
+
 def check_email(request):
     if request.method == 'POST':
         email_exists = False
@@ -118,6 +140,7 @@ def check_email(request):
             return redirect("login_view")
         else:                                            #email exists
             return redirect("../login_view?email="+email)
+
 
 
 def login_action(request):
@@ -132,6 +155,7 @@ def login_action(request):
         else:
             messages.warning(request, 'Email and password do not match.', extra_tags='alert-danger')
             return redirect("/login_view?email="+email)
+
 
 
 def logout_action(request):

@@ -225,6 +225,10 @@ input[type=checkbox] {
   background-color:rgb(250,250,250);
 }
 
+.checkoutIcon.active:hover{
+  background-color:rgb(80,80,80);
+}
+
 .img.img-fluid.mx-auto.d-block.info{
   height:30em;
 }
@@ -235,6 +239,32 @@ input[type=checkbox] {
   color: lightgrey;
   border: solid 1px lightgrey;
 }
+
+/* Loading spinner */
+#loading{
+  border: 5px solid rgb(80,80,80);
+  border-radius: 50%;
+  border-top: 5px solid rgb(217,21,21);
+  width: 90px;
+  height: 90px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -60px 0 0 -60px;
+  z-index: 1;
+  -webkit-animation: spin 1s linear infinite; /* Safari */
+  animation: spin 1s linear infinite;
+}
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 
 /*Horizontal line*/
 .group {
@@ -260,6 +290,12 @@ input[type=checkbox] {
 }
 /*-------------*/
 
+.checkoutDiv{
+  background-color: white;
+  border: 0.1px solid rgb(200,200,200);
+  margin-left: 9em;
+  margin-right: -1em;
+}
 
 /*Big screen*/
 @media screen and (min-width:1600px){
@@ -271,12 +307,12 @@ input[type=checkbox] {
   picture{
     margin-left:23em;
   }
-  .checkoutDiv{
-    background-color: white;
-    border: 0.1px solid rgb(200,200,200);
-    margin-left: 9em;
-    margin-right: -1em;
+
+  /* Picture tag in checkout */
+  .checkoutLogo{
+    margin-left: 17em;
   }
+
   #checkoutNav{
     margin-right: 20em;
   }
@@ -287,14 +323,13 @@ input[type=checkbox] {
   picture{
     margin-left:13em; /*ei toimi????*/
   }
-  .checkoutDiv{
-    background-color: white;
-    border: 0.1px solid rgb(200,200,200);
-    margin-left: 9em;
-    margin-right: -1em;
-  }
   #checkoutNav{
     margin-right: 10em;
+  }
+
+  /* Picture tag in checkout */
+  .checkoutLogo{
+    margin-left: 7em;
   }
 }
 
@@ -306,5 +341,11 @@ input[type=checkbox] {
   #sideBarNav{
     position:absolute;
     z-index:1;
+  }
+  .checkoutDiv{
+    background-color: white;
+    border: 0.1px solid rgb(200,200,200);
+    margin-left: 0em;
+    margin-right: -1em;
   }
 }
