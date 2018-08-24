@@ -65,23 +65,23 @@
             <div class="pt-4 mx-4">
               <div class="row">
                 <div class="col text-center">
-                  <a href="#cart"><div id="cart" class="checkoutIcon active"><img class="img img-fluid" src="{% static 'img/cart_w.png' %}" alt="Cart"></div></a>
+                  <div id="cart" class="checkoutIcon active"><a href="#cart"><img class="img img-fluid" src="{% static 'img/cart_w.png' %}" alt="Cart"></a></div>
                   <label class="font-13">Shopping cart</label>
                 </div>
                 <div class="col text-center">
-                  <a href="#contacts"><div id="contacts" class="checkoutIcon"><img class="img img-fluid" src="{% static 'img/contacts_b.png' %}" alt="Contacts"></div></a>
+                  <div id="contacts" class="checkoutIcon"><a href="#contacts"><img class="img img-fluid" src="{% static 'img/contacts_b.png' %}" alt="Contacts"></a></div>
                   <label class="font-13">Contacts</label>
                 </div>
                 <div class="col text-center">
-                  <a href="#delivery"><div id="delivery" class="checkoutIcon"><img class="img img-fluid" src="{% static 'img/delivery_b.png' %}" alt="Delivery"></div></a>
+                  <div id="delivery" class="checkoutIcon"><a href="#delivery"><img class="img img-fluid" src="{% static 'img/delivery_b.png' %}" alt="Delivery"></a></div>
                   <label class="font-13">Delivery</label>
                 </div>
                 <div class="col text-center">
-                  <a href="#payment"><div id="payment" class="checkoutIcon"><img class="img img-fluid" src="{% static 'img/payment_b.png' %}" alt="Payment"></div></a>
+                  <div id="payment" class="checkoutIcon"><a href="#payment"><img class="img img-fluid" src="{% static 'img/payment_b.png' %}" alt="Payment"></a></div>
                   <label class="font-13">Payment</label>
                 </div>
                 <div class="col text-center">
-                  <a href="#summary"><div id="summary" class="checkoutIcon"><img class="img img-fluid" src="{% static 'img/summary_b.png' %}" alt="Summary"></div></a>
+                  <div id="summary" class="checkoutIcon"><a href="#summary"><img class="img img-fluid" src="{% static 'img/summary_b.png' %}" alt="Summary"></a></div>
                   <label class="font-13">Summary</label>
                 </div>
               </div>
@@ -204,9 +204,9 @@
 
             <!-- Next and previous buttons -->
             <hr>
-            <a href=""><button id="prevBtn" onclick="prev()" class="btn btn-light m-2">Previous</button></a>
-            <a href=""><button id="nextBtn" onclick="next()" class="btn btn-primary float-right m-2">Next</button></a>
-
+            <button id="prevBtn" onclick="prev()" class="btn btn-light mx-3 mb-3">Previous</button>
+            <button id="nextBtn" onclick="next()" class="btn btn-primary float-right mx-3 mb-3">Next</button>
+            <button style="display:none" id="sendBtn" onclick="" class="btn btn-primary float-right mx-3 mb-3">Submit</button>
 
 
           </div>
@@ -248,6 +248,10 @@
           window.location.hash = $(this).attr("id");
           updateStep();
         });
+
+        $("#sendBtn").click(function(){
+          alert("MOIMOI");
+        });
       });
 
 
@@ -276,7 +280,7 @@
         var step = window.location.hash.substring(1,window.location.hash.length);
         // Show the current step
         $("#"+step+"Div").show();
-        $("#"+step).addClass("active").children().attr("src", "/shopApp/static/img/" + step + "_w.png");
+        $("#"+step).addClass("active").children().children().attr("src", "/shopApp/static/img/" + step + "_w.png");
 
         // Index of the current step
         var index = list.indexOf(step);
@@ -285,22 +289,24 @@
         for (var i = 0; i < list.length; i++) {
           if (i !== index){
             $("#"+list[i]+"Div").hide();
-            $("#"+list[i]).removeClass("active").children().attr("src", "/shopApp/static/img/" + list[i] + "_b.png");
+            $("#"+list[i]).removeClass("active").children().children().attr("src", "/shopApp/static/img/" + list[i] + "_b.png");
           }
         }
 
         // If the last step
         if (index === list.length-1) {
-          $("#nextBtn").text("Submit");
+          $("#nextBtn").hide();
+          $("#sendBtn").show();
         }else{
-          $("#nextBtn").text("Next");
+          $("#nextBtn").show();
+          $("#sendBtn").hide();
         }
 
         // If the first step
         if (index === 0) {
-          $("#prevBtn").css('display', 'hidden');
+          $("#prevBtn").css('visibility', 'hidden');
         }else{
-          $("#prevBtn").text("Previous");
+          $("#prevBtn").css('visibility', 'visible');
         }
       } // updateStep
 
