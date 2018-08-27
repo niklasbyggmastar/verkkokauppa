@@ -7,7 +7,7 @@ class CategoryManager(Manager):
 
 class ProfileManager(Manager):
     def by_user(self, user):
-        return self.get_queryset().filter(username=user.username)
+        return self.get_queryset().filter(id=user.id)
 
 class ItemManager(Manager):
     def by_date(self, date):
@@ -20,3 +20,7 @@ class ReviewManager(Manager):
         return self.get_queryset().filter(
         item__date_added__gte=datetime.date(date,1,1),
         item__date_added__lte=datetime.date(date,12,31))
+
+class OrderManager(Manager):
+    def by_user(self, user):
+        return self.get_queryset().filter(id=user.id) #API loppuun

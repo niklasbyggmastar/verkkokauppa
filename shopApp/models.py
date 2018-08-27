@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.postgres.fields import ArrayField
-from .managers import ItemManager, ReviewManager, CategoryManager, ProfileManager
+from .managers import ItemManager, ReviewManager, CategoryManager, ProfileManager, OrderManager
 
 
 class Profile(models.Model):
@@ -15,7 +15,7 @@ class Profile(models.Model):
         ('EN', 'English'),
     )
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    phone_num = PhoneNumberField()
+    phone_num = PhoneNumberField(blank=True, null=True)
     language = models.CharField(max_length=2, choices=LANGUAGES)
     street_address = models.CharField(max_length=200, blank=True, null=True)
     zip_code = models.CharField(max_length=10, blank=True, null=True)
@@ -86,7 +86,7 @@ class Review(models.Model):
     age = models.CharField(max_length=50, blank=True, null=True)
     nickname = models.CharField(max_length=200, blank=True, null=True)
     gender = models.CharField(max_length=50, blank=True, null=True)
-    #------------------------
+    # ------------------------
     title = models.CharField(max_length=200, default="")
     text = models.CharField(max_length=2000)
     stars = models.IntegerField(default=0, validators=[MinValueValidator(1), MaxValueValidator(5)])
@@ -99,3 +99,27 @@ class Review(models.Model):
     @property
     def date(self):
         return self.date_added.date
+
+class Order(models.Model):
+    items = ArrayField(models.IntegerField(default=0, unique=True) ,size=50, blank=True, default=[])    #List of item IDs
+    # --- if logged in: ---
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None, blank=True, null=True)
+    # --- if not logged in ---
+    full_name = models.CharField(max_length=200, blank=True, null=True)
+    street_address = models.CharField(max_length=200, blank=True, null=True)
+    zip_code = models.CharField(max_length=10, blank=True, null=True)
+    city = models.CharField(max_length=200, blank=True, null=True)
+    phone_num = PhoneNumberField(blank=True, null=True)
+    email = models.CharField(max_length=200, blank=True, null=True)
+    # ----------------------
+    delivery_method = models.CharField(max_length=200, blank=True, null=True)
+    payment_method = models.CharField(max_length=200, blank=True, null=True)
+    date_of_order = models.DateTimeField('date of order', blank=True, null=True)
+    objects = OrderManager()
+
+    def __str__(self):
+        return self.user.username
+
+    @property
+    def date_of_order(self):
+        return self.date_of_order

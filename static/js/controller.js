@@ -139,7 +139,6 @@ app.controller("checkoutCtrl", function ($scope, $http) {
         city: $scope.city
       }
     }).then(function(response){
-      // Parse JsonResponse from Django view and update cart length in template
       var message = angular.element(document.querySelector('.alert'));
       message.html("Address added successfully!").removeClass("d-none").addClass("alert-success");
       $(".alert.alert-success").fadeTo(3000, 500).slideUp(500, function(){
@@ -149,6 +148,32 @@ app.controller("checkoutCtrl", function ($scope, $http) {
         console.log(response.data);
       });
   };
+
+  // Add a new delivery address
+  $scope.addDelivery = function(){
+    // Get values of input fields
+    var delivery_method = $scope.delivery_method;
+    console.log(delivery_method);
+    // Call django view
+    $http({
+      method: 'POST',
+      url: '/addDelivery/',
+      data: delivery_method
+    }).then(function(response){
+      // Parse JsonResponse from Django view and update delivery method
+      var delivery_method = angular.element(document.querySelector('#delivery_method'));
+      delivery_method.html(response.data.delivery_method);
+      var message = angular.element(document.querySelector('.alert'));
+      message.html("Delivery method added successfully!").removeClass("d-none").addClass("alert-success");
+      $(".alert.alert-success").fadeTo(3000, 500).slideUp(500, function(){
+        $(".alert.alert-success").slideUp(500);
+      });
+      }, function errorCallBack(response){
+        console.log(response.data);
+      });
+  };
+
+
 }); // Checkout controller
 
 

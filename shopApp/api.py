@@ -1,5 +1,5 @@
 from tastypie.resources import ModelResource
-from .models import Item, Review, Profile, Category
+from .models import Item, Review, Profile, Category, Order
 from django.contrib.auth.models import User
 from tastypie import fields
 from tastypie.api import Api
@@ -32,9 +32,16 @@ class ReviewResource(ModelResource):
         queryset = Review.objects.all()
         resource_name = 'review'
 
+class OrderResource(ModelResource):
+    user = fields.ForeignKey(UserResource, 'user')
+    class Meta:
+        queryset = Order.objects.all()
+        resource_name = 'order'
+
 v1_api = Api(api_name='v1')
 v1_api.register(UserResource())
 v1_api.register(ProfileResource())
 v1_api.register(CategoryResource())
 v1_api.register(ItemResource())
 v1_api.register(ReviewResource())
+v1_api.register(OrderResource())

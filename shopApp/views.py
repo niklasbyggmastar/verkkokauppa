@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Item, Category, Review, Profile
+from .models import Item, Category, Review, Profile, Order
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
@@ -32,17 +32,31 @@ def results(request, category_name):
     return render(request, 'shopApp/results.html', context)
 
 def checkout(request):
-    profile = Profile.objects.get(user=request.user)
-    cart = []
-    total_price = 0
-    for item_id in profile.shopping_cart:
-        for item in Item.objects.all():
-            if item_id == item.id:
-                cart.insert(0, item)
-    for item in cart:
-        total_price += item.price
-    context = {'profile': profile, 'cart': cart, 'total_price': total_price}
-    return render(request, 'shopApp/checkout.html', context)
+    if request.user.is_authenticated:
+        profile = Profile.objects.get(user=request.user)
+        # Add the actual item objects in the 'cart' array
+        cart = []
+        for item_id in profile.shopping_cart:
+            for item in Item.objects.all():
+                if item_id == item.id:
+                    cart.insert(0, item)
+        # Get the total price of cart contents
+        total_price = 0
+        for item in cart:
+            total_price += item.price
+        # If user has not yet an order object instance, create new
+        if not Order.objects.filter(user=request.user):
+            order = Order.objects.create(items=profile.shopping_cart, user=request.user)
+            order.save()
+        # If user already has an order instance, get it
+        else:
+            order = Order.objects.get(user=request.user)
+            order.items = profile.shopping_cart
+            order.save()
+        context = {'profile': profile, 'cart': cart, 'total_price': total_price, 'order': order}
+    #if not request.user.is_authenticated:
+    #    order = BORDER BORDER
+        return render(request, 'shopApp/checkout.html', context)
 
 def write(request, item_id):
     categories = Category.objects.order_by('name')
@@ -107,6 +121,21 @@ def addAddress(request):
             'city': profile.city
         })
 
+def addDelivery(request):
+    if request.method == 'POST':
+        delivery = request.body.decode('utf-8')
+        order = Order.objects.get(user=request.user)
+        order.delivery_method = delivery
+        order.save()
+        return JsonResponse({'delivery_method': order.delivery_method})
+
+def addPayment(request):
+    if request.method == 'POST':
+        payment = request.body.decode('utf-8')
+        order = Order.objects.get(user=request.user)
+        order.payment_method = payment
+        order.save()
+        return JsonResponse({'payment_method': order.payment_method})
 
 
 def post_review(request, item_id):
