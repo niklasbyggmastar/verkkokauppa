@@ -1,6 +1,6 @@
 var app = angular.module('app', []);
 
-// Controller
+// Controller for info view
 app.controller("ctrl", function ($scope, $http, $location, $filter) {
 
   // Other
@@ -110,16 +110,41 @@ app.controller("ctrl", function ($scope, $http, $location, $filter) {
 
 
 
+
+
+
+
+
 //---------------------------------------------------------
 
 
 
-app.controller("checkoutCtrl", function ($scope, $http) {
+
+
+
+// Controller for checkout view
+app.controller("checkoutCtrl", function ($scope, $http, $location, $filter) {
   // Set csrf token for post method
   var csrf_token = Cookies.get('csrftoken');
   $http.defaults.headers.post['XSRF-AUTH'] = csrf_token;
   $http.defaults.xsrfCookieName = 'csrftoken';
   $http.defaults.xsrfHeaderName = 'X-CSRFToken';
+
+  // Get user order and data related to it
+  var user_id = $location.$$absUrl.split('/')[4];
+  var orderUrl = "http://localhost:8000/api/v1/order/?format=json";
+  $scope.checkoutIcon = [];
+  $http.get(orderUrl).then(function(response){
+    $scope.ngorder = $filter('filter')(response.data.objects, {user: "/api/v1/user/" + user_id + "/"})[0];
+    console.log($scope.ngorder);
+    $scope.ngcart = $scope.ngorder.items;
+    $scope.ngaddress = $scope.ngorder.street_address;
+    $scope.ngzip_code = $scope.ngorder.zip_code;
+    $scope.ngcity = $scope.ngorder.city;
+    $scope.ngdelivery = $scope.ngorder.delivery_method;
+    console.log($scope.ngcart + ", " + $scope.ngaddress);
+
+  });
 
   // Add a new delivery address
   $scope.addAddress = function(){
@@ -139,6 +164,7 @@ app.controller("checkoutCtrl", function ($scope, $http) {
         city: $scope.city
       }
     }).then(function(response){
+      $scope.ngaddress = response.data.street_address;
       var message = angular.element(document.querySelector('.alert'));
       message.html("Address added successfully!").removeClass("d-none").addClass("alert-success");
       $(".alert.alert-success").fadeTo(3000, 500).slideUp(500, function(){
@@ -149,25 +175,43 @@ app.controller("checkoutCtrl", function ($scope, $http) {
       });
   };
 
-  // Add a new delivery address
+
+
+  // Add delivery method
   $scope.addDelivery = function(){
-    // Get values of input fields
+    // Get value of input field
     var delivery_method = $scope.delivery_method;
-    console.log(delivery_method);
+    console.log("DELIVERY METHOD: " + delivery_method);
     // Call django view
     $http({
       method: 'POST',
       url: '/addDelivery/',
       data: delivery_method
     }).then(function(response){
+      $scope.ngdelivery_method = response.data.delivery_method;
+      console.log("DELIVERY: " + $scope.ngdelivery_method);
       // Parse JsonResponse from Django view and update delivery method
       var delivery_method = angular.element(document.querySelector('#delivery_method'));
       delivery_method.html(response.data.delivery_method);
-      var message = angular.element(document.querySelector('.alert'));
-      message.html("Delivery method added successfully!").removeClass("d-none").addClass("alert-success");
-      $(".alert.alert-success").fadeTo(3000, 500).slideUp(500, function(){
-        $(".alert.alert-success").slideUp(500);
+      }, function errorCallBack(response){
+        console.log(response.data);
       });
+  };
+
+
+  // Add a payment method
+  $scope.addPayment = function(){
+    // Get value of input field
+    var payment_method = $scope.payment_method;
+    // Call django view
+    $http({
+      method: 'POST',
+      url: '/addPayment/',
+      data: payment_method
+    }).then(function(response){
+      // Parse JsonResponse from Django view and update delivery method
+      var payment_method = angular.element(document.querySelector('#payment_method'));
+      payment_method.html(response.data.payment_method);
       }, function errorCallBack(response){
         console.log(response.data);
       });

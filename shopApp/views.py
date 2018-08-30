@@ -31,7 +31,7 @@ def results(request, category_name):
     context = {'items': items, 'categories': categories, 'category': category, 'profile': profile}
     return render(request, 'shopApp/results.html', context)
 
-def checkout(request):
+def checkout(request, user_id):
     if request.user.is_authenticated:
         profile = Profile.objects.get(user=request.user)
         # Add the actual item objects in the 'cart' array
@@ -46,7 +46,7 @@ def checkout(request):
             total_price += item.price
         # If user has not yet an order object instance, create new
         if not Order.objects.filter(user=request.user):
-            order = Order.objects.create(items=profile.shopping_cart, user=request.user)
+            order = Order.objects.create(items=profile.shopping_cart, user=request.user, full_name=request.user.get_full_name(), street_address=profile.street_address, zip_code=profile.zip_code, city=profile.city, phone_num=profile.phone_num, email=request.user.email)
             order.save()
         # If user already has an order instance, get it
         else:
@@ -115,6 +115,11 @@ def addAddress(request):
         profile.zip_code = zip_code
         profile.city = city
         profile.save()
+        order = Order.objects.get(user=request.user)
+        order.street_address = street_address
+        order.zip_code = zip_code
+        order.city = city
+        order.save()
         return JsonResponse({
             'street_address': profile.street_address,
             'zip_code': profile.zip_code,

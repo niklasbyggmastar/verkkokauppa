@@ -1,5 +1,7 @@
 body{
   background-color: rgb(235,235,235);
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .blackLink{
@@ -208,6 +210,10 @@ input[type=checkbox] {
   background-color:rgb(80,80,80);
 }
 
+.checkoutIcon.active:hover{
+  background-color:rgb(80,80,80);
+}
+
 .checkoutIcon{
   background-color:rgb(245,245,245);
   border-radius:50%;
@@ -225,9 +231,17 @@ input[type=checkbox] {
   background-color:rgb(250,250,250);
 }
 
-.checkoutIcon.active:hover{
-  background-color:rgb(80,80,80);
+.checkoutIcon.disabled{
+  opacity: 0.33;
+  pointer-events: none;
 }
+
+/*Turha*/
+.disabled:hover{
+  cursor: no-drop;
+}
+
+
 
 .img.img-fluid.mx-auto.d-block.info{
   height:30em;
@@ -239,6 +253,31 @@ input[type=checkbox] {
   color: lightgrey;
   border: solid 1px lightgrey;
 }
+
+.checkoutDiv{
+  background-color: white;
+  border: 0.1px solid rgb(200,200,200);
+  margin-left: 9em;
+  margin-right: -1em;
+  height: 90vh;
+}
+
+/* Div in choosing delivery or payment type */
+.toggleDiv{
+  background-color:#f3f3f3;
+  border: 1px solid lightgrey
+}
+.toggleDiv:hover{
+  cursor: pointer;
+}
+
+
+.scrollWindow{
+  overflow-y:auto;
+  overflow-x:hidden;
+}
+
+
 
 /* Loading spinner */
 #loading{
@@ -290,12 +329,6 @@ input[type=checkbox] {
 }
 /*-------------*/
 
-.checkoutDiv{
-  background-color: white;
-  border: 0.1px solid rgb(200,200,200);
-  margin-left: 9em;
-  margin-right: -1em;
-}
 
 /*Big screen*/
 @media screen and (min-width:1600px){

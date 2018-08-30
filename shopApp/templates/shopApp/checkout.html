@@ -7,6 +7,7 @@
     <title>Verkkokauppa</title>
     <meta name="viewport" content="width=device-width, height=device-height initial-scale=1.0">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
     <script src="{% static 'js/jquery.star-rating-svg.min.js' %}"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
@@ -57,44 +58,68 @@
 
       <div class="row">
         <div class="col col-lg-9 col-md-10 col-xs-8">
-          <div class="checkoutDiv mt-lg-3 mt-sm-0 d-flex flex-column" style="height:90vh">
+          <div class="checkoutDiv mt-lg-3 mt-sm-0 d-flex flex-column">
 
 
             <!-- Top bar of the order steps -->
             <div class="pt-4 mx-4">
               <div class="row">
+                <!-- Cart icon -->
                 <div class="col text-center">
-                  <div id="cart" class="checkoutIcon active"><a href="#cart"><img class="img img-fluid" src="{% static 'img/cart_w.png' %}" alt="Cart"></a></div>
+                  {% verbatim %}
+                    <div id="cart" class="checkoutIcon active">
+                      <img class="img img-fluid" src="/shopApp/static/img/cart_w.png" alt="Cart">
+                    </div>
+                  {% endverbatim %}
                   <label class="font-13">Shopping cart</label>
                 </div>
+
+                <!-- Contacts icon -->
                 <div class="col text-center">
-                  <div id="contacts" class="checkoutIcon"><a href="#contacts"><img class="img img-fluid" src="{% static 'img/contacts_b.png' %}" alt="Contacts"></a></div>
+                  {% verbatim %}
+                    <div id="contacts" ng-class="{ 'checkoutIcon disabled': !ngcart, 'checkoutIcon': ngcart }">
+                      <img class="img img-fluid" src="/shopApp/static/img/contacts_b.png" alt="Contacts">
+                    </div>
+                  {% endverbatim %}
                   <label class="font-13">Contacts</label>
                 </div>
+
+                <!-- Delivery icon -->
                 <div class="col text-center">
-                  <div id="delivery" class="checkoutIcon"><a href="#delivery"><img class="img img-fluid" src="{% static 'img/delivery_b.png' %}" alt="Delivery"></a></div>
+                  {% verbatim %}
+                    <div id="delivery" ng-class="{ 'checkoutIcon disabled': !ngaddress, 'checkoutIcon': ngaddress }">
+                      <img class="img img-fluid" src="/shopApp/static/img/delivery_b.png" alt="Delivery">
+                    </div>
+                  {% endverbatim %}
                   <label class="font-13">Delivery</label>
                 </div>
+
+                <!-- Payment icon -->
                 <div class="col text-center">
-                  <div id="payment" class="checkoutIcon"><a href="#payment"><img class="img img-fluid" src="{% static 'img/payment_b.png' %}" alt="Payment"></a></div>
+                  {% verbatim %}
+                    <div id="payment" ng-class="{ 'checkoutIcon disabled': !ngdelivery_method, 'checkoutIcon': ngdelivery_method }">
+                      <img class="img img-fluid" src="/shopApp/static/img/payment_b.png" alt="Payment">
+                    </div>
+                  {% endverbatim %}
                   <label class="font-13">Payment</label>
                 </div>
+
+                <!-- Summary icon -->
                 <div class="col text-center">
-                  <div id="summary" class="checkoutIcon"><a href="#summary"><img class="img img-fluid" src="{% static 'img/summary_b.png' %}" alt="Summary"></a></div>
+                  <div id="summary" class="checkoutIcon disabled"><img class="img img-fluid" src="{% static 'img/summary_b.png' %}" alt="Summary"></div>
                   <label class="font-13">Summary</label>
                 </div>
+
 
               </div>
               <hr>
             </div>
 
 
-            <hr>
-
 
 
             <!-- CART SECTION -->
-            <div id="cartDiv" style="overflow-y:auto; overflow-x:hidden">
+            <div id="cartDiv" style="overflow-y:auto; overflow-x:hidden; margin-right:.5px;">
               <h5 class="ml-4 mb-5"><i class="font-26 fas fa-shopping-cart"></i> Shopping cart</h5>
               {% for item in cart %}
                 <li class="d-inline">
@@ -122,14 +147,14 @@
 
               <div class="alert d-none" role="alert"></div>
 
-              {% if profile.street_address|length > 0 %} <!-- Check only the address (?) -->
+              {% if order.street_address|length > 0 %} <!-- Check only the address (?) -->
                 <h5 class="ml-4 mb-4"><i class="font-26 far fa-id-card"></i> Delivery address</h5>
                 <div class="p-3 m-3 w-25" style="border:1px solid #2171cc; border-radius:3px;">
                   <li style="font-weight:bold">{{ request.user.get_full_name }}</li>
-                  <li>{{ profile.street_address }}</li>
-                  <li>{{ profile.zip_code }} {{ profile.city }}</li>
-                  <li><i class="fas fa-phone"></i> {{ profile.phone_num }}</li>
-                  <li><i class="far fa-envelope"></i> {{ request.user.email }}</li>
+                  <li>{{ order.street_address }}</li>
+                  <li>{{ order.zip_code }} {{ order.city }}</li>
+                  <li><i class="fas fa-phone"></i> {{ order.phone_num }}</li>
+                  <li><i class="far fa-envelope"></i> {{ order.user.email }}</li>
                 </div>
 
 
@@ -177,28 +202,51 @@
                 <h5 class="ml-4 mb-4"><i class="fas fa-truck font-26"></i> Select delivery method</h5>
                 <div class="form-group">
 
-                  <div style="background-color:#f3f3f3" class="mx-4 p-2 mb-4">
-                    <h6 class="my-1 mx-1">Collect from a store</h6>
+                  <div class="mx-4 p-2 mb-4 toggleDiv" id="select_collect">
+                    <h6 class="mx-1 p-3">Collect from a store</h6>
+                    <!-- The content of the div -->
                     <div id="collect">
-                      <select class="form-control mx-auto d-block" ng-model="delivery_method" ng-change="addDelivery()">
-                        <option value="Collect from Helsinki or a 24h stall">Collect from Helsinki or a 24h stall</option>
-                        <option value="Collect from Pirkkala">Collect from Pirkkala</option>
-                        <option value="Collect from Oulu">Collect from Oulu</option>
-                        <option value="Collect from Vantaa warehouse">Collect from Vantaa warehouse</option>
-                        <option value="Collect from Raisio">Collect from Raisio</option>
-                      </select>
+                      <!-- CALLS HTTP POST TWICE -->
+                      <div class="btn-group-toggle" ng-click="addDelivery()">
+                        <label class="btn btn-light btn-lg w-100 mb-1">
+                          <input ng-model="delivery_method" value="Collect from Helsinki or a 24h stall" type="radio" autocomplete="off"><span class="float-left">Collect from Helsinki or a 24h stall</span>
+                        </label>
+                        <label class="btn btn-light btn-lg w-100 mb-1">
+                          <input ng-model="delivery_method" value="Collect from Pirkkala" type="radio" autocomplete="off"><span class="float-left">Collect from Pirkkala</span>
+                        </label>
+                        <label class="btn btn-light btn-lg w-100 mb-1">
+                          <input ng-model="delivery_method" value="Collect from Oulu" type="radio" autocomplete="off"><span class="float-left">Collect from Oulu</span>
+                        </label>
+                        <label class="btn btn-light btn-lg w-100 mb-1">
+                          <input ng-model="delivery_method" value="Collect from Vantaa warehouse" type="radio" autocomplete="off"><span class="float-left">Collect from Vantaa warehouse</span>
+                        </label>
+                        <label class="btn btn-light btn-lg w-100 mb-1">
+                          <input ng-model="delivery_method" value="Collect from Raisio" type="radio" autocomplete="off"><span class="float-left">Collect from Raisio</span>
+                        </label>
+                      </div>
+
                     </div>
                   </div>
 
-                  <div style="background-color:#f3f3f3" class="mx-4 p-2 mb-4">
-                    <h6 class="my-1 mx-1">Home delivery</h6>
-                    <div id="deliver_home">
-                      <select class="form-control mx-auto d-block" ng-model="delivery_method" ng-change="addDelivery()">
-                        <option value="Delivery on a weekday before 9am">Delivery on a weekday before 9am</option>
-                        <option value="Delivery on a weekday before 2pm">Delivery on a weekday before 2pm</option>
-                        <option value="Home delivery">Home delivery</option>
-                        <option value="Matkahuolto Jakopaketti">Matkahuolto Jakopaketti</option>
-                      </select>
+                  <div class="mx-4 p-2 mb-4 toggleDiv" id="select_delivery">
+                    <h6 class="mx-1 p-3">Home delivery</h6>
+                    <!-- The content of the div -->
+                    <div id="deliver_home" style="display:none">
+                      <div class="btn-group-toggle" ng-click="addDelivery()">
+                        <label class="btn btn-light btn-lg w-100 mb-1">
+                          <input ng-model="delivery_method" value="Delivery on a weekday before 9am" type="radio" autocomplete="off"> Delivery on a weekday before 9am
+                        </label>
+                        <label class="btn btn-light btn-lg w-100 mb-1">
+                          <input ng-model="delivery_method" value="Delivery on a weekday before 2pm" type="radio" autocomplete="off"> Delivery on a weekday before 2pm
+                        </label>
+                        <label class="btn btn-light btn-lg w-100 mb-1">
+                          <input ng-model="delivery_method" value="Home delivery" type="radio" autocomplete="off"> Home delivery
+                        </label>
+                        <label class="btn btn-light btn-lg w-100 mb-1">
+                          <input ng-model="delivery_method" value="Matkahuolto Jakopaketti" type="radio" autocomplete="off"> Matkahuolto Jakopaketti
+                        </label>
+
+                      </div>
                     </div>
                   </div>
 
@@ -207,30 +255,41 @@
 
 
             <!-- PAYMENT SECTION -->
+
             <div id="paymentDiv" style="display:none">
 
                 <h5 class="ml-4 mb-4"><i class="far fa-credit-card font-26"></i> Select payment method</h5>
-                <div style="background-color:#f3f3f3" class="mx-4 p-2 mb-4">
+                <div class="mx-4 p-2 mb-4 toggleDiv">
                   <h6 class="my-1 mx-1">Online bank service</h6>
+
                   <div id="online_bank_service">
-                    <select class="form-control mx-auto d-block" ng-model="payment_method" ng-change="addPayment()">
-                      <option value="Osuuspankki">Osuuspankki</option>
-                      <option value="Nordea">Nordea</option>
-                      <option value="Aktia">Aktia</option>
-                      <option value="Ålandsbanken">Ålandsbanken</option>
-                    </select>
+                    <div class="btn-group-toggle" ng-click="addPayment()">
+                      <label class="btn btn-light btn-lg w-100 mb-1">
+                        <input ng-model="payment_method" value="Osuuspankki" type="radio" autocomplete="off"> Osuuspankki
+                      </label>
+                      <label class="btn btn-light btn-lg w-100 mb-1">
+                        <input ng-model="payment_method" value="Nordea" type="radio" autocomplete="off"> Nordea
+                      </label>
+                      <label class="btn btn-light btn-lg w-100 mb-1">
+                        <input ng-model="payment_method" value="Aktia" type="radio" autocomplete="off"> Aktia
+                      </label>
+                      <label class="btn btn-light btn-lg w-100 mb-1">
+                        <input ng-model="payment_method" value="Ålandsbanken" type="radio" autocomplete="off"> Ålandsbanken
+                      </label>
+
+                    </div>
                   </div>
+
+
                 </div>
               {% endverbatim %}
             </div>
 
 
             <!-- SUMMARY SECTION -->
-            <div id="summaryDiv" style="display:none;overflow-y:auto; overflow-x:hidden">
+            <div id="summaryDiv" style="display:none;overflow-y:auto;overflow-x:hidden;margin-right:.5px">
               <h5 class="ml-4 mb-4"><i class="fas fa-arrow-right font-26"></i> Confirm your order</h5>
               <h6 class="mx-4 my-3">Shopping cart</h6>
-
-
               {% for item in cart %}
                 <li class="d-inline">
                   <div class="row">
@@ -257,8 +316,6 @@
                 <h6 class="font-13">Vat included</h6>
               </div>
 
-
-
             </div>
 
 
@@ -266,12 +323,15 @@
             <hr>
             <button id="prevBtn" onclick="prev()" class="btn btn-light mx-3 mb-3 w-25 mt-auto">Previous</button>
             <button id="nextBtn" onclick="next()" class="btn btn-primary mx-3 mb-3 w-25 mt-auto" style="position: absolute; right:0px; bottom:0px">Next</button>
+            <!-- MAKE ORDER + SEND CONFIRMATION EMAIL TO CLIENT! -->
             <button id="sendBtn" onclick="javascript:alert('MIAU')" class="btn btn-primary mx-3 mb-3 w-25 mt-auto" style="display:none;position: absolute; right:0px; bottom:0px">Confirm order</button>
 
 
-          </div>
+          </div> <!-- checkoutDiv -->
         </div>
 
+
+        <!-- SIDEBAR -->
         <div class="col col-lg-3 col-md-2 col-xs-4">
           <div class="p-4 mt-3 infoSideBar w-75">
             <h6>Order summary</h6>
@@ -282,110 +342,27 @@
           <div class="p-4 mt-3 infoSideBar w-75">
             <h6>Client information</h6>
             <li class="font-13 mb-2" style="font-weight:bold">{{ request.user.get_full_name }}<span class="float-right font-12" style="color:grey;">{{ request.user.id }}</span></li>
-            <li class="mb-2"><i class="fas fa-phone"></i> <span class="font-13"> {{ profile.phone_num }}</span></li>
-            <li class="mb-2"><i class="far fa-envelope"></i> <span class="font-13"> {{ request.user.email }}</span></li>
-
-
-            <!-- WORKS ON FIRST TIME, DOESN'T UPDATE NEW METHOD WHEN COMING BACK! -->
-            {% if not order.payment_method or not order.delivery_method %}
-              {% verbatim %}
-                <li ng-if="delivery_method"><i class="fas fa-truck"></i> <h6 class="d-inline"> Delivery method</h6></li>
-                <li><span class="font-12" id="delivery_method"></span></li>
-                <li ng-if="payment_method"><i class="far fa-credit-card"></i> <h6 class="d-inline"> Payment method</h6></li>
-                <li><span class="font-12" id="payment_method"></span></li>
-              {% endverbatim %}
-            {% else %}
-              <li><i class="fas fa-truck"></i> <h6 class="d-inline"> Delivery method</h6></li>
-              <li><span class="font-12">{{ order.delivery_method }}</span></li>
-              <li><i class="far fa-credit-card"></i> <h6 class="d-inline"> Payment method</h6></li>
-              <li><span class="font-12">{{ order.payment_method }}</span></li>
+            {% if profile.phone_num %}
+              <li class="mb-2"><i class="fas fa-phone"></i> <span class="font-13"> {{ profile.phone_num }}</span></li>
+            {% endif %}
+            {% if request.user.email %}
+              <li class="mb-2"><i class="far fa-envelope"></i> <span class="font-13"> {{ request.user.email }}</span></li>
             {% endif %}
 
+            {% verbatim %}
+              <li ng-if="ngdelivery_method"><i class="fas fa-truck"></i> <h6 class="d-inline"> Delivery method</h6></li>
+              <li><span class="font-12" id="delivery_method">{{ ngdelivery_method }}</span></li>
+              <li ng-if="payment_method"><i class="far fa-credit-card"></i> <h6 class="d-inline"> Payment method</h6></li>
+              <li><span class="font-12" id="payment_method"></span></li>
+            {% endverbatim %}
 
           </div>
         </div>
-
+        <!-- SIDEBAR -->
 
       </div>
 
     </div><!--container-->
-    <script>
-
-      // List of the step names
-      var list = ["cart", "contacts", "delivery", "payment", "summary"];
-
-      $(function(){
-        // If the url has no step specified, redirect to the first step
-        if (!window.location.hash) {
-          window.location.hash = "#cart";
-        }
-        updateStep();
-        // When any icon is clicked
-        $(".checkoutIcon").click(function(){
-          // Change the url hash to the wanted step and update the view
-          window.location.hash = $(this).attr("id");
-          updateStep();
-        });
-
-      });
-
-
-      function next(){
-        var step = window.location.hash.substring(1,window.location.hash.length);
-        var currentIndex = list.indexOf(step);
-        if (currentIndex !== list.length-1) {
-          window.location.hash = list[currentIndex+1];
-        }
-        updateStep();
-      }
-
-
-      function prev(){
-        var step = window.location.hash.substring(1,window.location.hash.length);
-        var currentIndex = list.indexOf(step);
-        if (currentIndex !== 0) {
-          window.location.hash = list[currentIndex-1];
-        }
-        updateStep();
-      }
-
-
-      function updateStep(){
-        // Current step from the url
-        var step = window.location.hash.substring(1,window.location.hash.length);
-        // Show the current step
-        $("#"+step+"Div").show();
-        $("#"+step).addClass("active").children().children().attr("src", "/shopApp/static/img/" + step + "_w.png");
-
-        // Index of the current step
-        var index = list.indexOf(step);
-
-        // Hide all other steps
-        for (var i = 0; i < list.length; i++) {
-          if (i !== index){
-            $("#"+list[i]+"Div").hide();
-            $("#"+list[i]).removeClass("active").children().children().attr("src", "/shopApp/static/img/" + list[i] + "_b.png");
-          }
-        }
-
-        // If the last step
-        if (index === list.length-1) {
-          $("#nextBtn").hide();
-          $("#sendBtn").show();
-        }else{
-          $("#nextBtn").show();
-          $("#sendBtn").hide();
-        }
-
-        // If the first step
-        if (index === 0) {
-          $("#prevBtn").css('visibility', 'hidden');
-        }else{
-          $("#prevBtn").css('visibility', 'visible');
-        }
-      } // updateStep
-
-
-    </script>
+    <script src="{% static 'js/checkoutScript.js' %}"></script>
   </body>
 </html>

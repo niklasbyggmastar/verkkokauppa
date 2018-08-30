@@ -114,6 +114,7 @@ class Order(models.Model):
     # ----------------------
     delivery_method = models.CharField(max_length=200, blank=True, null=True)
     payment_method = models.CharField(max_length=200, blank=True, null=True)
+    total_price = models.IntegerField(default=0)
     date_of_order = models.DateTimeField('date of order', blank=True, null=True)
     objects = OrderManager()
 
