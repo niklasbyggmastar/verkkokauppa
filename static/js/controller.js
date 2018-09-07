@@ -136,14 +136,12 @@ app.controller("checkoutCtrl", function ($scope, $http, $location, $filter) {
   $scope.checkoutIcon = [];
   $http.get(orderUrl).then(function(response){
     $scope.ngorder = $filter('filter')(response.data.objects, {user: "/api/v1/user/" + user_id + "/"})[0];
-    console.log($scope.ngorder);
     $scope.ngcart = $scope.ngorder.items;
     $scope.ngaddress = $scope.ngorder.street_address;
     $scope.ngzip_code = $scope.ngorder.zip_code;
     $scope.ngcity = $scope.ngorder.city;
-    $scope.ngdelivery = $scope.ngorder.delivery_method;
-    console.log($scope.ngcart + ", " + $scope.ngaddress);
-
+    $scope.ngdelivery_method = $scope.ngorder.delivery_method;
+    $scope.ngpayment_method = $scope.ngorder.payment_method;
   });
 
   // Add a new delivery address
@@ -164,6 +162,7 @@ app.controller("checkoutCtrl", function ($scope, $http, $location, $filter) {
         city: $scope.city
       }
     }).then(function(response){
+      $scope.removeDisabled();
       $scope.ngaddress = response.data.street_address;
       var message = angular.element(document.querySelector('.alert'));
       message.html("Address added successfully!").removeClass("d-none").addClass("alert-success");
@@ -181,18 +180,14 @@ app.controller("checkoutCtrl", function ($scope, $http, $location, $filter) {
   $scope.addDelivery = function(){
     // Get value of input field
     var delivery_method = $scope.delivery_method;
-    console.log("DELIVERY METHOD: " + delivery_method);
     // Call django view
     $http({
       method: 'POST',
       url: '/addDelivery/',
       data: delivery_method
     }).then(function(response){
+      $scope.removeDisabled();
       $scope.ngdelivery_method = response.data.delivery_method;
-      console.log("DELIVERY: " + $scope.ngdelivery_method);
-      // Parse JsonResponse from Django view and update delivery method
-      var delivery_method = angular.element(document.querySelector('#delivery_method'));
-      delivery_method.html(response.data.delivery_method);
       }, function errorCallBack(response){
         console.log(response.data);
       });
@@ -209,14 +204,18 @@ app.controller("checkoutCtrl", function ($scope, $http, $location, $filter) {
       url: '/addPayment/',
       data: payment_method
     }).then(function(response){
-      // Parse JsonResponse from Django view and update delivery method
-      var payment_method = angular.element(document.querySelector('#payment_method'));
-      payment_method.html(response.data.payment_method);
+      $scope.removeDisabled();
+      $scope.ngpayment_method = response.data.payment_method;
       }, function errorCallBack(response){
         console.log(response.data);
       });
   };
 
+  $scope.className = true;
+
+  $scope.removeDisabled = function(){
+    $scope.className = false;
+  }
 
 }); // Checkout controller
 

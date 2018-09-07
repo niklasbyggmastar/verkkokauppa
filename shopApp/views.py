@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Item, Category, Review, Profile, Order
+from .models import *
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
@@ -7,6 +7,12 @@ from django.db.models import Avg
 from django.utils import timezone
 from django.http import JsonResponse
 import json
+from django.conf import settings
+from django.core.mail import send_mail
+from django.template import loader
+from email.mime.image import MIMEImage
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
 
 
 def index(request):
@@ -34,26 +40,33 @@ def results(request, category_name):
 def checkout(request, user_id):
     if request.user.is_authenticated:
         profile = Profile.objects.get(user=request.user)
+
         # Add the actual item objects in the 'cart' array
         cart = []
         for item_id in profile.shopping_cart:
             for item in Item.objects.all():
                 if item_id == item.id:
                     cart.insert(0, item)
-        # Get the total price of cart contents
-        total_price = 0
-        for item in cart:
-            total_price += item.price
+
         # If user has not yet an order object instance, create new
         if not Order.objects.filter(user=request.user):
-            order = Order.objects.create(items=profile.shopping_cart, user=request.user, full_name=request.user.get_full_name(), street_address=profile.street_address, zip_code=profile.zip_code, city=profile.city, phone_num=profile.phone_num, email=request.user.email)
+            # Get the total price of cart contents
+            order.total_price = 0
+            for item in cart:
+                total_price += item.price
+            order = Order.objects.create(items=profile.shopping_cart, user=request.user, full_name=request.user.get_full_name(), street_address=profile.street_address, zip_code=profile.zip_code, city=profile.city, phone_num=profile.phone_num, email=request.user.email, total_price=total_price)
             order.save()
+
         # If user already has an order instance, get it
         else:
             order = Order.objects.get(user=request.user)
             order.items = profile.shopping_cart
+            order.total_price = 0
+            for item in cart:
+                order.total_price += item.price
             order.save()
-        context = {'profile': profile, 'cart': cart, 'total_price': total_price, 'order': order}
+
+        context = {'profile': profile, 'cart': cart, 'order': order}
     #if not request.user.is_authenticated:
     #    order = BORDER BORDER
         return render(request, 'shopApp/checkout.html', context)
@@ -93,6 +106,8 @@ def signup(request):
 
 
 #---------------- ACTIONS ---------------
+
+#----- CHECKOUT ----
 
 def addToCart(request):
     if request.method == 'POST':
@@ -141,6 +156,45 @@ def addPayment(request):
         order.payment_method = payment
         order.save()
         return JsonResponse({'payment_method': order.payment_method})
+
+def confirmOrder(request):
+    profile = Profile.objects.get(user=request.user)
+    order = Order.objects.get(user=request.user)
+    order.confirmed = True
+    orders_list = []
+    for item_id in profile.shopping_cart:
+        for item in Item.objects.all():
+            if item_id == item.id:
+                orders_list.insert(0, item)
+
+
+    html_message = loader.render_to_string(
+    "../templates/shopApp/email_confirm.html",
+    {
+        'user': request.user,
+        'profile': profile,
+        'orders_list': orders_list
+    }
+    ).strip()
+
+    subject = 'Thank you for your order!'
+
+    message = EmailMultiAlternatives(subject, html_message, settings.EMAIL_HOST_USER, ['niklas.byggmastar@gmail.com'])
+    message.content_subtype = 'html'
+    message.mixed_subtype = 'related'
+    for item in orders_list:
+        image = MIMEImage(item.image.read())
+        image.add_header('Content-ID', '<{}>'.format(item.image_filename))
+        message.attach(image)
+
+    message.send()
+
+
+
+#    send_mail(subject, "", settings.EMAIL_HOST_USER, ['niklas.byggmastar@gmail.com'], fail_silently=False, html_message=html_message)
+    return redirect("/?checkyallmail")
+
+#----- /CHECKOUT ----
 
 
 def post_review(request, item_id):

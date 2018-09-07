@@ -7,6 +7,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.postgres.fields import ArrayField
 from .managers import ItemManager, ReviewManager, CategoryManager, ProfileManager, OrderManager
+import os
 
 
 class Profile(models.Model):
@@ -76,6 +77,10 @@ class Item(models.Model):
     def date(self):
         return self.date_added.date
 
+    @property
+    def image_filename(self):
+        return os.path.basename(self.image.name)
+
 class Review(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     # --- if logged in: ---
@@ -114,8 +119,9 @@ class Order(models.Model):
     # ----------------------
     delivery_method = models.CharField(max_length=200, blank=True, null=True)
     payment_method = models.CharField(max_length=200, blank=True, null=True)
-    total_price = models.IntegerField(default=0)
+    total_price = models.DecimalField(decimal_places=2, max_digits=9, default=0)
     date_of_order = models.DateTimeField('date of order', blank=True, null=True)
+    confirmed = models.BooleanField(default=False)
     objects = OrderManager()
 
     def __str__(self):

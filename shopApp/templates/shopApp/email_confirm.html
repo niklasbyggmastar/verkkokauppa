@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {% load static %}
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, height=device-height initial-scale=1.0">
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+    <script src="{% static 'js/jquery.star-rating-svg.min.js' %}"></script>-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/star-rating-svg.css' %}">
+    <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
+    <script src="{% static 'js/controller.js' %}"></script>-->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  </head>
+  <body>
+    {{ user.get_full_name }}
+    <h5>{{ profile.street_address }}</h5>
+    {% for item in orders_list %}
+      <li class="d-inline">
+        <div class="row">
+          <div class="col-lg-2 col-md-2"> <!--!!!!!!!!!!!-->
+            <a href="{% url 'info' item.id %}"><img class="img img-fluid mx-3" src="cid:{{ item.image.path }}" alt="{{ item.name }}"></a>
+          </div>
+          <div class="col-lg-10 col-md-10">
+            <a href="{% url 'info' item.id %}" style="color:black"><span style="font-weight:bold">{{ item.name }}</span></a>
+            <span class="float-right mr-3" style="font-weight:bold">{{ item.price }} €</span>
+            <p style="color:gray">Item number {{ item.id }}</p>
+          </div>
+        </div>
+        <hr class="thickHr">
+      </li>
+    {% empty %}
+      <h5>No items</h5>
+    {% endfor %}
+  </body>
+</html>

@@ -22,9 +22,6 @@
   <body ng-app="app">
       <!--TOP BAR-->
       <nav class="navbar navbar-expand-md navbar-light justify-content-start">
-        <button type="button" class="navbar-toggler mr-2" data-toggle="collapse" data-target="#sideBarNav" aria-controls="sideBarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <i class="fas fa-bars"></i>
-        </button>
         <a class="navbar-brand" href="{% url 'index' %}">
           <picture class="checkoutLogo">
             <source media="(max-width:1920) and (min-width:1000px)" srcset="{% static 'img/logo.png' %}">
@@ -34,7 +31,7 @@
           </picture>
         </a>
 
-        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <!--<div class="collapse navbar-collapse" id="collapsibleNavbar">-->
           <ul class="navbar-nav ml-auto" id="checkoutNav">
             <li class="nav-item mr-4">
               <a style="color:white" class="nav-link" href="#">
@@ -49,7 +46,7 @@
               </a>
             </li>
           </ul>
-        </div>
+        <!--</div>-->
       </nav>
 
 
@@ -57,274 +54,299 @@
       <div class="container-fluid" ng-controller="checkoutCtrl">
 
       <div class="row">
-        <div class="col col-lg-9 col-md-10 col-xs-8">
-          <div class="checkoutDiv mt-lg-3 mt-sm-0 d-flex flex-column">
+        <div class="col-lg-9 col-md-10 pr-0">
+          <div class="checkoutDiv mt-lg-3 mt-sm-0" style="padding-bottom:12vh"> <!--d-flex flex-column-->
 
 
             <!-- Top bar of the order steps -->
-            <div class="pt-4 mx-4">
-              <div class="row">
-                <!-- Cart icon -->
-                <div class="col text-center">
+            <div class="pb-4 pb-xl-0 pb-lg-0 pb-md-0 pb-sm-0" style="border-bottom:solid .1px rgb(200,200,200);">
+              <div class="pt-3 mx-xl-3 mx-lg-3 mx-md-3 mx-sm-3 ml-4 mr-2" >
+                <div class="row">
                   {% verbatim %}
-                    <div id="cart" class="checkoutIcon active">
-                      <img class="img img-fluid" src="/shopApp/static/img/cart_w.png" alt="Cart">
+                    <!-- Cart icon -->
+                    <div class="col text-center" id="cartCol">
+                      <div id="cart" class="checkoutIcon active">
+                        <img class="img img-fluid mx-auto d-block" src="/shopApp/static/img/cart_w.png" alt="Cart">
+                        <label class="font-13 my-2" id="cartLabel">Cart</label>
+                      </div>
+                    </div>
+
+                    <!-- Contacts icon -->
+                    <div class="col text-center" id="contactsCol">
+                      <div id="contacts" ng-class="{ 'checkoutIcon disabled': !ngcart, 'checkoutIcon': ngcart }">
+                        <img class="img img-fluid mx-auto d-block" src="/shopApp/static/img/contacts_b.png" alt="Contacts">
+                        <label class="font-13 my-2" id="contactsLabel">Contacts</label>
+                      </div>
+                    </div>
+
+                    <!-- Delivery icon -->
+                    <div class="col text-center" id="deliveryCol">
+                      <div id="delivery" ng-class="{ 'checkoutIcon disabled': !ngaddress, 'checkoutIcon': ngaddress }">
+                        <img class="img img-fluid mx-auto d-block" src="/shopApp/static/img/delivery_b.png" alt="Delivery">
+                        <label class="font-13 my-2" id="deliveryLabel">Delivery</label>
+                      </div>
+                    </div>
+
+                    <!-- Payment icon -->
+                    <div class="col text-center" id="paymentCol">
+                      <div id="payment" ng-class="{ 'checkoutIcon disabled': !ngdelivery_method, 'checkoutIcon': ngdelivery_method }">
+                        <img class="img img-fluid mx-auto d-block" src="/shopApp/static/img/payment_b.png" alt="Payment">
+                        <label class="font-13 my-2" id="paymentLabel">Payment</label>
+                      </div>
+                    </div>
+
+                    <!-- Summary icon -->
+                    <div class="col text-center" id="summaryCol">
+                      <div id="summary" ng-class="{ 'checkoutIcon disabled': !ngpayment_method, 'checkoutIcon': ngpayment_method }">
+                        <img class="img img-fluid mx-auto d-block" src="/shopApp/static/img/summary_b.png" alt="Summary">
+                        <label class="font-13 my-2" id="summaryLabel">Summary</label>
+                      </div>
                     </div>
                   {% endverbatim %}
-                  <label class="font-13">Shopping cart</label>
+
                 </div>
-
-                <!-- Contacts icon -->
-                <div class="col text-center">
-                  {% verbatim %}
-                    <div id="contacts" ng-class="{ 'checkoutIcon disabled': !ngcart, 'checkoutIcon': ngcart }">
-                      <img class="img img-fluid" src="/shopApp/static/img/contacts_b.png" alt="Contacts">
-                    </div>
-                  {% endverbatim %}
-                  <label class="font-13">Contacts</label>
-                </div>
-
-                <!-- Delivery icon -->
-                <div class="col text-center">
-                  {% verbatim %}
-                    <div id="delivery" ng-class="{ 'checkoutIcon disabled': !ngaddress, 'checkoutIcon': ngaddress }">
-                      <img class="img img-fluid" src="/shopApp/static/img/delivery_b.png" alt="Delivery">
-                    </div>
-                  {% endverbatim %}
-                  <label class="font-13">Delivery</label>
-                </div>
-
-                <!-- Payment icon -->
-                <div class="col text-center">
-                  {% verbatim %}
-                    <div id="payment" ng-class="{ 'checkoutIcon disabled': !ngdelivery_method, 'checkoutIcon': ngdelivery_method }">
-                      <img class="img img-fluid" src="/shopApp/static/img/payment_b.png" alt="Payment">
-                    </div>
-                  {% endverbatim %}
-                  <label class="font-13">Payment</label>
-                </div>
-
-                <!-- Summary icon -->
-                <div class="col text-center">
-                  <div id="summary" class="checkoutIcon disabled"><img class="img img-fluid" src="{% static 'img/summary_b.png' %}" alt="Summary"></div>
-                  <label class="font-13">Summary</label>
-                </div>
-
-
               </div>
-              <hr>
             </div>
 
 
+            <br>
 
 
             <!-- CART SECTION -->
-            <div id="cartDiv" style="overflow-y:auto; overflow-x:hidden; margin-right:.5px;">
-              <h5 class="ml-4 mb-5"><i class="font-26 fas fa-shopping-cart"></i> Shopping cart</h5>
-              {% for item in cart %}
-                <li class="d-inline">
-                  <div class="row">
-                    <div class="col-lg-2 col-md-2"> <!--!!!!!!!!!!!-->
-                      <a href="{% url 'info' item.id %}"><img class="img img-fluid mx-3" src="/{{ item.image }}" alt="{{ item.name }}"></a>
+            <div class="checkoutStepWrap">
+              <div id="cartDiv" style="position: relative">
+                <h5 class="ml-4 mb-5"><i class="font-26 fas fa-shopping-cart"></i> Shopping cart</h5>
+                {% for item in cart %}
+                  <li class="d-inline">
+                    <div class="row">
+                      <div class="col-lg-2 col-md-2"> <!--!!!!!!!!!!!-->
+                        <a href="{% url 'info' item.id %}"><img class="img img-fluid mx-xl-3 mx-lg-3 mx-md-3 mx-sm-3 checkoutItemImg" src="/{{ item.image }}" alt="{{ item.name }}"></a>
+                      </div>
+                      <div class="col-lg-10 col-md-10">
+                        <div class="mx-3 mx-0-sm mx-0-md mx-0-lg mx-0-xl p-2">
+                          <a href="{% url 'info' item.id %}" style="color:black"><span style="font-weight:bold">{{ item.name }}</span></a>
+                          <span class="float-right mr-3" style="font-weight:bold">{{ item.price }} €</span>
+                          <p style="color:gray">Item number {{ item.id }}</p>
+                        </div>
+                      </div>
                     </div>
-                    <div class="col-lg-10 col-md-10">
-                      <a href="{% url 'info' item.id %}" style="color:black"><span style="font-weight:bold">{{ item.name }}</span></a>
-                      <span class="float-right mr-3" style="font-weight:bold">{{ item.price }} €</span>
-                      <p style="color:gray">Item number {{ item.id }}</p>
-                    </div>
-                  </div>
-                  <hr class="cartItemSeparator">
-                </li>
-              {% empty %}
-                <h6 class="p-4 text-center">No items in shopping cart.</h6>
-              {% endfor %}
+                    {% if not forloop.last %}
+                      <hr class="thickHr">
+                    {% endif %}
+                  </li>
+                {% empty %}
+                  <h6 class="p-4 text-center">No items in shopping cart.</h6>
+                {% endfor %}
+              </div>
             </div>
+
 
 
 
             <!-- CONTACTS SECTION -->
-            <div id="contactsDiv" style="display:none">
+            <div class="checkoutStepWrap">
+              <div id="contactsDiv" style="position: relative;">
 
-              <div class="alert d-none" role="alert"></div>
+                <div class="alert d-none" role="alert"></div>
 
-              {% if order.street_address|length > 0 %} <!-- Check only the address (?) -->
-                <h5 class="ml-4 mb-4"><i class="font-26 far fa-id-card"></i> Delivery address</h5>
-                <div class="p-3 m-3 w-25" style="border:1px solid #2171cc; border-radius:3px;">
-                  <li style="font-weight:bold">{{ request.user.get_full_name }}</li>
-                  <li>{{ order.street_address }}</li>
-                  <li>{{ order.zip_code }} {{ order.city }}</li>
-                  <li><i class="fas fa-phone"></i> {{ order.phone_num }}</li>
-                  <li><i class="far fa-envelope"></i> {{ order.user.email }}</li>
-                </div>
-
-
-              {% else %}
-              <h5 class="ml-4 mb-4"><i class="font-26 far fa-id-card"></i> Adding an address</h5>
-              <div class="mx-auto d-block p-3 mb-5" style="border: 1px solid #c4c4c4; width:47%; border-radius:3px;">
-                <h6 style="background-color:#f0f8fc; border:1px solid #cee9f5" class="py-3 px-5 font-14 my-4">Fields with a star ( <span style="color:red">*</span> ) are mandatory</h6>
-                  <div class="my-1">
-                    <span style="color:red">*</span> <span class="font-14">Name</span><input type="text" class="form-control form-control-sm" placeholder="Full name" value="{{ user.get_full_name }}" required readonly>
+                {% if order.street_address|length > 0 %} <!-- Check only the address (?) -->
+                  <h5 class="ml-4 mb-4"><i class="font-26 far fa-id-card"></i> Delivery address</h5>
+                  <div class="p-3 m-3" id="select_delivery_div">
+                    <li style="font-weight:bold">{{ request.user.get_full_name }}</li>
+                    <li>{{ order.street_address }}</li>
+                    <li>{{ order.zip_code }} {{ order.city }}</li>
+                    <li><i class="fas fa-phone"></i> {{ order.phone_num }}</li>
+                    <li><i class="far fa-envelope"></i> {{ order.user.email }}</li>
                   </div>
-                  <div class="my-1">
-                    {% verbatim %}
-                      <span style="color:red">*</span> <span class="font-14">Street address</span><input id="street_address" ng-model="street_address" ng-blur="getVal()" type="text" class="form-control form-control-sm" required>
+
+
+                {% else %}
+                <h5 class="ml-4 mb-4"><i class="font-26 far fa-id-card"></i> Adding an address</h5>
+                <div class="mx-auto d-block p-3 mb-5" style="border: 1px solid #c4c4c4; width:47%; border-radius:3px;">
+                  <h6 style="background-color:#f0f8fc; border:1px solid #cee9f5" class="py-3 px-5 font-14 my-4">Fields with a star ( <span style="color:red">*</span> ) are mandatory</h6>
+                    <div class="my-1">
+                      <span style="color:red">*</span> <span class="font-14">Name</span><input type="text" class="form-control form-control-sm" placeholder="Full name" value="{{ user.get_full_name }}" required readonly>
                     </div>
                     <div class="my-1">
-                      <div class="row">
-                        <div class="col-4">
-                          <span style="color:red">*</span> <span class="font-14">Zip code</span><input ng-model="zip_code" ng-blur="getVal()" type="text" class="form-control form-control-sm" required>
+                      {% verbatim %}
+                        <span style="color:red">*</span> <span class="font-14">Street address</span><input id="street_address" ng-model="street_address" ng-blur="getVal()" type="text" class="form-control form-control-sm" required>
+                      </div>
+                      <div class="my-1">
+                        <div class="row">
+                          <div class="col-4">
+                            <span style="color:red">*</span> <span class="font-14">Zip code</span><input ng-model="zip_code" ng-blur="getVal()" type="text" class="form-control form-control-sm" required>
+                          </div>
+                          <div class="col-8">
+                            <span style="color:red">*</span> <span class="font-14">City</span><input ng-model="city" ng-blur="getVal()" type="text" class="form-control form-control-sm" required>
+                          {% endverbatim %}
                         </div>
-                        <div class="col-8">
-                          <span style="color:red">*</span> <span class="font-14">City</span><input ng-model="city" ng-blur="getVal()" type="text" class="form-control form-control-sm" required>
-                        {% endverbatim %}
                       </div>
                     </div>
+                    <div class="my-1">
+                      <span style="color:red">*</span> <span class="font-14">Phone number</span><input type="tel" class="form-control form-control-sm" value="{{ profile.phone_num }}" required>
+                    </div>
+                    <div class="my-1">
+                      <span class="font-14">Email</span><input type="email" class="form-control form-control-sm" value="{{ user.email }}">
+                    </div>
+                    <!-- ASYNC SAVE ADDRESS INFO TO PROFILE -->
+                    {% verbatim %}
+                      <button id="addressBtn" ng-click="addAddress()" type="button" class="btn btn-primary w-100 mt-3">Add address and continue</button>
+                    {% endverbatim %}
                   </div>
-                  <div class="my-1">
-                    <span style="color:red">*</span> <span class="font-14">Phone number</span><input type="tel" class="form-control form-control-sm" value="{{ profile.phone_num }}" required>
-                  </div>
-                  <div class="my-1">
-                    <span class="font-14">Email</span><input type="email" class="form-control form-control-sm" value="{{ user.email }}">
-                  </div>
-                  <!-- ASYNC SAVE ADDRESS INFO TO PROFILE -->
-                  {% verbatim %}
-                    <button id="addressBtn" ng-click="addAddress()" type="button" class="btn btn-primary w-100 mt-3">Add address and continue</button>
-                  {% endverbatim %}
-                </div>
-              {% endif %}
+                {% endif %}
 
+              </div>
             </div>
+
 
 
             <!-- DELIVERY SECTION -->
-            <div id="deliveryDiv" style="display:none">
-              {% verbatim %}
-                <h5 class="ml-4 mb-4"><i class="fas fa-truck font-26"></i> Select delivery method</h5>
-                <div class="form-group">
+            <div class="checkoutStepWrap">
+              <div id="deliveryDiv" style="position: relative;">
+                {% verbatim %}
+                  <h5 class="ml-4 mb-4"><i class="fas fa-truck font-26"></i> Select delivery method</h5>
+                  <div class="form-group">
 
-                  <div class="mx-4 p-2 mb-4 toggleDiv" id="select_collect">
-                    <h6 class="mx-1 p-3">Collect from a store</h6>
-                    <!-- The content of the div -->
-                    <div id="collect">
-                      <!-- CALLS HTTP POST TWICE -->
-                      <div class="btn-group-toggle" ng-click="addDelivery()">
-                        <label class="btn btn-light btn-lg w-100 mb-1">
-                          <input ng-model="delivery_method" value="Collect from Helsinki or a 24h stall" type="radio" autocomplete="off"><span class="float-left">Collect from Helsinki or a 24h stall</span>
-                        </label>
-                        <label class="btn btn-light btn-lg w-100 mb-1">
-                          <input ng-model="delivery_method" value="Collect from Pirkkala" type="radio" autocomplete="off"><span class="float-left">Collect from Pirkkala</span>
-                        </label>
-                        <label class="btn btn-light btn-lg w-100 mb-1">
-                          <input ng-model="delivery_method" value="Collect from Oulu" type="radio" autocomplete="off"><span class="float-left">Collect from Oulu</span>
-                        </label>
-                        <label class="btn btn-light btn-lg w-100 mb-1">
-                          <input ng-model="delivery_method" value="Collect from Vantaa warehouse" type="radio" autocomplete="off"><span class="float-left">Collect from Vantaa warehouse</span>
-                        </label>
-                        <label class="btn btn-light btn-lg w-100 mb-1">
-                          <input ng-model="delivery_method" value="Collect from Raisio" type="radio" autocomplete="off"><span class="float-left">Collect from Raisio</span>
-                        </label>
-                      </div>
-
-                    </div>
-                  </div>
-
-                  <div class="mx-4 p-2 mb-4 toggleDiv" id="select_delivery">
-                    <h6 class="mx-1 p-3">Home delivery</h6>
-                    <!-- The content of the div -->
-                    <div id="deliver_home" style="display:none">
-                      <div class="btn-group-toggle" ng-click="addDelivery()">
-                        <label class="btn btn-light btn-lg w-100 mb-1">
-                          <input ng-model="delivery_method" value="Delivery on a weekday before 9am" type="radio" autocomplete="off"> Delivery on a weekday before 9am
-                        </label>
-                        <label class="btn btn-light btn-lg w-100 mb-1">
-                          <input ng-model="delivery_method" value="Delivery on a weekday before 2pm" type="radio" autocomplete="off"> Delivery on a weekday before 2pm
-                        </label>
-                        <label class="btn btn-light btn-lg w-100 mb-1">
-                          <input ng-model="delivery_method" value="Home delivery" type="radio" autocomplete="off"> Home delivery
-                        </label>
-                        <label class="btn btn-light btn-lg w-100 mb-1">
-                          <input ng-model="delivery_method" value="Matkahuolto Jakopaketti" type="radio" autocomplete="off"> Matkahuolto Jakopaketti
-                        </label>
+                    <div class="mx-4 p-2 mb-4 toggleDiv" id="select_collect">
+                      <h6 class="mx-1 p-3">Collect from a store<span class="float-right">0,00 €</span></h6>
+                      <!-- The content of the div -->
+                      <div id="collect">
+                        <!-- CALLS HTTP POST TWICE -->
+                        <div class="btn-group-toggle" ng-click="addDelivery()">
+                          <label class="btn btn-light btn-lg w-100 mb-1 align-baseline">
+                            <input ng-model="delivery_method" value="Collect from Helsinki or a 24h stall" type="radio" autocomplete="off"><span class="float-left font-14 bold"><img class="img img-fluid mr-3" style="height:30px;" src="/shopApp/static/img/favicon.png" alt="Verkkokauppa">Collect from Helsinki or a 24h stall</span><span class="float-right font-14 bold">0,00 €</span>
+                          </label>
+                          <label class="btn btn-light btn-lg w-100 mb-1 align-baseline">
+                            <input ng-model="delivery_method" value="Collect from Pirkkala" type="radio" autocomplete="off"><span class="float-left align-baseline font-14 bold"><img class="img img-fluid mr-3" style="height:30px;" src="/shopApp/static/img/favicon.png" alt="Verkkokauppa">Collect from Pirkkala</span><span class="float-right font-14 bold">0,00 €</span>
+                          </label>
+                          <label class="btn btn-light btn-lg w-100 mb-1 align-baseline">
+                            <input ng-model="delivery_method" value="Collect from Oulu" type="radio" autocomplete="off"><span class="float-left align-baseline font-14 bold"><img class="img img-fluid mr-3" style="height:30px;" src="/shopApp/static/img/favicon.png" alt="Verkkokauppa">Collect from Oulu</span><span class="float-right font-14 bold">0,00 €</span>
+                          </label>
+                          <label class="btn btn-light btn-lg w-100 mb-1 align-baseline">
+                            <input ng-model="delivery_method" value="Collect from Vantaa warehouse" type="radio" autocomplete="off"><span class="float-left align-baseline font-14 bold"><img class="img img-fluid mr-3" style="height:30px;" src="/shopApp/static/img/favicon.png" alt="Verkkokauppa">Collect from Vantaa warehouse</span><span class="float-right font-14 bold">0,00 €</span>
+                          </label>
+                          <label class="btn btn-light btn-lg w-100 mb-1 align-baseline">
+                            <input ng-model="delivery_method" value="Collect from Raisio" type="radio" autocomplete="off"><span class="float-left align-baseline font-14 bold"><img class="img img-fluid mr-3" style="height:30px;" src="/shopApp/static/img/favicon.png" alt="Verkkokauppa">Collect from Raisio</span><span class="float-right font-14 bold">0,00 €</span>
+                          </label>
+                        </div>
 
                       </div>
                     </div>
-                  </div>
 
-                </div>
+                    <div class="mx-4 p-2 mb-4 toggleDiv" id="select_delivery">
+                      <h6 class="mx-1 p-3">Home delivery</h6>
+                      <!-- The content of the div -->
+                      <div id="deliver_home" style="display:none">
+                        <div class="btn-group-toggle" ng-click="addDelivery()">
+                          <label class="btn btn-light btn-lg w-100 mb-1">
+                            <input ng-model="delivery_method" value="Delivery on a weekday before 9am" type="radio" autocomplete="off"> Delivery on a weekday before 9am
+                          </label>
+                          <label class="btn btn-light btn-lg w-100 mb-1">
+                            <input ng-model="delivery_method" value="Delivery on a weekday before 2pm" type="radio" autocomplete="off"> Delivery on a weekday before 2pm
+                          </label>
+                          <label class="btn btn-light btn-lg w-100 mb-1">
+                            <input ng-model="delivery_method" value="Home delivery" type="radio" autocomplete="off"> Home delivery
+                          </label>
+                          <label class="btn btn-light btn-lg w-100 mb-1">
+                            <input ng-model="delivery_method" value="Matkahuolto Jakopaketti" type="radio" autocomplete="off"> Matkahuolto Jakopaketti
+                          </label>
+
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+              </div>
             </div>
+
 
 
             <!-- PAYMENT SECTION -->
+            <div class="checkoutStepWrap">
+              <div id="paymentDiv" style="position: relative;">
 
-            <div id="paymentDiv" style="display:none">
+                  <h5 class="ml-4 mb-4"><i class="far fa-credit-card font-26"></i> Select payment method</h5>
+                  <div class="mx-4 p-2 mb-4 toggleDiv">
+                    <h6 class="my-1 mx-1">Online bank service</h6>
 
-                <h5 class="ml-4 mb-4"><i class="far fa-credit-card font-26"></i> Select payment method</h5>
-                <div class="mx-4 p-2 mb-4 toggleDiv">
-                  <h6 class="my-1 mx-1">Online bank service</h6>
+                    <div id="online_bank_service">
+                      <div class="btn-group-toggle" ng-click="addPayment()">
+                        <label class="btn btn-light btn-lg w-100 mb-1">
+                          <input ng-model="payment_method" value="Osuuspankki" type="radio" autocomplete="off"> Osuuspankki
+                        </label>
+                        <label class="btn btn-light btn-lg w-100 mb-1">
+                          <input ng-model="payment_method" value="Nordea" type="radio" autocomplete="off"> Nordea
+                        </label>
+                        <label class="btn btn-light btn-lg w-100 mb-1">
+                          <input ng-model="payment_method" value="Aktia" type="radio" autocomplete="off"> Aktia
+                        </label>
+                        <label class="btn btn-light btn-lg w-100 mb-1">
+                          <input ng-model="payment_method" value="Ålandsbanken" type="radio" autocomplete="off"> Ålandsbanken
+                        </label>
 
-                  <div id="online_bank_service">
-                    <div class="btn-group-toggle" ng-click="addPayment()">
-                      <label class="btn btn-light btn-lg w-100 mb-1">
-                        <input ng-model="payment_method" value="Osuuspankki" type="radio" autocomplete="off"> Osuuspankki
-                      </label>
-                      <label class="btn btn-light btn-lg w-100 mb-1">
-                        <input ng-model="payment_method" value="Nordea" type="radio" autocomplete="off"> Nordea
-                      </label>
-                      <label class="btn btn-light btn-lg w-100 mb-1">
-                        <input ng-model="payment_method" value="Aktia" type="radio" autocomplete="off"> Aktia
-                      </label>
-                      <label class="btn btn-light btn-lg w-100 mb-1">
-                        <input ng-model="payment_method" value="Ålandsbanken" type="radio" autocomplete="off"> Ålandsbanken
-                      </label>
-
+                      </div>
                     </div>
+
                   </div>
-
-
-                </div>
-              {% endverbatim %}
+                {% endverbatim %}
+              </div>
             </div>
+
 
 
             <!-- SUMMARY SECTION -->
-            <div id="summaryDiv" style="display:none;overflow-y:auto;overflow-x:hidden;margin-right:.5px">
-              <h5 class="ml-4 mb-4"><i class="fas fa-arrow-right font-26"></i> Confirm your order</h5>
-              <h6 class="mx-4 my-3">Shopping cart</h6>
-              {% for item in cart %}
-                <li class="d-inline">
-                  <div class="row">
-                    <div class="col-lg-2 col-md-2"> <!--!!!!!!!!!!!-->
-                      <a href="{% url 'info' item.id %}"><img class="img img-fluid mx-3" src="/{{ item.image }}" alt="{{ item.name }}"></a>
+            <div class="checkoutStepWrap">
+              <div id="summaryDiv">
+                <h5 class="ml-4 mb-4"><i class="fas fa-arrow-right font-26"></i> Confirm your order</h5>
+                <h6 class="mx-4 my-3">Shopping cart</h6>
+                {% for item in cart %}
+                  <li class="d-inline">
+                    <div class="row">
+                      <div class="col-lg-2 col-md-2"> <!--!!!!!!!!!!!-->
+                        <a href="{% url 'info' item.id %}"><img class="img img-fluid mx-xl-3 mx-lg-3 mx-md-3 mx-sm-3 checkoutItemImg" src="/{{ item.image }}" alt="{{ item.name }}"></a>
+                      </div>
+                      <div class="col-lg-10 col-md-10 mx-2">
+                        <div class="mx-3 mx-0-sm mx-0-md mx-0-lg mx-0-xl p-2">
+                          <a href="{% url 'info' item.id %}" style="color:black"><span class="" style="font-weight:bold">{{ item.name }}</span></a>
+                          <span class="float-right mr-3" style="font-weight:bold">{{ item.price }} €</span>
+                          <p style="color:gray">Item number {{ item.id }}</p>
+                        </div>
+                      </div>
                     </div>
-                    <div class="col-lg-10 col-md-10">
-                      <a href="{% url 'info' item.id %}" style="color:black"><span style="font-weight:bold">{{ item.name }}</span></a>
-                      <span class="float-right mr-3" style="font-weight:bold">{{ item.price }} €</span>
-                      <p style="color:gray">Item number {{ item.id }}</p>
-                    </div>
-                  </div>
-                  <hr class="cartItemSeparator">
-                </li>
-              {% empty %}
-                <h6 class="p-4 text-center">No items in shopping cart.</h6>
-              {% endfor %}
-              <div class="ml-4">
-                <h6>{{ cart|length }} items in total<span class="float-right mr-3">{{ total_price }} €</span></h6>
-                <h6>Delivery method: {{ order.delivery_method }}<span class="float-right mr-3">30 €</span></h6>
-                <h6>Payment method: {{ order.payment_method }}<span class="float-right mr-3">0 €</span></h6>
-                <hr class="cartItemSeparator">
-                <h6>Order in total<span class="float-right mr-3" style="color:red">{{ total_price }} €</span></h6>
-                <h6 class="font-13">Vat included</h6>
+                    <hr class="thickHr">
+                  </li>
+                {% empty %}
+                  <h6 class="p-4 text-center">No items in shopping cart.</h6>
+                {% endfor %}
+                <div class="ml-4">
+                  <h6>{{ cart|length }} items in total<span class="float-right mr-3">{{ order.total_price }} €</span></h6>
+                  {% verbatim %}
+                    <h6>Delivery method: {{ ngdelivery_method }}<span class="float-right mr-3">30 €</span></h6>
+                    <h6>Payment method: {{ ngpayment_method }}<span class="float-right mr-3">0 €</span></h6>
+                  {% endverbatim %}
+                  <hr class="thickHr">
+                  <h6>Order in total<span class="float-right mr-3" style="color:red">{{ order.total_price }} €</span></h6>
+                  <h6 class="font-13">Vat included</h6>
+                </div>
               </div>
-
             </div>
 
 
+
             <!-- Next and previous buttons -->
-            <hr>
-            <button id="prevBtn" onclick="prev()" class="btn btn-light mx-3 mb-3 w-25 mt-auto">Previous</button>
-            <button id="nextBtn" onclick="next()" class="btn btn-primary mx-3 mb-3 w-25 mt-auto" style="position: absolute; right:0px; bottom:0px">Next</button>
-            <!-- MAKE ORDER + SEND CONFIRMATION EMAIL TO CLIENT! -->
-            <button id="sendBtn" onclick="javascript:alert('MIAU')" class="btn btn-primary mx-3 mb-3 w-25 mt-auto" style="display:none;position: absolute; right:0px; bottom:0px">Confirm order</button>
+            <div class="footer">
+              <div class="float-left mt-3 ml-4" id="footerCartPrice">
+                <span class="bold font-14">{{ cart | length }} items in total</span> <br>
+                <span class="font-14">Total price <span style="color:red; font-weight:bold">{{ order.total_price }} €</span></span>
+              </div>
+              <button id="prevBtn" onclick="prev()" class="btn btn-light my-3 mr-3 ml-4 w-25 float-left">Previous</button>
+              {% verbatim %}
+                <button id="nextBtn" onclick="next()" ng-class="{ 'btn btn-primary m-3 w-25 float-right': true, 'disabled':className }">Next</button>
+              {% endverbatim %}
+              <a href="{% url 'confirmOrder' %}"><button id="sendBtn" class="btn btn-primary m-3 w-25 float-right" style="display:none">Confirm order</button></a>
+            </div>
+
+
 
 
           </div> <!-- checkoutDiv -->
@@ -332,32 +354,36 @@
 
 
         <!-- SIDEBAR -->
-        <div class="col col-lg-3 col-md-2 col-xs-4">
-          <div class="p-4 mt-3 infoSideBar w-75">
-            <h6>Order summary</h6>
-            <li class="font-13" style="margin-bottom:-5px;">{{ cart|length }} items in total<span class="float-right">{{ total_price }} €</span></li>
-            <hr>
-            <li class="font-13" style="font-weight:bold;margin-top:-5px;">Total price<span class="float-right" style="color:red;">{{ total_price }} €</span></li>
-          </div>
-          <div class="p-4 mt-3 infoSideBar w-75">
-            <h6>Client information</h6>
-            <li class="font-13 mb-2" style="font-weight:bold">{{ request.user.get_full_name }}<span class="float-right font-12" style="color:grey;">{{ request.user.id }}</span></li>
-            {% if profile.phone_num %}
-              <li class="mb-2"><i class="fas fa-phone"></i> <span class="font-13"> {{ profile.phone_num }}</span></li>
-            {% endif %}
-            {% if request.user.email %}
-              <li class="mb-2"><i class="far fa-envelope"></i> <span class="font-13"> {{ request.user.email }}</span></li>
-            {% endif %}
 
-            {% verbatim %}
-              <li ng-if="ngdelivery_method"><i class="fas fa-truck"></i> <h6 class="d-inline"> Delivery method</h6></li>
-              <li><span class="font-12" id="delivery_method">{{ ngdelivery_method }}</span></li>
-              <li ng-if="payment_method"><i class="far fa-credit-card"></i> <h6 class="d-inline"> Payment method</h6></li>
-              <li><span class="font-12" id="payment_method"></span></li>
-            {% endverbatim %}
+          <div class="col-lg-3 col-md-2">
+            <div class="checkoutSideBarWrap">
+            <div class="p-4 mt-3 infoSideBar w-75">
+              <h6>Order summary</h6>
+              <li class="font-13" style="margin-bottom:-5px;">{{ cart|length }} items in total<span class="float-right">{{ order.total_price }} €</span></li>
+              <hr>
+              <li class="font-13" style="font-weight:bold;margin-top:-5px;">Total price<span class="float-right" style="color:red;">{{ order.total_price }} €</span></li>
+            </div>
+            <div class="p-4 mt-3 infoSideBar w-75">
+              <h6>Client information</h6>
+              <li class="font-13 mb-2" style="font-weight:bold">{{ request.user.get_full_name }}<span class="float-right font-12" style="color:grey;">{{ request.user.id }}</span></li>
+              {% if profile.phone_num %}
+                <li class="mb-2"><i class="fas fa-phone"></i> <span class="font-13"> {{ profile.phone_num }}</span></li>
+              {% endif %}
+              {% if request.user.email %}
+                <li class="mb-2"><i class="far fa-envelope"></i> <span class="font-13"> {{ request.user.email }}</span></li>
+              {% endif %}
 
+              {% verbatim %}
+                <li ng-if="ngdelivery_method"><i class="fas fa-truck"></i> <h6 class="d-inline"> Delivery method</h6></li>
+                <li><span class="font-12">{{ ngdelivery_method }}</span></li>
+                <li ng-if="ngpayment_method"><i class="far fa-credit-card"></i> <h6 class="d-inline"> Payment method</h6></li>
+                <li><span class="font-12">{{ ngpayment_method }}</span></li>
+              {% endverbatim %}
+              </div>
+            </div>
           </div>
-        </div>
+
+
         <!-- SIDEBAR -->
 
       </div>
