@@ -124,6 +124,7 @@ app.controller("ctrl", function ($scope, $http, $location, $filter) {
 
 // Controller for checkout view
 app.controller("checkoutCtrl", function ($scope, $http, $location, $filter) {
+
   // Set csrf token for post method
   var csrf_token = Cookies.get('csrftoken');
   $http.defaults.headers.post['XSRF-AUTH'] = csrf_token;
@@ -137,41 +138,60 @@ app.controller("checkoutCtrl", function ($scope, $http, $location, $filter) {
   $http.get(orderUrl).then(function(response){
     $scope.ngorder = $filter('filter')(response.data.objects, {user: "/api/v1/user/" + user_id + "/"})[0];
     $scope.ngcart = $scope.ngorder.items;
-    $scope.ngaddress = $scope.ngorder.street_address;
+    $scope.ngstreet_address = $scope.ngorder.street_address;
     $scope.ngzip_code = $scope.ngorder.zip_code;
     $scope.ngcity = $scope.ngorder.city;
+    $scope.ngphone_num = $scope.ngorder.phone_num;
+    if ($scope.ngstreet_address && $scope.ngzip_code && $scope.ngcity && $scope.ngphone_num) {
+      $scope.ngaddress = true;
+    }else{
+      $scope.ngaddress = false;
+      $scope.street_address = $scope.ngstreet_address;
+      $scope.zip_code = $scope.ngzip_code;
+      $scope.city = $scope.ngcity;
+      $scope.phone_num = $scope.ngphone_num;
+    }
+    $scope.email = $scope.ngorder.email;
     $scope.ngdelivery_method = $scope.ngorder.delivery_method;
     $scope.ngpayment_method = $scope.ngorder.payment_method;
   });
 
+
+
   // Add a new delivery address
-  $scope.addAddress = function(){
+  $scope.addContacts = function(){
     // Get values of input fields
     $scope.getVal = function(){
       $scope.street_address = $scope.street_address;
       $scope.zip_code = $scope.zip_code;
       $scope.city = $scope.city;
+      $scope.phone_num = $scope.phone_num;
+      $scope.email = $scope.email;
     }
-    // Call django view
-    $http({
-      method: 'POST',
-      url: '/addAddress/',
-      data: {
-        street_address: $scope.street_address,
-        zip_code: $scope.zip_code,
-        city: $scope.city
-      }
-    }).then(function(response){
-      $scope.removeDisabled();
-      $scope.ngaddress = response.data.street_address;
-      var message = angular.element(document.querySelector('.alert'));
-      message.html("Address added successfully!").removeClass("d-none").addClass("alert-success");
-      $(".alert.alert-success").fadeTo(3000, 500).slideUp(500, function(){
-        $(".alert.alert-success").slideUp(500);
-      });
+    // Call django view if required fields filled
+    if ($scope.street_address && $scope.zip_code && $scope.city && $scope.phone_num) {
+      $http({
+        method: 'POST',
+        url: '/addContacts/',
+        data: {
+          street_address: $scope.street_address,
+          zip_code: $scope.zip_code,
+          city: $scope.city,
+          phone_num: $scope.phone_num,
+          email: $scope.email
+        }
+      }).then(function(response){
+          $scope.ngaddress = true;
+          $scope.removeDisabled();
+          $scope.showMessage("Address added successfully!", "alert-success");
       }, function errorCallBack(response){
-        console.log(response.data);
+          console.log(response.data);
       });
+    }else{
+      console.log("jotain PUUTTUU SEN TUNTEE");
+      $scope.ngaddress = false;
+      $scope.showMessage("Please fill in all the required fields.", "alert-danger");
+    }
   };
 
 
@@ -186,8 +206,8 @@ app.controller("checkoutCtrl", function ($scope, $http, $location, $filter) {
       url: '/addDelivery/',
       data: delivery_method
     }).then(function(response){
-      $scope.removeDisabled();
       $scope.ngdelivery_method = response.data.delivery_method;
+      $scope.removeDisabled();
       }, function errorCallBack(response){
         console.log(response.data);
       });
@@ -204,18 +224,33 @@ app.controller("checkoutCtrl", function ($scope, $http, $location, $filter) {
       url: '/addPayment/',
       data: payment_method
     }).then(function(response){
-      $scope.removeDisabled();
       $scope.ngpayment_method = response.data.payment_method;
+      $scope.removeDisabled();
       }, function errorCallBack(response){
         console.log(response.data);
       });
   };
 
-  $scope.className = true;
+
 
   $scope.removeDisabled = function(){
-    $scope.className = false;
+    angular.element(document.querySelector('#nextBtn')).removeClass('disabled');
   }
+
+
+  $scope.showMessage = function(msgText, className){
+    var message = angular.element(document.querySelector('.alert'));
+    if (className === "alert-success") {
+      message.html(msgText).removeClass("d-none").removeClass("alert-danger").addClass(className);
+      $(".alert.alert-success").fadeTo(3000, 500).slideUp(500, function(){
+        $(".alert.alert-success").slideUp(500);
+      });
+    }else{
+      message.html(msgText).removeClass("d-none").addClass(className);
+    }
+
+  }
+
 
 }); // Checkout controller
 

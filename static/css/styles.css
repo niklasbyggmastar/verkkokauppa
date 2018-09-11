@@ -280,6 +280,7 @@ input[type=checkbox] {
   border-radius:3px;
   width:25%;
   padding: 5px;
+  background-color: #edf3fa;
 }
 
 .checkoutSideBarWrap{
@@ -305,6 +306,17 @@ input[type=checkbox] {
 .col-12{
   padding-right: 0px;
 }
+
+button{
+  white-space: normal;
+}
+
+#add_address_div{
+  border: 1px solid #c4c4c4;
+  width:47%;
+  border-radius:3px;
+}
+
 
 /* Div in choosing delivery or payment type */
 .toggleDiv{
@@ -460,6 +472,9 @@ input[type=checkbox] {
   }
   #select_delivery_div{
     width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
   }
   .checkoutSideBarWrap{
     display: none;
@@ -498,6 +513,13 @@ input[type=checkbox] {
 
   #summaryLabel{
     margin-left:-18px
+  }
+
+  #add_address_div{
+    width:auto;
+    margin-left:auto;
+    margin-right: auto;
+    display: block;
   }
 
 }

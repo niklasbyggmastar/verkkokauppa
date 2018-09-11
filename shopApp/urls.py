@@ -12,7 +12,7 @@ urlpatterns = [
     path('account/', views.account, name='account'),
     #---- Actions ----
     path('addToCart/', views.addToCart, name='addToCart'),
-    path('addAddress/', views.addAddress, name='addAddress'),
+    path('addContacts/', views.addContacts, name='addContacts'),
     path('addDelivery/', views.addDelivery, name='addDelivery'),
     path('addPayment/', views.addPayment, name='addPayment'),
     path('confirmOrder/', views.confirmOrder, name='confirmOrder'),

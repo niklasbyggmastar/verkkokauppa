@@ -119,26 +119,35 @@ def addToCart(request):
 
 
 
-def addAddress(request):
+def addContacts(request):
     if request.method == 'POST':
         data = json.loads(request.body.decode('utf-8'))
         street_address = data['street_address']
         zip_code = data['zip_code']
         city = data['city']
+        phone_num = data['phone_num']
+        email = data['email']
         profile = Profile.objects.get(user=request.user)
         profile.street_address = street_address
         profile.zip_code = zip_code
         profile.city = city
+        profile.phone_num = phone_num
+        profile.email = email
         profile.save()
         order = Order.objects.get(user=request.user)
         order.street_address = street_address
         order.zip_code = zip_code
         order.city = city
+        order.phone_num = phone_num
+        order.email = email
         order.save()
+        # Turha?
         return JsonResponse({
-            'street_address': profile.street_address,
-            'zip_code': profile.zip_code,
-            'city': profile.city
+            'street_address': order.street_address,
+            'zip_code': order.zip_code,
+            'city': order.city,
+            'phone_num': str(order.phone_num),
+            'email': order.email
         })
 
 def addDelivery(request):

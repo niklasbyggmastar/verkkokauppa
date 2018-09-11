@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, height=device-height initial-scale=1.0">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/jquery.validate.js"></script>
     <script src="{% static 'js/jquery.star-rating-svg.min.js' %}"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
@@ -54,7 +55,7 @@
       <div class="container-fluid" ng-controller="checkoutCtrl">
 
       <div class="row">
-        <div class="col-lg-9 col-md-10 pr-0">
+        <div class="col-lg-9 col-md-10 mr-0 pl-4 pr-0 pr-xl-3 pr-lg-3- pr-md-3 pr-sm-3">
           <div class="checkoutDiv mt-lg-3 mt-sm-0" style="padding-bottom:12vh"> <!--d-flex flex-column-->
 
 
@@ -119,10 +120,10 @@
                 {% for item in cart %}
                   <li class="d-inline">
                     <div class="row">
-                      <div class="col-lg-2 col-md-2"> <!--!!!!!!!!!!!-->
+                      <div class="col-xl-2 col-lg-2 col-md-2"> <!--!!!!!!!!!!!-->
                         <a href="{% url 'info' item.id %}"><img class="img img-fluid mx-xl-3 mx-lg-3 mx-md-3 mx-sm-3 checkoutItemImg" src="/{{ item.image }}" alt="{{ item.name }}"></a>
                       </div>
-                      <div class="col-lg-10 col-md-10">
+                      <div class="col-xl-10 col-lg-10 col-md-10">
                         <div class="mx-3 mx-0-sm mx-0-md mx-0-lg mx-0-xl p-2">
                           <a href="{% url 'info' item.id %}" style="color:black"><span style="font-weight:bold">{{ item.name }}</span></a>
                           <span class="float-right mr-3" style="font-weight:bold">{{ item.price }} €</span>
@@ -147,12 +148,11 @@
             <div class="checkoutStepWrap">
               <div id="contactsDiv" style="position: relative;">
 
-                <div class="alert d-none" role="alert"></div>
-
-                {% if order.street_address|length > 0 %} <!-- Check only the address (?) -->
+                {% if order.street_address|length > 0 and order.zip_code|length > 0 and order.city|length > 0 %}
                   <h5 class="ml-4 mb-4"><i class="font-26 far fa-id-card"></i> Delivery address</h5>
-                  <div class="p-3 m-3" id="select_delivery_div">
-                    <li style="font-weight:bold">{{ request.user.get_full_name }}</li>
+                  <div class="alert d-none" role="alert"></div>
+                  <div class="p-3 mx-auto d-block" id="select_delivery_div">
+                    <li style="font-weight:bold">{{ request.user.get_full_name }} <a href="#"><span class="float-right font-14"><i class="fas fa-pen"></i> Edit</span></a> </li>
                     <li>{{ order.street_address }}</li>
                     <li>{{ order.zip_code }} {{ order.city }}</li>
                     <li><i class="fas fa-phone"></i> {{ order.phone_num }}</li>
@@ -161,37 +161,36 @@
 
 
                 {% else %}
-                <h5 class="ml-4 mb-4"><i class="font-26 far fa-id-card"></i> Adding an address</h5>
-                <div class="mx-auto d-block p-3 mb-5" style="border: 1px solid #c4c4c4; width:47%; border-radius:3px;">
-                  <h6 style="background-color:#f0f8fc; border:1px solid #cee9f5" class="py-3 px-5 font-14 my-4">Fields with a star ( <span style="color:red">*</span> ) are mandatory</h6>
-                    <div class="my-1">
-                      <span style="color:red">*</span> <span class="font-14">Name</span><input type="text" class="form-control form-control-sm" placeholder="Full name" value="{{ user.get_full_name }}" required readonly>
-                    </div>
-                    <div class="my-1">
-                      {% verbatim %}
-                        <span style="color:red">*</span> <span class="font-14">Street address</span><input id="street_address" ng-model="street_address" ng-blur="getVal()" type="text" class="form-control form-control-sm" required>
-                      </div>
+                  <h5 class="ml-4 mb-4"><i class="font-26 far fa-id-card"></i> Adding an address</h5>
+                  <div class="mx-auto d-block p-3 mb-5" id="add_address_div">
+                    <h6 style="background-color:#f0f8fc; border:1px solid #cee9f5" class="py-3 px-5 font-14 my-4">Fields with a star ( <span style="color:red">*</span> ) are mandatory</h6>
+                    <div class="alert d-none" role="alert"></div>
                       <div class="my-1">
-                        <div class="row">
-                          <div class="col-4">
-                            <span style="color:red">*</span> <span class="font-14">Zip code</span><input ng-model="zip_code" ng-blur="getVal()" type="text" class="form-control form-control-sm" required>
-                          </div>
-                          <div class="col-8">
-                            <span style="color:red">*</span> <span class="font-14">City</span><input ng-model="city" ng-blur="getVal()" type="text" class="form-control form-control-sm" required>
-                          {% endverbatim %}
-                        </div>
+                        <span style="color:red">*</span> <span class="font-14">Name</span><input type="text" class="form-control form-control-sm" placeholder="Full name" value="{{ user.get_full_name }}" required readonly>
                       </div>
-                    </div>
-                    <div class="my-1">
-                      <span style="color:red">*</span> <span class="font-14">Phone number</span><input type="tel" class="form-control form-control-sm" value="{{ profile.phone_num }}" required>
-                    </div>
-                    <div class="my-1">
-                      <span class="font-14">Email</span><input type="email" class="form-control form-control-sm" value="{{ user.email }}">
-                    </div>
-                    <!-- ASYNC SAVE ADDRESS INFO TO PROFILE -->
-                    {% verbatim %}
-                      <button id="addressBtn" ng-click="addAddress()" type="button" class="btn btn-primary w-100 mt-3">Add address and continue</button>
-                    {% endverbatim %}
+                      {% verbatim %}
+                        <div class="my-1">
+                          <span style="color:red">*</span> <span class="font-14">Street address</span><input ng-model="street_address" ng-blur="getVal()" type="text" class="form-control form-control-sm" required> <!-- id="street_address" -->
+                        </div>
+                        <div class="my-1">
+                          <div class="row">
+                            <div class="col-4">
+                              <span style="color:red">*</span> <span class="font-14">Zip code</span><input ng-model="zip_code" ng-blur="getVal()" type="text" class="form-control form-control-sm" required>
+                            </div>
+                            <div class="col-8">
+                              <span style="color:red">*</span> <span class="font-14">City</span><input ng-model="city" ng-blur="getVal()" type="text" class="form-control form-control-sm" required>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="my-1">
+                          <span style="color:red">*</span> <span class="font-14">Phone number</span><input ng-model="phone_num" ng-blur="getVal()" type="tel" class="form-control form-control-sm" required>
+                        </div>
+                        <div class="my-1">
+                          <span class="font-14">Email</span><input ng-model="email" ng-blur="getVal()" type="email" class="form-control form-control-sm">
+                        </div>
+                        <!-- ASYNC SAVE ADDRESS INFO TO PROFILE -->
+                        <button id="addressBtn" ng-click="addContacts()" type="button" class="btn btn-primary w-100 mt-3">Add address and continue</button>
+                      {% endverbatim %}
                   </div>
                 {% endif %}
 
@@ -302,10 +301,10 @@
                 {% for item in cart %}
                   <li class="d-inline">
                     <div class="row">
-                      <div class="col-lg-2 col-md-2"> <!--!!!!!!!!!!!-->
+                      <div class="col-xl-2 col-lg-2 col-md-2"> <!--!!!!!!!!!!!-->
                         <a href="{% url 'info' item.id %}"><img class="img img-fluid mx-xl-3 mx-lg-3 mx-md-3 mx-sm-3 checkoutItemImg" src="/{{ item.image }}" alt="{{ item.name }}"></a>
                       </div>
-                      <div class="col-lg-10 col-md-10 mx-2">
+                      <div class="col-xl-10 col-lg-10 col-md-10">
                         <div class="mx-3 mx-0-sm mx-0-md mx-0-lg mx-0-xl p-2">
                           <a href="{% url 'info' item.id %}" style="color:black"><span class="" style="font-weight:bold">{{ item.name }}</span></a>
                           <span class="float-right mr-3" style="font-weight:bold">{{ item.price }} €</span>
@@ -339,11 +338,17 @@
                 <span class="bold font-14">{{ cart | length }} items in total</span> <br>
                 <span class="font-14">Total price <span style="color:red; font-weight:bold">{{ order.total_price }} €</span></span>
               </div>
-              <button id="prevBtn" onclick="prev()" class="btn btn-light my-3 mr-3 ml-4 w-25 float-left">Previous</button>
+              <button id="prevBtn" onclick="prev()" class="btn btn-light my-3 mr-3 ml-4 w-25 float-left font-14">Previous</button>
+
+
+              <button id="nextBtn" onclick="next()" class="btn btn-primary m-3 w-25 float-right font-14">Next</button>
+
+
+
               {% verbatim %}
-                <button id="nextBtn" onclick="next()" ng-class="{ 'btn btn-primary m-3 w-25 float-right': true, 'disabled':className }">Next</button>
+                <!--<button id="nextBtn" onclick="next()" ng-class="{ 'btn btn-primary m-3 w-25 float-right font-14': true, 'disabled':isDisabled }">Next</button>-->
               {% endverbatim %}
-              <a href="{% url 'confirmOrder' %}"><button id="sendBtn" class="btn btn-primary m-3 w-25 float-right" style="display:none">Confirm order</button></a>
+              <a href="{% url 'confirmOrder' %}"><button id="sendBtn" class="btn btn-primary m-3 float-right font-14" style="display:none">Confirm order</button></a>
             </div>
 
 
@@ -390,5 +395,6 @@
 
     </div><!--container-->
     <script src="{% static 'js/checkoutScript.js' %}"></script>
+
   </body>
 </html>

@@ -8,18 +8,17 @@ var list = ["cart", "contacts", "delivery", "payment", "summary"];
 var previous_step = "";
 $(function(){
 
-  if ($(window).width() > 480){
-    $("#cartLabel").appendTo().parents(".col.text-center");
-    $("#contactsLabel").appendTo(".col.text-center");
-    $("#deliveryLabel").appendTo(".col.text-center");
-    $("#paymentLabel").appendTo(".col.text-center");
-    $("#summaryLabel").appendTo(".col.text-center");
-  }
+  fitCheckoutIcons();
 
-  // If the url has no specified step or has an invalid hash, redirect to the first step
-  if (!window.location.hash || !list.includes(window.location.hash.substring(3,window.location.hash.length))) {
-    window.location.hash = "cart";
-  }
+  var initialStep = window.location.hash.substring(3,window.location.hash.length)
+  console.log(initialStep);
+  // If the url has no specified step, has an invalid hash or is disabled --> redirect to the first step
+  setTimeout(function(){
+    if (!window.location.hash || !list.includes(initialStep) || $("#"+list[list.indexOf(initialStep)]).attr('class')==="checkoutIcon disabled") {
+      window.location.hash = "cart";
+    }
+  },500);
+
 
   updateStep();
 
@@ -48,6 +47,7 @@ $(function(){
 
   $(window).resize(function(){
     adjustWidth();
+    fitCheckoutIcons();
   });
 
 }); // function
@@ -88,6 +88,18 @@ function adjustWidth(){
   $(".footer").width(parentwidth);
 }
 
+function fitCheckoutIcons(){
+  if ($(window).width() > 480){
+    $("#cartLabel").appendTo("#cartCol");
+    $("#contactsLabel").appendTo("#contactsCol");
+    $("#deliveryLabel").appendTo("#deliveryCol");
+    $("#paymentLabel").appendTo("#paymentCol");
+    $("#summaryLabel").appendTo("#summaryCol");
+    $("#sendBtn").addClass("w-25");
+  }else{
+    $("#sendBtn").removeClass("w-25");
+  }
+}
 
 
 function updateStep(){
@@ -142,12 +154,16 @@ function updateStep(){
   }
 
   // If the next step is not yet available, disable the next button
-  if ($("#"+list[index+1]).attr('class')==="checkoutIcon disabled") {
-    console.log(list[index+1]);
-    $("#nextBtn").addClass("disabled");
-  }else{
-    $("#nextBtn").removeClass("disabled");
-  }
+  setTimeout(function(){
+    if ($("#"+list[index+1]).attr('class')!=="checkoutIcon disabled") {
+      console.log("Not disabled " + list[index+1]);
+      $("#nextBtn").removeClass("disabled");
+    }else{
+      $("#nextBtn").addClass("disabled");
+      console.log("Disabled af " + list[index+1]);
+    }
+  }, 500);
+
 
   // Too soon?
   setTimeout(function(){
